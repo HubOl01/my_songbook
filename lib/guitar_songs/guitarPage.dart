@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
@@ -15,7 +17,7 @@ class GuitarPage extends GetView<GuitarController> {
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
           appBar: AppBar(
-            title: Text("Список песен"),
+            title: Text(tr(LocaleKeys.appbar_list_songs)),
             actions: [
               IconButton(
                   onPressed: () {
@@ -48,7 +50,7 @@ class GuitarPage extends GetView<GuitarController> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text("Катюша",
+                                            Text(tr(LocaleKeys.ex_name_song),
                                                 style: TextStyle(fontSize: 16)),
                                             SizedBox(
                                               width: 5,
@@ -58,7 +60,7 @@ class GuitarPage extends GetView<GuitarController> {
                                                   BorderRadius.circular(15),
                                               child: Container(
                                                 color: colorFiolet,
-                                                child: Text("Пример",
+                                                child: Text(tr(LocaleKeys.example),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 10)),
@@ -69,7 +71,7 @@ class GuitarPage extends GetView<GuitarController> {
                                           ],
                                         ),
                                         Text(
-                                          "Военные песни",
+                                          tr(LocaleKeys.ex_name_singer),
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ]),

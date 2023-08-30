@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:my_songbook/main.dart';
 
 Future speedPut(int speed) async {
   var box = await Hive.openBox('my_songbook');
@@ -24,6 +25,14 @@ Future isClosedWarringPut(bool isClosedWarring) async {
 Future isDeleteTestPut(bool isDeleteTest) async {
   var box = await Hive.openBox('my_songbook');
   box.put("isDeleteTest", isDeleteTest);
+  await box.compact();
+  await box.close();
+}
+
+Future switCH(int index) async {
+  var box = await Hive.openBox('my_songbook');
+  box.put("themeMode", index);
+  getMode();
   await box.compact();
   await box.close();
 }

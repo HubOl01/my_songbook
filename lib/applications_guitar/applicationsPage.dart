@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../generated/locale_keys.g.dart';
 import 'akkords.dart';
 import 'applicationsController.dart';
 
@@ -10,29 +12,34 @@ class ApplicationsPage extends GetView<ApplicationsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-          child: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverAppBar(
-                      title: Text("Аккорды для гитары"),
-                      forceElevated: innerBoxIsScrolled,
-                      snap: false,
-                      floating: true,
-                      pinned: false,
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      elevation: 0,
-                      // backgroundColor: Colors.white,
-                    ),
-                  ],
-              body: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                  itemCount: akkordsList.length,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  title: Text(tr(LocaleKeys.appbar_chords)),
+                  forceElevated: innerBoxIsScrolled,
+                  snap: false,
+                  floating: true,
+                  pinned: false,
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
+                  elevation: 0,
+                  // backgroundColor: Colors.white,
+                ),
+              ],
+          body: SafeArea(
+      child: !context.isDarkMode
+              ? ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: context.locale == Locale('ru')
+                      ? akkordsListRU.length
+                      : akkordsListEN.length,
                   itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(children: [
                           Text(
-                            akkordsList[index].name,
+                            context.locale == Locale('ru')
+                                ? akkordsListRU[index].name
+                                : akkordsListEN[index].name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
                           ),
@@ -40,11 +47,39 @@ class ApplicationsPage extends GetView<ApplicationsController> {
                             height: 10,
                           ),
                           Image.asset(
-                            akkordsList[index].url_image,
+                            context.locale == Locale('ru')
+                                ? akkordsListRU[index].url_image
+                                : akkordsListEN[index].url_image,
+                            height: 300,
+                          )
+                        ]),
+                      ))
+              : ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: context.locale == Locale('ru')
+                      ? akkordsListDarkRU.length
+                      : akkordsListDarkEN.length,
+                  itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(children: [
+                          Text(
+                            context.locale == Locale('ru')
+                                ? akkordsListDarkRU[index].name
+                                : akkordsListDarkEN[index].name,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 30),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Image.asset(
+                            context.locale == Locale('ru')
+                                ? akkordsListDarkRU[index].url_image
+                                : akkordsListDarkEN[index].url_image,
                             height: 300,
                           )
                         ]),
                       ))),
-        ));
+    ));
   }
 }

@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/Storage/storage.dart';
 import 'package:my_songbook/settings/currentNumber.dart';
 import '../components/player_widget.dart';
+import '../generated/locale_keys.g.dart';
 
 class TestEdit_song extends StatefulWidget {
   const TestEdit_song(
@@ -44,7 +46,7 @@ class _TestEdit_songState extends State<TestEdit_song> {
               floating: true,
               pinned: false,
               backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
+              foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
               elevation: 0,
               actions: [
                 IconButton(
@@ -52,14 +54,14 @@ class _TestEdit_songState extends State<TestEdit_song> {
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text("Подтверждение"),
-                                content: Text("Вы хотите удалить?"),
+                                title: Text(tr(LocaleKeys.confirmation_title)),
+                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_delete)),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Get.back();
                                       },
-                                      child: Text("Нет")),
+                                      child: Text(tr(LocaleKeys.confirmation_no))),
                                   TextButton(
                                       onPressed: () async {
                                         setState(() {
@@ -70,7 +72,7 @@ class _TestEdit_songState extends State<TestEdit_song> {
                                       Get.back();
                                       Get.back();
                                       },
-                                      child: Text("Да"))
+                                      child: Text(tr(LocaleKeys.confirmation_yes)))
                                 ]));
                           
                     },
@@ -102,12 +104,12 @@ class _TestEdit_songState extends State<TestEdit_song> {
                         height: 10,
                       ),
                       Text(
-                        "Название песни: ${widget.name_song}",
+                        "${tr(LocaleKeys.edit_song_name_song)} ${widget.name_song}",
                         style: TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
                       Text(
-                        "Исполнитель: ${widget.name_singer}",
+                        "${tr(LocaleKeys.edit_song_name_singer)} ${widget.name_singer}",
                         style: TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
@@ -120,7 +122,7 @@ class _TestEdit_songState extends State<TestEdit_song> {
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
-                            label: Text("Текст песни"),
+                            label: Text(tr(LocaleKeys.edit_song_label_text_song)),
                             contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder()),
                       )

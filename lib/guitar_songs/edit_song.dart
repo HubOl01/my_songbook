@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/guitarDetalController.dart';
 
 import '../components/player_widget.dart';
@@ -36,7 +38,8 @@ class _Edit_songState extends State<Edit_song> {
               floating: true,
               pinned: false,
               backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
+              foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
+              // foregroundColor: Colors.black,
               elevation: 0,
               actions: [
                 IconButton(
@@ -44,14 +47,14 @@ class _Edit_songState extends State<Edit_song> {
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text("Подтверждение"),
-                                content: Text("Вы хотите удалить?"),
+                                title: Text(tr(LocaleKeys.confirmation_title)),
+                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_delete)),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Get.back();
                                       },
-                                      child: Text("Нет")),
+                                      child: Text(tr(LocaleKeys.confirmation_no))),
                                   TextButton(
                                       onPressed: () async {
                                         try {
@@ -67,20 +70,20 @@ class _Edit_songState extends State<Edit_song> {
                                           await showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                    title: Text("Ошибка"),
+                                                    title: Text(tr(LocaleKeys.alertDialog_error_title)),
                                                     content: Text(
-                                                        "Не удалось удалить песню, попробуйте еще раз"),
+                                                        tr(LocaleKeys.alertDialog_error_delete_content)),
                                                     actions: [
                                                       TextButton(
                                                           onPressed: () {
                                                             Get.back();
                                                           },
-                                                          child: Text("ОК"))
+                                                          child: Text(tr(LocaleKeys.alertDialog_error_OK)))
                                                     ],
                                                   ));
                                         }
                                       },
-                                      child: Text("Да"))
+                                      child: Text(tr(LocaleKeys.confirmation_yes)))
                                 ],
                               ));
                     },
@@ -93,14 +96,14 @@ class _Edit_songState extends State<Edit_song> {
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text("Подтверждение"),
-                                content: Text("Вы хотите изменить?"),
+                                title: Text(tr(LocaleKeys.confirmation_title)),
+                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_update)),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Get.back();
                                       },
-                                      child: Text("Нет")),
+                                      child: Text(tr(LocaleKeys.confirmation_no))),
                                   TextButton(
                                       onPressed: () async {
                                         try {
@@ -120,20 +123,20 @@ class _Edit_songState extends State<Edit_song> {
                                           await showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                    title: Text("Ошибка"),
+                                                    title: Text(tr(LocaleKeys.alertDialog_error_title)),
                                                     content: Text(
-                                                        "Не удалось изменить песню, попробуйте еще раз"),
+                                                        tr(LocaleKeys.alertDialog_error_update_content)),
                                                     actions: [
                                                       TextButton(
                                                           onPressed: () {
                                                             Get.back();
                                                           },
-                                                          child: Text("ОК"))
+                                                          child: Text(tr(LocaleKeys.alertDialog_error_OK)))
                                                     ],
                                                   ));
                                         }
                                       },
-                                      child: Text("Да"))
+                                      child: Text(tr(LocaleKeys.confirmation_yes)))
                                 ],
                               ));
                     },
@@ -164,12 +167,12 @@ class _Edit_songState extends State<Edit_song> {
                         height: 10,
                       ),
                       Text(
-                        "Название песни: ${widget.songModel.name_song}",
+                        "${tr(LocaleKeys.edit_song_name_song)} ${widget.songModel.name_song}",
                         style: TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
                       Text(
-                        "Исполнитель: ${widget.songModel.name_singer}",
+                        "${tr(LocaleKeys.edit_song_name_singer)} ${widget.songModel.name_singer}",
                         style: TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
@@ -181,7 +184,7 @@ class _Edit_songState extends State<Edit_song> {
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
-                            label: Text("Текст песни"),
+                            label: Text(tr(LocaleKeys.edit_song_label_text_song)),
                             contentPadding: EdgeInsets.all(8),
                             border: OutlineInputBorder()),
                       )

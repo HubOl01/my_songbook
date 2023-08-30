@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_songbook/styles/colors.dart';
 
@@ -58,9 +59,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Future assetAudio() async {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
     final player = AudioCache(prefix: "assets/audio/");
-    final url = await player.load("katusha.mp3");
+    final urlRU = await player.load("katusha.mp3");
+    final urlEN = await player.load("katushaEN.mp3");
     audioPlayer.setSourceUrl(
-      url.path,
+      context.locale == Locale('ru') ?
+      urlRU.path : urlEN.path,
     );
     // await audioPlayer.play(AssetSource("/assets/audio/kino-kukushka-mp3.mp3"));
   }

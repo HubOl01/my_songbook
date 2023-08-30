@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chord/flutter_chord.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/Storage/storage.dart';
+import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testEdit_song.dart';
 
 import '../components/auto_scroll.dart';
@@ -26,9 +28,9 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(fontSize: sizeText, color: Colors.black);
+    final textStyle = TextStyle(fontSize: sizeText, color: Theme.of(context).primaryTextTheme.titleMedium!.color);
     final chordStyle = TextStyle(fontSize: sizeText, color: Colors.red);
-    final _lyrics = '''
+    final _lyricsRU = '''
 Am                  E7
 Расцветали яблони и груши 
  E7                 Am
@@ -81,6 +83,34 @@ Am                  E7
  Dm  Am    E7         Am 
 А любовь Катюша сбережет
 ''';
+    final _lyricsEN = '''
+Apple trees and pear trees were a flower,
+River mist was rising all around.
+Young Katyusha went strolling by the hour
+On the steep banks,
+O’er the rocky ground.
+
+By the river’s bank she sang a love song
+Of her hero in a distant land.
+Of the one she’d dearly loved for so long,
+Holding tight his letters in her hand.
+
+Oh, my song, song of a maiden’s true love,
+To my dear one travel with the sun.
+To the one who Katyusha loves so,
+Bring my greetings to him, one by one.
+
+Let him know that I am true and faithful,
+Let him hear the love song that I send.
+Tell him as he defends our home that grateful,
+True Katyusha our love will defend.
+
+Apple trees and pear trees were a flower,
+River mist was rising all around.
+Young Katyusha went strolling by the hour
+On the steep banks,
+O’er the rocky ground.
+''';
     return Scaffold(
       body: NestedScrollView(
         // controller: _scrollController,
@@ -91,12 +121,12 @@ Am                  E7
             floating: true,
             pinned: false,
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.black,
+            foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
             elevation: 0,
             // backgroundColor: Colors.white,
             actions: [
               Tooltip(
-                message: "Авто-прокрутка",
+                message: tr(LocaleKeys.tooltip_autoscroll),
                 child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -108,7 +138,7 @@ Am                  E7
                     icon: Icon(Icons.arrow_circle_down)),
               ),
               Tooltip(
-                message: "Уменьшить размер текста",
+                message: tr(LocaleKeys.tooltip_text_down),
                 child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -119,7 +149,7 @@ Am                  E7
                     icon: Icon(Icons.text_decrease)),
               ),
               Tooltip(
-                message: "Увеличить размер текста",
+                message: tr(LocaleKeys.tooltip_text_up),
                 child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -130,14 +160,16 @@ Am                  E7
                     icon: Icon(Icons.text_increase)),
               ),
               Tooltip(
-                message: "Редактор песни",
+                message: tr(LocaleKeys.tooltip_edit_song),
                 child: IconButton(
                     onPressed: () {
                       Get.to(TestEdit_song(
-                        name_song: "Катюша",
-                        name_singer: "Военные песни",
-                        song: _lyrics,
-                        // audio: "",
+                        name_song: tr(LocaleKeys.ex_name_song),
+                        name_singer: tr(LocaleKeys.ex_name_singer),
+                        song: context.locale == Locale('ru')
+                            ? _lyricsRU
+                            : _lyricsEN,
+                        audio: "",
                         asset: true,
                         // date_created: DateTime.now(),
                       ));
@@ -151,12 +183,13 @@ Am                  E7
           physics: BouncingScrollPhysics(),
           controller: _scrollController,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    Text("Скорость прокрутки: "),
+                    Text(tr(LocaleKeys.text_speed_scroll)),
                     IconButton(
                         onPressed: () {
                           setState(() {
@@ -179,21 +212,31 @@ Am                  E7
                   ],
                 ),
                 PlayerWidget(
-                  name_song: "Катюша",
-                  name_singer: "Военные песни",
+                  name_song: tr(LocaleKeys.ex_name_song),
+                  name_singer: tr(LocaleKeys.ex_name_singer),
                   audio: "",
                   asset: true,
                 ),
-                LyricsRenderer(
-                  lyrics: _lyrics,
-                  textStyle: textStyle,
-                  chordStyle: chordStyle,
-                  onTapChord: (String chord) {
-                    print('pressed chord: $chord');
-                  },
-                  transposeIncrement: 0,
-                  scrollSpeed: 0,
+                SizedBox(
+                  height: 20,
                 ),
+                Text(
+                  context.tr(LocaleKeys.testWarning),
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                LyricsRenderer(
+                    lyrics:
+                        context.locale == Locale('ru') ? _lyricsRU : _lyricsEN,
+                    textStyle: textStyle,
+                    chordStyle: chordStyle,
+                    onTapChord: () {}),
+                // Text(
+                //   context.locale == Locale('ru') ? _lyricsRU : _lyricsEN,
+                //   style: textStyle,
+                // ),
                 SizedBox(
                   height: 10,
                 )
@@ -206,7 +249,4 @@ Am                  E7
   }
 }
 
-
-void akkord(String song){
-
-}
+void akkord(String song) {}

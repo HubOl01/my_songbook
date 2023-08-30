@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../generated/locale_keys.g.dart';
 import 'Model/help.dart';
 import 'data/helpList.dart';
 
@@ -10,10 +12,11 @@ class HelperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final questions = context.locale == Locale('ru') ? questionsRU : context.locale == Locale('zh') ? questionsZH : questionsEN;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Помощь"),
+        title:  Text(tr(LocaleKeys.settings_help)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -22,7 +25,7 @@ class HelperPage extends StatelessWidget {
               children:
                   questions.map<ExpansionPanelRadio>((HelpModel helpModel) {
                 return ExpansionPanelRadio(
-                    // backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+                    backgroundColor: Theme.of(context).primaryColor,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
                         title: Text(helpModel.question),
@@ -37,19 +40,33 @@ class HelperPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: RichText(
+                
                     text: TextSpan(children: [
                   new TextSpan(
                     text:
-                        'Не нашли вопрос? Вы можете написать любые вопросы через наше сообщество VK по ',
-                    style: new TextStyle(color: Colors.black),
+                        tr(LocaleKeys.settings_help_other_quest),
+                    style: TextStyle(color: Theme.of(context).primaryTextTheme.titleMedium!.color),
                   ),
                   new TextSpan(
-                    text: 'ссылке...',
+                    text: "VK",
                     style: new TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
                           Uri.parse("https://vk.com/topic-222084855_49405619"),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                  ),new TextSpan(
+                    text: tr(LocaleKeys.settings_help_other_quest_or),
+                    style: new TextStyle(color: Theme.of(context).primaryTextTheme.titleMedium!.color),
+                  ),new TextSpan(
+                    text: "Telegram",
+                    style: new TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
+                    recognizer: new TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse("https://t.me/mysongbook01_discussions/8"),
                           mode: LaunchMode.externalApplication,
                         );
                       },

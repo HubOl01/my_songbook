@@ -1,0 +1,65 @@
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
+
+abstract class  LocaleKeys {
+  static const appbar_list_songs = 'appbar_list_songs';
+  static const example = 'example';
+  static const ex_name_song = 'ex_name_song';
+  static const ex_name_singer = 'ex_name_singer';
+  static const tooltip_song = 'tooltip_song';
+  static const tooltip_chords = 'tooltip_chords';
+  static const tooltip_settings = 'tooltip_settings';
+  static const bottom_song = 'bottom_song';
+  static const bottom_chords = 'bottom_chords';
+  static const bottom_settings = 'bottom_settings';
+  static const tooltip_autoscroll = 'tooltip_autoscroll';
+  static const tooltip_text_down = 'tooltip_text_down';
+  static const tooltip_text_up = 'tooltip_text_up';
+  static const tooltip_edit_song = 'tooltip_edit_song';
+  static const text_speed_scroll = 'text_speed_scroll';
+  static const edit_song_label_text_song = 'edit_song_label_text_song';
+  static const edit_song_name_song = 'edit_song_name_song';
+  static const edit_song_name_singer = 'edit_song_name_singer';
+  static const confirmation_title = 'confirmation_title';
+  static const edit_song_confirmation_content_delete = 'edit_song_confirmation_content_delete';
+  static const edit_song_confirmation_content_update = 'edit_song_confirmation_content_update';
+  static const confirmation_yes = 'confirmation_yes';
+  static const confirmation_no = 'confirmation_no';
+  static const appbar_add_song = 'appbar_add_song';
+  static const add_song_attention = 'add_song_attention';
+  static const add_song_label_name_song = 'add_song_label_name_song';
+  static const add_song_label_name_singer = 'add_song_label_name_singer';
+  static const add_song_label_text_song = 'add_song_label_text_song';
+  static const add_song_confirmation_content = 'add_song_confirmation_content';
+  static const add_song_add_audiofile = 'add_song_add_audiofile';
+  static const add_song_save = 'add_song_save';
+  static const appbar_chords = 'appbar_chords';
+  static const appbar_settings = 'appbar_settings';
+  static const settings_theme_mode = 'settings_theme_mode';
+  static const settings_translate = 'settings_translate';
+  static const settings_help = 'settings_help';
+  static const settings_help_other_quest = 'settings_help_other_quest';
+  static const settings_help_other_quest_or = 'settings_help_other_quest_or';
+  static const settings_call_tech = 'settings_call_tech';
+  static const appbar_settings_call_tech = 'appbar_settings_call_tech';
+  static const settings_call_tech_text = 'settings_call_tech_text';
+  static const settings_call_tech_personally = 'settings_call_tech_personally';
+  static const settings_call_tech_discussions = 'settings_call_tech_discussions';
+  static const settings_about = 'settings_about';
+  static const settings_about_version = 'settings_about_version';
+  static const settings_about_subscribe = 'settings_about_subscribe';
+  static const settings_about_check_update = 'settings_about_check_update';
+  static const alertDialog_error_title = 'alertDialog_error_title';
+  static const alertDialog_error_update_content = 'alertDialog_error_update_content';
+  static const alertDialog_error_delete_content = 'alertDialog_error_delete_content';
+  static const alertDialog_error_create_content = 'alertDialog_error_create_content';
+  static const alertDialog_error_not_data_content = 'alertDialog_error_not_data_content';
+  static const alertDialog_error_OK = 'alertDialog_error_OK';
+  static const alertDialogWarningTitle = 'alertDialogWarningTitle';
+  static const alertDialogWarningContent = 'alertDialogWarningContent';
+  static const alertDialogWarningExit = 'alertDialogWarningExit';
+  static const testWarning = 'testWarning';
+  static const theme_mode_auto = 'theme_mode_auto';
+  static const theme_mode_light = 'theme_mode_light';
+  static const theme_mode_dark = 'theme_mode_dark';
+
+}

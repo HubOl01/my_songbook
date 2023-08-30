@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../Storage/storage.dart';
 import '../components/player_widget.dart';
+import '../generated/locale_keys.g.dart';
 import '../settings/currentNumber.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';
@@ -24,6 +26,8 @@ class _Create_songState extends State<Create_song> {
   TextEditingController name_songController = new TextEditingController();
   TextEditingController name_singerController = new TextEditingController();
   TextEditingController songController = new TextEditingController();
+  String name_song = "";
+  String name_singer = "";
   // late String number;
   // late String title;
   // late String content;
@@ -53,7 +57,7 @@ class _Create_songState extends State<Create_song> {
             snap: false,
             floating: true,
             pinned: false,
-            title: Text("Добавление песни"),
+            title: Text(tr(LocaleKeys.appbar_add_song)),
             // backgroundColor: Colors.transparent,
             // foregroundColor: Colors.black,
             elevation: 0,
@@ -89,7 +93,7 @@ class _Create_songState extends State<Create_song> {
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: Text(
-                              "Внимание! Заполняйте пожалуйста название песни, исполнителя и аудиофайла корректно, т.к. в будущем вы не сможете изменить. Только можно удалить и заново заполнить!",
+                              tr(LocaleKeys.add_song_attention),
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.red),
                             ),
@@ -104,7 +108,7 @@ class _Create_songState extends State<Create_song> {
                   controller: name_songController,
                   // maxLines: 30,
                   decoration: InputDecoration(
-                      label: Text("Название песни"),
+                      label: Text(tr(LocaleKeys.add_song_label_name_song)),
                       contentPadding: EdgeInsets.all(8),
                       border: OutlineInputBorder()),
                 ),
@@ -115,7 +119,7 @@ class _Create_songState extends State<Create_song> {
                   controller: name_singerController,
                   // maxLines: 30,
                   decoration: InputDecoration(
-                      label: Text("Исполнитель"),
+                      label: Text(tr(LocaleKeys.add_song_label_name_singer)),
                       contentPadding: EdgeInsets.all(8),
                       border: OutlineInputBorder()),
                 ),
@@ -127,7 +131,7 @@ class _Create_songState extends State<Create_song> {
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: InputDecoration(
-                      label: Text("Текст песни"),
+                      label: Text(tr(LocaleKeys.add_song_label_text_song)),
                       contentPadding: EdgeInsets.all(8),
                       border: OutlineInputBorder()),
                 ),
@@ -135,7 +139,7 @@ class _Create_songState extends State<Create_song> {
                   height: 10,
                 ),
                 Text(
-                  "Добавление аудиофайла",
+                  tr(LocaleKeys.add_song_add_audiofile),
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(
@@ -153,6 +157,7 @@ class _Create_songState extends State<Create_song> {
                               isAudio = false;
                               customFile = null;
                             });
+
                             await FilePicker.platform.clearTemporaryFiles();
                           },
                           child: Icon(
@@ -206,33 +211,37 @@ class _Create_songState extends State<Create_song> {
                                 // } else {
                               } catch (ex) {
                                 print("exxe => ${ex}");
-                                showDialog(
+                                await showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                            title: Text("Ошибка"),
-                                            content: Text(
-                                                "Не удалось создать песню, попробуйте еще раз"),
+                                            title: Text(tr(LocaleKeys
+                                                .alertDialog_error_title)),
+                                            content: Text(tr(LocaleKeys
+                                                .alertDialog_error_create_content)),
                                             actions: [
                                               TextButton(
                                                   onPressed: () {
                                                     Get.back();
                                                   },
-                                                  child: Text("Ок"))
+                                                  child: Text(tr(LocaleKeys
+                                                      .alertDialog_error_OK)))
                                             ]));
                               }
                             } else {
-                              showDialog(
+                              await showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                          title: Text("Ошибка"),
-                                          content:
-                                              Text("Вы не заполнили данные"),
+                                          title: Text(tr(LocaleKeys
+                                              .alertDialog_error_title)),
+                                          content: Text(tr(LocaleKeys
+                                              .alertDialog_error_not_data_content)),
                                           actions: [
                                             TextButton(
                                                 onPressed: () {
                                                   Get.back();
                                                 },
-                                                child: Text("Ок"))
+                                                child: Text(tr(LocaleKeys
+                                                    .alertDialog_error_OK)))
                                           ]));
                             }
                           } catch (ex) {
@@ -240,7 +249,7 @@ class _Create_songState extends State<Create_song> {
                           }
                         },
                         child: Text(
-                          "Сохранить",
+                          tr(LocaleKeys.add_song_save),
                           style: TextStyle(fontSize: 18),
                         ))),
               ],
@@ -280,7 +289,7 @@ class _Create_songState extends State<Create_song> {
       // allowedExtensions: ['mp3'],
     );
     if (_picker != null) {
-      setState(() {
+      setState(() async {
         isAudio = false;
         customFile = null;
         PlatformFile file = _picker.files.first;
@@ -292,35 +301,10 @@ class _Create_songState extends State<Create_song> {
         print(file.path);
         customFile = file;
         isAudio = true;
-
-        if (name_singerController.text.trim().isEmpty ||
-            name_songController.text.trim().isEmpty) {
-          autotext(file.name);
-        } else {
-          showDialog(
-              context: context,
-              builder: (builder) => AlertDialog(
-                    title: Text("Подтверждение"),
-                    content:
-                        Text("Переименовать название песни и исполнителя?"),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: Text("Нет")),
-                      Spacer(),
-                      TextButton(
-                          onPressed: () {
-                            autotext(file.name);
-                            Get.back();
-                          },
-                          child: Text("Да"))
-                    ],
-                  ));
-        }
+        autotext(customFile!.name);
         // xfile = file;
       });
+
       // return file;
       // final saveFile = await saveFilePermanently(file);
       // print("From path: ${file.path!}");
@@ -353,8 +337,37 @@ class _Create_songState extends State<Create_song> {
           nameSong = words[1].replaceAll("-", " ");
         }
       }
-      name_singerController.text = nameSinger;
-      name_songController.text = nameSong;
+      setState(() async {
+        if (name_songController.text.trim().isNotEmpty ||
+            name_singerController.text.trim().isNotEmpty) {
+          await showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(context.tr(LocaleKeys.confirmation_title)),
+                    content: Text(
+                        context.tr(LocaleKeys.add_song_confirmation_content)),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_no))),
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              name_songController.text = nameSong;
+                              name_singerController.text = nameSinger;
+                            });
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_yes)))
+                    ],
+                  ));
+        } else {
+          name_songController.text = nameSong;
+          name_singerController.text = nameSinger;
+        }
+      });
     } else {
       String nameSong = name;
       if (nameSong.contains(".mp3")) {
@@ -369,8 +382,36 @@ class _Create_songState extends State<Create_song> {
           nameSong = nameSong.replaceAll("-", " ");
         }
       }
+      setState(() async {
+        if (name_songController.text.trim().isNotEmpty ||
+            name_singerController.text.trim().isNotEmpty) {
+          await showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(context.tr(LocaleKeys.confirmation_title)),
+                    content: Text(
+                        context.tr(LocaleKeys.add_song_confirmation_content)),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_no))),
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              name_songController.text = nameSong;
+                            });
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_yes)))
+                    ],
+                  ));
+        } else {
+          name_songController.text = nameSong;
+        }
+      });
       // name_singerController.text = nameSinger;
-      name_songController.text = nameSong;
     }
   }
 }
