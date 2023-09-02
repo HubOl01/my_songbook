@@ -37,14 +37,8 @@ My Songbook имеет множество функций, такие как до
 После создания приложения решил попробовать выпустить на российском маркетплейсе RuStore. 1.0.0 версия была опубликована 25.08.23, а позже обновлено до 1.2.2 1-го сентября уже во многих маркетплейсах, такие как AppGallery (Huawei) и GetApp (Xiaomi).
 
 ### Скрины приложения
-<p float="left" class="noselect">
-<img src="flutter_03.png" alt="Создание песни с аудиофайлом" width="200"/>
-<img src="flutter_04.png" alt="Список всех созданных песен" width="200"/>
-<img src="flutter_05.png" alt="Просмотр песни с проигрывателем" width="200"/>
-<img src="flutter_02.png" alt="Справочник аккордов для гитары" width="200"/>
-</p>
-
-<style>
+<head>
+   <style>
    img {
     border-radius: 12px;
     margin: 0px 10px 10px 0px;
@@ -83,3 +77,10 @@ My Songbook имеет множество функций, такие как до
             pointer-events: none;
 }
   </style>
+</head>
+<p float="left" class="noselect">
+<img src="flutter_03.png" alt="Создание песни с аудиофайлом" width="200"/>
+<img src="flutter_04.png" alt="Список всех созданных песен" width="200"/>
+<img src="flutter_05.png" alt="Просмотр песни с проигрывателем" width="200"/>
+<img src="flutter_02.png" alt="Справочник аккордов для гитары" width="200"/>
+</p>
