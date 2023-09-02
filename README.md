@@ -1,10 +1,10 @@
 # <img class="icon" src="assets/icon/my_songbook.png" alt="My Songbook" width="50"/> My Songbook
 
 <p float="left" align="center">
-<a href="[VK Подписаться](https://vk.com/mysongbook01)">
+<a href="https://vk.com/mysongbook01">
 <img class="badges" src="assets/badges/VK.png" alt="VK Подписаться" width="100"/>
 </a>
-<a href="[Telegram Подписаться](https://t.me/mysongbook01)">
+<a href="https://t.me/mysongbook01">
 <img class="badges" src="assets/badges/Telegram.png" alt="Telegram Подписаться" width="100"/>
 </a>
 </p>
@@ -15,13 +15,13 @@
 Мобильное приложение для гитаристов, певцов, композиторов и всех желающих, которые хотят записывать свои песни или создавать новые композиции.
 
 <p float="left">
-<a href="[Скачать с RuStore](https://apps.rustore.ru/app/ru.ru_developer.my_songbook)">
+<a href="https://apps.rustore.ru/app/ru.ru_developer.my_songbook">
 <img class="icon" src="assets/badges/RuStore.png" alt="RuStore" width="100"/>
 </a>
-<a href="[Скачать с AppGallery](https://appgallery.huawei.com/app/C109087129)">
+<a href="https://appgallery.huawei.com/app/C109087129">
 <img class="icon" src="assets/badges/AppGallery.png" alt="AppGallery" width="100"/>
 </a>
-<a href="[Скачать с GetApps](https://global.app.mi.com/details?lo=RU&la=en_US&id=ru.ru_developer.my_songbook.mi)">
+<a href="https://global.app.mi.com/details?lo=RU&la=en_US&id=ru.ru_developer.my_songbook.mi">
 <img class="icon" src="assets/badges/GetApps.png" alt="GetApps" width="100"/>
 </a>
 </p>
