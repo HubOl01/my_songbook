@@ -39,8 +39,8 @@ My Songbook имеет множество функций, такие как до
 ### Скрины приложения
 
 <p float="left" class="noselect">
-<img src="flutter_03.png" alt="Создание песни с аудиофайлом" width="200"/>
-<img src="flutter_04.png" alt="Список всех созданных песен" width="200"/>
-<img src="flutter_05.png" alt="Просмотр песни с проигрывателем" width="200"/>
-<img src="flutter_02.png" alt="Справочник аккордов для гитары" width="200"/>
+<img src="flutter_03.png" alt="Создание песни с аудиофайлом" width="245"/>
+<img src="flutter_04.png" alt="Список всех созданных песен" width="245"/>
+<img src="flutter_05.png" alt="Просмотр песни с проигрывателем" width="245"/>
+<img src="flutter_02.png" alt="Справочник аккордов для гитары" width="245"/>
 </p>
