@@ -1,46 +1,3 @@
-<html>
-<head>
-   <style>
-   img {
-    border-radius: 12px;
-    margin: 0px 10px 10px 0px;
-   }
-
-   .icon {
-    border-radius: 5px;
-    margin: 0px 10px 0px 0px;
-      -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-            pointer-events: none;
-   }
-   .noselect {
-  -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-            pointer-events: none;
-}
-
-.badges{
-  margin: 0px 50px 0px 0px;
-      border-radius: 0px;
-      -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-            pointer-events: none;
-}
-  </style>
-</head>
-<body>
 # <img class="icon" src="assets/icon/my_songbook.png" alt="My Songbook" width="50"/> My Songbook
 
 <p float="left" align="center">
@@ -87,5 +44,3 @@ My Songbook имеет множество функций, такие как до
 <img src="flutter_05.png" alt="Просмотр песни с проигрывателем" width="200"/>
 <img src="flutter_02.png" alt="Справочник аккордов для гитары" width="200"/>
 </p>
-</body>
-</html>
