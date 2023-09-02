@@ -1,3 +1,4 @@
+<html>
 <head>
    <style>
    img {
@@ -87,3 +88,4 @@ My Songbook имеет множество функций, такие как до
 <img src="flutter_02.png" alt="Справочник аккордов для гитары" width="200"/>
 </p>
 </body>
+</html>
