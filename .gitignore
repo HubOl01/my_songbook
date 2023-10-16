@@ -45,4 +45,5 @@ app.*.map.json
 /android/key.properties
 *.properties
 *.draft.md
+.env
 

@@ -1,6 +1,7 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -13,6 +14,7 @@ import 'applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'guitar_songs/guitarPage.dart';
 import 'settings/settingsPage.dart';
+
 
 
 int? indexMode;
@@ -30,6 +32,7 @@ void main() async{
     ErrorWidget.builder = (FlutterErrorDetails details) {
     return const Material();
   };
+  await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(app.path);
   var box = await Hive.openBox('my_songbook');
@@ -40,7 +43,7 @@ void main() async{
   isDeleteTest = box.get("isDeleteTest") ?? false;
   try {
     AppMetrica.activate(
-        AppMetricaConfig("1d6d9a9b-318d-47c3-aac4-1a83f5ba93ff"));
+        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: true));
   } catch (ex) {
     print("app_metrica: ${ex}");
   }
