@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -72,7 +74,12 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
     // final player = AudioCache(prefix: "assets/audio/");
     // final url = await player.load("kino-kukushka-mp3.mp3");
+  
+    // File file = File(widget.audio);
+    // String content = await file.readAsString(encoding: latin1);
+    String encodedUrl = Uri.encodeFull(widget.audio);
     audioPlayer.setSourceUrl(widget.audio);
+    print("set audio: ${widget.audio} = $encodedUrl");
     // await audioPlayer.play(AssetSource("/assets/audio/kino-kukushka-mp3.mp3"));
   }
 

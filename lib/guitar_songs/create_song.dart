@@ -158,7 +158,7 @@ class _Create_songState extends State<Create_song> {
                               customFile = null;
                             });
 
-                            await FilePicker.platform.clearTemporaryFiles();
+                            // await FilePicker.platform.clearTemporaryFiles();
                           },
                           child: Icon(
                             Icons.audio_file,
@@ -282,8 +282,8 @@ class _Create_songState extends State<Create_song> {
 
   bool isAudio = false;
   Future getFile() async {
-    var appDir = (await getTemporaryDirectory()).path;
-    new Directory(appDir).delete(recursive: true);
+    // var appDir = (await getTemporaryDirectory()).path;
+    // new Directory(appDir).delete(recursive: true);
     FilePickerResult? _picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
       // allowedExtensions: ['mp3'],
@@ -382,10 +382,10 @@ class _Create_songState extends State<Create_song> {
           nameSong = nameSong.replaceAll("-", " ");
         }
       }
-      setState(() async {
+      setState(() {
         if (name_songController.text.trim().isNotEmpty ||
             name_singerController.text.trim().isNotEmpty) {
-          await showDialog(
+          showDialog(
               context: context,
               builder: (context) => AlertDialog(
                     title: Text(context.tr(LocaleKeys.confirmation_title)),
