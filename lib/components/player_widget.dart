@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +64,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       context.locale == Locale('ru') ?
       urlRU.path : urlEN.path,
     );
-    // await audioPlayer.play(AssetSource("/assets/audio/kino-kukushka-mp3.mp3"));
   }
 
   Future setAudio() async {
@@ -80,7 +76,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     String encodedUrl = Uri.encodeFull(widget.audio);
     audioPlayer.setSourceUrl(widget.audio);
     print("set audio: ${widget.audio} = $encodedUrl");
-    // await audioPlayer.play(AssetSource("/assets/audio/kino-kukushka-mp3.mp3"));
   }
 
   @override
