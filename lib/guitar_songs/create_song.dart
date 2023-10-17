@@ -289,7 +289,7 @@ class _Create_songState extends State<Create_song> {
       // allowedExtensions: ['mp3'],
     );
     if (_picker != null) {
-      setState(() async {
+      setState(()  {
         isAudio = false;
         customFile = null;
         PlatformFile file = _picker.files.first;
@@ -337,10 +337,10 @@ class _Create_songState extends State<Create_song> {
           nameSong = words[1].replaceAll("-", " ");
         }
       }
-      setState(() async {
+      setState(() {
         if (name_songController.text.trim().isNotEmpty ||
             name_singerController.text.trim().isNotEmpty) {
-          await showDialog(
+           showDialog(
               context: context,
               builder: (context) => AlertDialog(
                     title: Text(context.tr(LocaleKeys.confirmation_title)),
