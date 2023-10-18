@@ -49,11 +49,11 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                               [XFile(controller.songModel.value.path_music!)],
                               text:
                                   "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
-                              subject: "My Songbook");
+                              subject: "${controller.songModel.value.name_song} from My Songbook");
                         } else {
                           Share.share(
                               "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
-                              subject: "My Songbook");
+                              subject: "${controller.songModel.value.name_song} from My Songbook");
                         }
                       },
                       icon: Icon(Icons.share)),
