@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
-import 'guitar_songs/guitarPage.dart';
+import 'generated/guitar_songs/guitarPage.dart';
 import 'settings/settingsPage.dart';
 
 

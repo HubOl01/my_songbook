@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../Storage/storage.dart';
-import '../components/auto_scroll.dart';
-import '../components/player_widget.dart';
-import '../settings/currentNumber.dart';
+import '../../Storage/storage.dart';
+import '../../components/auto_scroll.dart';
+import '../../components/player_widget.dart';
+import '../../settings/currentNumber.dart';
 import 'edit_song.dart';
 import 'guitarDetalController.dart';
 // import 'package:get/get.dart';

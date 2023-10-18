@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/guitar_songs/guitarDetalController.dart';
+import 'package:my_songbook/generated/guitar_songs/guitarDetalController.dart';
 
-import '../components/player_widget.dart';
+import '../../components/player_widget.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/Storage/storage.dart';
 import 'package:my_songbook/settings/currentNumber.dart';
-import '../components/player_widget.dart';
-import '../generated/locale_keys.g.dart';
+import '../../components/player_widget.dart';
+import '../locale_keys.g.dart';
 
 class TestEdit_song extends StatefulWidget {
   const TestEdit_song(
