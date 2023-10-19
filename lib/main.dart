@@ -16,8 +16,6 @@ import 'generated/codegen_loader.g.dart';
 import 'guitar_songs/guitarPage.dart';
 import 'settings/settingsPage.dart';
 
-
-
 int? indexMode;
 Future getMode() async {
   var app = await path_provider.getApplicationDocumentsDirectory();
@@ -27,10 +25,10 @@ Future getMode() async {
   print("Mode = ${indexMode!}");
 }
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await EasyLocalization.ensureInitialized();
-    ErrorWidget.builder = (FlutterErrorDetails details) {
+  await EasyLocalization.ensureInitialized();
+  ErrorWidget.builder = (FlutterErrorDetails details) {
     return const Material();
   };
   await dotenv.load(fileName: ".env");
@@ -50,11 +48,11 @@ void main() async{
     print("app_metrica: ${ex}");
   }
   runApp(EasyLocalization(
-    supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
-    path: 'assets/translations',
-    fallbackLocale: Locale('en'),
-    assetLoader: CodegenLoader(),
-    child: MyApp()));
+      supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      assetLoader: CodegenLoader(),
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -62,18 +60,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppMetrica.reportEvent('locale: ${context.locale}');
     return ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
-      builder: (context, child) => GetMaterialApp(
-      themeMode: Provider.of<ThemeProvider>(context).themeMode,
-      theme: Themes.light,
-      darkTheme: Themes.dark,
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      home: MyHomePage(),
-    ));
+        create: (context) => ThemeProvider(),
+        builder: (context, child) => GetMaterialApp(
+              themeMode: Provider.of<ThemeProvider>(context).themeMode,
+              theme: Themes.light,
+              darkTheme: Themes.dark,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              home: MyHomePage(),
+            ));
   }
 }
 
@@ -82,8 +81,6 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(MyHomePageController());
-    // return GetBuilder<MyHomePageController>(builder: (controller) {
     return GetBuilder<MyHomePageController>(
         init: MyHomePageController(),
         initState: (controller) {},
@@ -124,12 +121,18 @@ class MyHomePage extends StatelessWidget {
 }
 
 List<Widget> pages = [GuitarPage(), ApplicationsPage(), SettingsPage()];
+List<String> pagesString = [
+  "Песни",
+  "Аккорды",
+  "Настройки",
+];
 
 class MyHomePageController extends GetxController {
   var tabIndex = 0.obs;
 
   void changeTabIndex(int index) {
     tabIndex.value = index;
+    AppMetrica.reportEvent('Раздел ${pagesString[index]}');
     update();
   }
 }

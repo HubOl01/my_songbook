@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:my_songbook/Storage/storage.dart';
 import 'package:my_songbook/main.dart';
@@ -249,6 +250,7 @@ class ThemeProvider with ChangeNotifier {
     _themeMode = themeMode;
     int index = reversMode(_themeMode);
     switCH(index);
+    AppMetrica.reportEvent('ThemePage: ${_themeMode}');
     notifyListeners();
   }
   // bool isOn = false;

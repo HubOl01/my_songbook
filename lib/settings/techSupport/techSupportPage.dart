@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,35 +38,68 @@ class TechSupportPage extends StatelessWidget {
               //   );
               // },
               trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://vk.com/im?media=&sel=-222084855"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.vk,
-                                  // size: 30,
-                                ),
-                              ),
-                              SizedBox(width: 10,),
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://t.me/foward01"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.telegram,
-                                  // size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse("https://vk.com/im?media=&sel=-222084855"),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    icon: Logo(
+                      Logos.vk,
+                      // size: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse("https://t.me/foward01"),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    icon: Logo(
+                      Logos.telegram,
+                      // size: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        final Email email = Email(
+                          body: "",
+                          subject: "My Songbook (Tech Support)",
+                          recipients: ["ru-developer@mail.ru"],
+                          isHTML: true,
+                        );
+
+                        String platformResponse;
+
+                        try {
+                          await FlutterEmailSender.send(email);
+                          platformResponse = 'success';
+                        } catch (error) {
+                          print(error);
+                          platformResponse = error.toString();
+                        }
+
+                        // if (!mounted) return;
+                        print(platformResponse);
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text(platformResponse),
+                        //   ),
+                        // );
+                      },
+                      icon: Icon(Icons.email_outlined)),
+                ],
+              ),
             ),
             // Divider(),
             ListTile(
@@ -77,35 +111,37 @@ class TechSupportPage extends StatelessWidget {
               //   );
               // },
               trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://vk.com/topic-222084855_49405611"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.vk,
-                                  // size: 30,
-                                ),
-                              ),
-                              SizedBox(width: 10,),
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://t.me/mysongbook01_discussions/5"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.telegram,
-                                  // size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse("https://vk.com/topic-222084855_49405611"),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    icon: Logo(
+                      Logos.vk,
+                      // size: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      launchUrl(
+                        Uri.parse("https://t.me/mysongbook01_discussions/5"),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    icon: Logo(
+                      Logos.telegram,
+                      // size: 30,
+                    ),
+                  ),
+                ],
+              ),
             ),
             // Divider(),
           ]),

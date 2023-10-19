@@ -206,11 +206,13 @@ class _Create_songState extends State<Create_song> {
                                 final GuitarController guitar =
                                     Get.put(GuitarController());
                                 guitar.refreshSongs();
+                                AppMetrica.reportEvent('create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
                                 // if (isSuccess) {
                                 Get.back();
                                 // } else {
                               } catch (ex) {
                                 print("exxe => ${ex}");
+                                AppMetrica.reportEvent('create_song: ${ex}');
                                 await showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(

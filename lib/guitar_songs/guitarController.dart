@@ -1,4 +1,3 @@
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:get/get.dart';
 
 import 'db/dbSongs.dart';
@@ -9,7 +8,6 @@ var songs = <Song>[].obs;
   var isLoading = false.obs;
   @override
   void onInit() {
-    AppMetrica.reportEvent('The guitar page is open');
     super.onInit();
     refreshSongs();
   }
@@ -21,15 +19,9 @@ var songs = <Song>[].obs;
   }
 
   Future refreshSongs() async {
-    // try {
     isLoading.value = true;
     songs.value = await DBSongs.instance.readAllSongs();
     
     isLoading.value = false;
-    // } catch (e) {
-    //   print("Exception : ${e}");
-    //   isLoading = false.obs;
-    // }
-    // Future.delayed(const Duration(seconds: 3), () {});
   }
 }
