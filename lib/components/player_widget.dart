@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,10 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   void initState() {
     if (widget.asset) {
       assetAudio();
+      AppMetrica.reportEvent('Катюша');
     } else {
       setAudio();
+      AppMetrica.reportEvent('${widget.name_song} - ${widget.name_singer} (${widget.audio})');
     }
 
     stream = audioPlayer.onPlayerStateChanged.listen((event) {

@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,20 +36,15 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.photo_outlined),
           title: Text(tr(LocaleKeys.settings_theme_mode)),
           onTap: () {
+            AppMetrica.reportEvent('ThemePage');
             Get.to(ThemePage());
-            // final snackBar = SnackBar(
-            //   content: const Text('Эта опция в разработке'),
-            // );
-            // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            // Future.delayed(Duration(seconds: 5), () {
-            //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            // });
           },
         ),
         ListTile(
           leading: Icon(Icons.translate),
           title: Text(tr(LocaleKeys.settings_translate)),
           onTap: () {
+            AppMetrica.reportEvent('TranslatePage');
             Get.to(TranslatePage());
           },
         ),
@@ -56,6 +52,7 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.help_outline),
           title: Text(tr(LocaleKeys.settings_help)),
           onTap: () {
+            AppMetrica.reportEvent('HelperPage');
             Get.to(HelperPage());
           },
         ),
@@ -63,6 +60,7 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.support_agent),
           title: Text(tr(LocaleKeys.settings_call_tech)),
           onTap: () {
+            AppMetrica.reportEvent('TechSupportPage');
             Get.to(TechSupportPage());
           },
         ),
@@ -70,6 +68,7 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.info_outline),
           title: Text(tr(LocaleKeys.settings_about)),
           onTap: () {
+            AppMetrica.reportEvent('AboutPage');
             Get.to(AboutPage());
           },
         ),

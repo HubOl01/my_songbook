@@ -1,4 +1,5 @@
 // import 'package:audioplayers/audioplayers.dart';
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chord/flutter_chord.dart';
@@ -48,16 +49,20 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                         if (controller.songModel.value.path_music != '') {
                           try{
                           await Share.shareXFiles(
-                              [XFile(controller.songModel.value.path_music!.contains(".mp3") ? controller.songModel.value.path_music! : "${controller.songModel.value.path_music!}.mp3")],
+                              [XFile(controller.songModel.value.path_music!)],
                               text:
                                   "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
                               subject: "${controller.songModel.value.name_song} from My Songbook");
+                              AppMetrica.reportEvent('Share successed!!! (audio)');
                           }catch(e){
+                            print("file exception: $e");
+                            AppMetrica.reportEvent('Share: file exception $e');
                             Share.share(
                               "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
                               subject: "${controller.songModel.value.name_song} from My Songbook");
                           }
                         } else {
+                          AppMetrica.reportEvent('Share successed!!! (not audio)');
                           await Share.share(
                               "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
                               subject: "${controller.songModel.value.name_song} from My Songbook");

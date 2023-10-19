@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
@@ -38,6 +39,7 @@ class _TranslatePageState extends State<TranslatePage> {
                     groupValue: currentLanguage,
                     value: language(0, context),
                     onChanged: (value) async {
+                      AppMetrica.reportEvent('TranslatePage: Русский');
                       setState(() {
                         currentLanguage = value;
                         context.setLocale(Locale(value));
@@ -73,6 +75,7 @@ class _TranslatePageState extends State<TranslatePage> {
                   groupValue: currentLanguage,
                   value: language(1, context),
                   onChanged: (value) async {
+                    AppMetrica.reportEvent('TranslatePage: English');
                     setState(() {
                       currentLanguage = value;
                       context.setLocale(Locale(value));
@@ -109,6 +112,7 @@ class _TranslatePageState extends State<TranslatePage> {
                     groupValue: currentLanguage,
                     value: language(2, context),
                     onChanged: (value) async {
+                      AppMetrica.reportEvent('TranslatePage: 中文 (experimental)');
                       setState(() {
                         currentLanguage = value;
                         context.setLocale(Locale(value));
