@@ -4,11 +4,11 @@ import 'package:flutter_chord/flutter_chord.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/Storage/storage.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/generated/guitar_songs/testEdit_song.dart';
+import 'package:my_songbook/guitar_songs/testEdit_song.dart';
 
-import '../../components/auto_scroll.dart';
-import '../../components/player_widget.dart';
-import '../../settings/currentNumber.dart';
+import '../components/auto_scroll.dart';
+import '../components/player_widget.dart';
+import '../settings/currentNumber.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});

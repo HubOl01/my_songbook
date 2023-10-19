@@ -2,10 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/generated/guitar_songs/testPage.dart';
+import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
-import '../../settings/currentNumber.dart';
+import '../settings/currentNumber.dart';
 import 'create_song.dart';
 import 'guitarController.dart';
 import 'guitarDetal.dart';

@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../Storage/storage.dart';
-import '../../components/player_widget.dart';
-import '../locale_keys.g.dart';
-import '../../settings/currentNumber.dart';
+import '../Storage/storage.dart';
+import '../components/player_widget.dart';
+import '../generated/locale_keys.g.dart';
+import '../settings/currentNumber.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';
 import 'model/songsModel.dart';

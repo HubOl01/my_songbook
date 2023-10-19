@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../Storage/storage.dart';
-import '../../components/auto_scroll.dart';
-import '../../components/player_widget.dart';
-import '../../settings/currentNumber.dart';
+import '../Storage/storage.dart';
+import '../components/auto_scroll.dart';
+import '../components/player_widget.dart';
+import '../settings/currentNumber.dart';
 import 'edit_song.dart';
 import 'guitarDetalController.dart';
 // import 'package:get/get.dart';
@@ -43,17 +43,27 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                 // backgroundColor: Colors.white,
                 actions: [
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async{
+                        try{
                         if (controller.songModel.value.path_music != '') {
-                          Share.shareXFiles(
-                              [XFile(controller.songModel.value.path_music!)],
+                          try{
+                          await Share.shareXFiles(
+                              [XFile(controller.songModel.value.path_music!.contains(".mp3") ? controller.songModel.value.path_music! : "${controller.songModel.value.path_music!}.mp3")],
                               text:
                                   "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
                               subject: "${controller.songModel.value.name_song} from My Songbook");
-                        } else {
-                          Share.share(
+                          }catch(e){
+                            Share.share(
                               "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
                               subject: "${controller.songModel.value.name_song} from My Songbook");
+                          }
+                        } else {
+                          await Share.share(
+                              "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
+                              subject: "${controller.songModel.value.name_song} from My Songbook");
+                        }
+                        }catch(e) {
+                          print("share_plus exception: $e");
                         }
                       },
                       icon: Icon(Icons.share)),
