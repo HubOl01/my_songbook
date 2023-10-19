@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/styles/colors.dart';
+import 'package:restart_app/restart_app.dart';
 
 class TranslatePage extends StatefulWidget {
   const TranslatePage({super.key});
@@ -55,7 +56,8 @@ class _TranslatePageState extends State<TranslatePage> {
                               actions: [
                                 TextButton(
                                     onPressed: () {
-                                      exit(0);
+                                      Restart.restartApp();
+                                      // exit(0);
                                     },
                                     child: Text(context
                                         .tr(LocaleKeys.alertDialogWarningExit)))
@@ -91,7 +93,8 @@ class _TranslatePageState extends State<TranslatePage> {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    exit(0);
+                                    Restart.restartApp();
+                                    // exit(0);
                                   },
                                   child: Text(context
                                       .tr(LocaleKeys.alertDialogWarningExit)))
@@ -128,7 +131,8 @@ class _TranslatePageState extends State<TranslatePage> {
                               actions: [
                                 TextButton(
                                     onPressed: () {
-                                      exit(0);
+                                      Restart.restartApp();
+                                      // exit(0);
                                     },
                                     child: Text(context
                                         .tr(LocaleKeys.alertDialogWarningExit)))
