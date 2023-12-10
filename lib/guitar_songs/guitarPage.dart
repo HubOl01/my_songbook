@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
+import 'package:my_songbook/guitar_songs/model/songsModel.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
@@ -9,6 +10,7 @@ import '../settings/currentNumber.dart';
 import 'create_song.dart';
 import 'guitarController.dart';
 import 'guitarDetal.dart';
+import 'search/searchPage.dart';
 
 class GuitarPage extends GetView<GuitarController> {
   const GuitarPage({super.key});
@@ -19,6 +21,11 @@ class GuitarPage extends GetView<GuitarController> {
           appBar: AppBar(
             title: Text(tr(LocaleKeys.appbar_list_songs)),
             actions: [
+              IconButton(
+                  onPressed: () {
+                    Get.to(SearchPage());
+                  },
+                  icon: Icon(Icons.search)),
               IconButton(
                   onPressed: () {
                     Get.to(Create_song());
@@ -60,7 +67,8 @@ class GuitarPage extends GetView<GuitarController> {
                                                   BorderRadius.circular(15),
                                               child: Container(
                                                 color: colorFiolet,
-                                                child: Text(tr(LocaleKeys.example),
+                                                child: Text(
+                                                    tr(LocaleKeys.example),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 10)),
@@ -84,36 +92,30 @@ class GuitarPage extends GetView<GuitarController> {
                             ? const Center(
                                 child: CircularProgressIndicator(),
                               )
-                            :  controller.songs.isEmpty 
-                        ? const SizedBox() :
-                            ListTile(
-                                title: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(controller.songs[index - 1].name_song,
-                                        style: TextStyle(fontSize: 16)),
-                                    Text(
-                                      "${controller.songs[index - 1].name_singer}",
-                                      style: TextStyle(fontSize: 14),
+                            : controller.songs.isEmpty
+                                ? const SizedBox()
+                                : ListTile(
+                                    title: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                            controller
+                                                .songs[index - 1].name_song,
+                                            style: TextStyle(fontSize: 16)),
+                                        Text(
+                                          "${controller.songs[index - 1].name_singer}",
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Get.to(GuitarDetal(
-                                    // songModel: controller.songs[index-1],
-                                    id: controller.songs[index - 1].id,
-                                    // name_song: controller.songs[index - 1].name_song,
-                                    // name_singer:
-                                    // controller.songs[index - 1].name_singer,
-                                    // song: controller.songs[index - 1].song,
-                                    // audio: controller.songs[index - 1].path_music,
-                                    // date_created:
-                                    // controller.songs[index - 1].date_created));
-                                  ));
-                                },
-                              );
+                                    onTap: () {
+                                      Get.to(GuitarDetal(
+                                        id: controller.songs[index - 1].id,
+                                      ));
+                                    },
+                                  );
                       },
                     ),
                   ))),
@@ -122,3 +124,4 @@ class GuitarPage extends GetView<GuitarController> {
 }
 
 final GuitarController controller = Get.put(GuitarController());
+

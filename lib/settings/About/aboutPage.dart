@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,7 @@ class AboutPage extends GetView<AboutController> {
         fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).primaryTextTheme.titleMedium!.color);
     return Obx(() => Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.white,
             foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
             elevation: 0,
           ),

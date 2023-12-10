@@ -1,6 +1,7 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/settings/Themes/themePage.dart';
 import 'package:my_songbook/settings/Translate/translatePage.dart';
@@ -74,5 +75,6 @@ class SettingsPage extends GetView<SettingsController> {
         ),
       ],
     ));
+    
   }
 }

@@ -12,11 +12,15 @@ class HelperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questions = context.locale == Locale('ru') ? questionsRU : context.locale == Locale('zh') ? questionsZH : questionsEN;
+    final questions = context.locale == Locale('ru')
+        ? questionsRU
+        : context.locale == Locale('zh')
+            ? questionsZH
+            : questionsEN;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title:  Text(tr(LocaleKeys.settings_help)),
+        title: Text(tr(LocaleKeys.settings_help)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -25,6 +29,7 @@ class HelperPage extends StatelessWidget {
               children:
                   questions.map<ExpansionPanelRadio>((HelpModel helpModel) {
                 return ExpansionPanelRadio(
+                    canTapOnHeader: true,
                     backgroundColor: Theme.of(context).primaryColor,
                     headerBuilder: (BuildContext context, bool isExpanded) {
                       return ListTile(
@@ -40,16 +45,19 @@ class HelperPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: RichText(
-                
-                    text: TextSpan(children: [
+                text: TextSpan(children: [
                   new TextSpan(
-                    text:
-                        tr(LocaleKeys.settings_help_other_quest),
-                    style: TextStyle(color: Theme.of(context).primaryTextTheme.titleMedium!.color),
+                    text: tr(LocaleKeys.settings_help_other_quest),
+                    style: TextStyle(
+                        color: Theme.of(context)
+                            .primaryTextTheme
+                            .titleMedium!
+                            .color),
                   ),
                   new TextSpan(
                     text: "VK",
-                    style: new TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
+                    style: new TextStyle(
+                        color: Colors.blue[700], fontWeight: FontWeight.bold),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
@@ -57,12 +65,19 @@ class HelperPage extends StatelessWidget {
                           mode: LaunchMode.externalApplication,
                         );
                       },
-                  ),new TextSpan(
+                  ),
+                  new TextSpan(
                     text: tr(LocaleKeys.settings_help_other_quest_or),
-                    style: new TextStyle(color: Theme.of(context).primaryTextTheme.titleMedium!.color),
-                  ),new TextSpan(
+                    style: new TextStyle(
+                        color: Theme.of(context)
+                            .primaryTextTheme
+                            .titleMedium!
+                            .color),
+                  ),
+                  new TextSpan(
                     text: "Telegram",
-                    style: new TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
+                    style: new TextStyle(
+                        color: Colors.blue[700], fontWeight: FontWeight.bold),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
                         launchUrl(
