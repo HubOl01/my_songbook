@@ -42,8 +42,8 @@ void main() async {
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
   try {
-    AppMetrica.activate(
-        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: true));
+    // AppMetrica.activate(
+    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: true));
   } catch (ex) {
     print("app_metrica: ${ex}");
   }

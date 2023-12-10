@@ -38,8 +38,8 @@ class Themes {
     scaffoldBackgroundColor: backgroundColorDark,
     // primaryColor: textColorDark,
     textTheme: TextTheme(
-        bodyLarge: TextStyle(backgroundColor: textColorDark),
-        bodySmall: TextStyle(backgroundColor: subColorDark)),
+        bodyLarge: TextStyle(color: textColorDark),
+        bodySmall: TextStyle(color: subColorDark)),
     backgroundColor: backgroundColorDark,
     dialogBackgroundColor: backgroundColorDark,
     primaryTextTheme:
@@ -117,7 +117,7 @@ class Themes {
         const TextTheme(titleMedium: TextStyle(color: Colors.black)),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(colorFiolet))),
+            backgroundColor: MaterialStatePropertyAll(colorFiolet), foregroundColor: MaterialStatePropertyAll(Colors.white))),
     // progressIndicatorTheme: const ProgressIndicatorThemeData(
     // color: Colors.blue, linearTrackColor: Colors.blue),
     inputDecorationTheme: InputDecorationTheme(
@@ -137,7 +137,7 @@ class Themes {
     // brightness: Brightness.light,
     appBarTheme: AppBarTheme(
         backgroundColor: colorFiolet,
-        // foregroundColor: textColor,
+        foregroundColor: Colors.white,
         elevation: 0,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

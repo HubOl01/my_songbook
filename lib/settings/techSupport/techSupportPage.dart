@@ -72,30 +72,30 @@ class TechSupportPage extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () async {
-                        final Email email = Email(
-                          body: "",
-                          subject: "My Songbook (Tech Support)",
-                          recipients: ["ru-developer@mail.ru"],
-                          isHTML: true,
-                        );
+                          final Email email = Email(
+                            body: "",
+                            subject: "My Songbook (Tech Support)",
+                            recipients: ["ru-developer@mail.ru"],
+                            isHTML: true,
+                          );
 
-                        String platformResponse;
+                          String platformResponse;
 
-                        try {
-                          await FlutterEmailSender.send(email);
-                          platformResponse = 'success';
-                        } catch (error) {
-                          print(error);
-                          platformResponse = error.toString();
-                        }
+                          try {
+                            await FlutterEmailSender.send(email);
+                            platformResponse = 'success';
+                          } catch (error) {
+                            print(error);
+                            platformResponse = error.toString();
+                          }
 
-                        // if (!mounted) return;
-                        print(platformResponse);
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text(platformResponse),
-                        //   ),
-                        // );
+                          // if (!mounted) return;
+                          print(platformResponse);
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text(platformResponse),
+                          //   ),
+                          // );
                       },
                       icon: Icon(Icons.email_outlined)),
                 ],
