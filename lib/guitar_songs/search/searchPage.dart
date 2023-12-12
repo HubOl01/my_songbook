@@ -28,7 +28,7 @@ class SearchPage extends GetView<SearchPageController> {
                 fillColor: Colors.white.withOpacity(.3),
                 hintText: "Трек, исполнитель",
                 hintStyle: TextStyle(
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(.8),
                     fontSize: 18,
                     decoration: TextDecoration.none),
                 prefixIcon: Icon(Icons.search),

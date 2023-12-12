@@ -34,6 +34,8 @@ var searchedSong = <Song>[].obs;
         if(song.name_song.contains(name)){
           searchedSong.add(song);
           print("Запрос ответа :=: ${searchedSong.toList()}");
+        }else if(song.name_singer.contains(name)){
+          searchedSong.add(song);
         }
     }
   }
