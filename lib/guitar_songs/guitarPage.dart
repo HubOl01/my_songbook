@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/guitar_songs/model/songsModel.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
@@ -45,9 +44,23 @@ class GuitarPage extends GetView<GuitarController> {
                     color: colorFiolet.withOpacity(0.3),
                     child: ListView.builder(
                       // physics: BouncingScrollPhysics(),
-                      itemCount: controller.songs.length + 1,
+                      itemCount: controller.songs.length + 2,
                       itemBuilder: (context, index) {
-                        if (index == 0) {
+                        if(index == 0) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                color: Colors.blue,
+                                height: 200,
+                                width: context.width,
+                                // child: ,
+                              ),
+                            ),
+                          );
+                        }
+                        if (index == 1) {
                           return !isDeleteTest
                               ? ListTile(
                                   title: Column(
