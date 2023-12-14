@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
 import '../settings/currentNumber.dart';
+import 'Frame_for_news/frameCard.dart';
 import 'create_song.dart';
 import 'guitarController.dart';
 import 'guitarDetal.dart';
@@ -47,18 +49,7 @@ class GuitarPage extends GetView<GuitarController> {
                       itemCount: controller.songs.length + 2,
                       itemBuilder: (context, index) {
                         if(index == 0) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                color: Colors.blue,
-                                height: 200,
-                                width: context.width,
-                                // child: ,
-                              ),
-                            ),
-                          );
+                        return FrameCard();
                         }
                         if (index == 1) {
                           return !isDeleteTest
