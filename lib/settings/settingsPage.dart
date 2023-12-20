@@ -1,13 +1,11 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/settings/Themes/themePage.dart';
 import 'package:my_songbook/settings/Translate/translatePage.dart';
-import 'package:my_songbook/settings/techSupport/techSupportPage.dart';
 
+import '../components/sendToSupport.dart';
 import '../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
@@ -62,34 +60,8 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.support_agent),
           title: Text(tr(LocaleKeys.settings_call_tech)),
           onTap: () async {
-            AppMetrica.reportEvent('TechSupportPage');
-            // Get.to(TechSupportPage());
-             final Email email = Email(
-                          body: "",
-                          subject: "My Songbook (Tech Support)",
-                          recipients: ["ru-developer@mail.ru"],
-                          isHTML: true,
-                        );
-
-                        String platformResponse;
-
-                        try {
-                          await FlutterEmailSender.send(email);
-                          platformResponse = 'success';
-                        } catch (error) {
-                          print(error);
-                          platformResponse = error.toString();
-                        }
-
-                        // if (!mounted) return;
-                        print(platformResponse);
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text(platformResponse),
-                        //   ),
-                        // );
-              },
-        
+            sendToSupport();
+          },
         ),
         ListTile(
           leading: Icon(Icons.info_outline),
@@ -101,6 +73,5 @@ class SettingsPage extends GetView<SettingsController> {
         ),
       ],
     ));
-    
   }
 }

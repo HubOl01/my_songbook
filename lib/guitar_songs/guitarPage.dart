@@ -7,7 +7,7 @@ import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
 import '../settings/currentNumber.dart';
-import 'Frame_for_news/frameCard.dart';
+import 'Card_for_news/cardNews.dart';
 import 'create_song.dart';
 import 'guitarController.dart';
 import 'guitarDetal.dart';
@@ -49,7 +49,7 @@ class GuitarPage extends GetView<GuitarController> {
                       itemCount: controller.songs.length + 2,
                       itemBuilder: (context, index) {
                         if(index == 0) {
-                        return FrameCard();
+                        return CardNews();
                         }
                         if (index == 1) {
                           return !isDeleteTest

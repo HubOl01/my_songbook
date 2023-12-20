@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../components/updateApp.dart';
 import '../../generated/locale_keys.g.dart';
 import 'aboutController.dart';
 
@@ -93,7 +94,7 @@ class AboutPage extends GetView<AboutController> {
                           height: 50,
                           child: ElevatedButton(
                               onPressed: () {
-                                controller.updateApp();
+                                updateApp();
                               },
                               child: Text(
                                   tr(LocaleKeys.settings_about_check_update))),
