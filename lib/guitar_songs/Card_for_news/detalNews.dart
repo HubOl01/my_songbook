@@ -56,20 +56,22 @@ class DetalNews extends StatelessWidget {
               ],
             ),
           ),
-          newData.isUpdate! ? Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: context.width,
-              height: 50,
-              child: CustomButton(
-                  onPressed: () {
-                    AppMetrica.reportEvent(
-                        'Информация о приложении (обновление)');
-                    updateApp();
-                  },
-                  child: Text("Обновиться до последней версии")),
-            ),
-          ) : SizedBox(),
+          newData.isUpdate!
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: context.width,
+                    height: 50,
+                    child: CustomButton(
+                        onPressed: () {
+                          AppMetrica.reportEvent(
+                              'Информация о приложении (обновление)');
+                          updateApp();
+                        },
+                        child: Text("Обновиться до последней версии")),
+                  ),
+                )
+              : SizedBox(),
           newData.isSupport!
               ? Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -34,18 +34,7 @@ class _CardNewsState extends State<CardNews> {
               return Stack(
                 children: [
                   JSONValue().length == 0
-                      ? Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Image.asset(context.isDarkMode
-                                  ? 'assets/images/dark_isuct.png'
-                                  : 'assets/images/isuct.png'),
-                            ),
-                          ),
-                        )
+                      ? SizedBox()
                       : CarouselSlider.builder(
                           carouselController: _controller,
                           itemCount: JSONValue().length,
@@ -64,11 +53,11 @@ class _CardNewsState extends State<CardNews> {
                             padding: const EdgeInsets.all(2.0),
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: JSONValue()[index].imageUrl! != ''
+                                child: JSONValue()[index].imageUrl != ''
                                     ? GestureDetector(
                                         onTap: () {
                                           AppMetrica.reportEvent(
-                                              'Открытие информационного баннера');
+                                              'Open Information Banners');
                                           JSONValue()[index].isClick!
                                               ? JSONValue()[index].type !=
                                                       'website'
@@ -76,7 +65,7 @@ class _CardNewsState extends State<CardNews> {
                                                       newData:
                                                           JSONValue()[index]))
                                                   : JSONValue()[index]
-                                                              .websiteUrl! !=
+                                                              .websiteUrl !=
                                                           ''
                                                       ? launchUrl(
                                                           Uri.parse(
@@ -108,9 +97,7 @@ class _CardNewsState extends State<CardNews> {
                                           ],
                                         ),
                                       )
-                                    : Image.asset(context.isDarkMode
-                                        ? 'assets/images/dark_isuct.png'
-                                        : 'assets/images/isuct.png')),
+                                    : SizedBox()),
                           ),
                         ),
 

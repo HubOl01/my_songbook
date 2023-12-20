@@ -1,11 +1,14 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/settings/Themes/Themes.dart';
 import 'package:my_songbook/settings/currentNumber.dart';
@@ -29,9 +32,14 @@ Future getMode() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return const Material();
-  };
+  // ErrorWidget.builder = (FlutterErrorDetails details) {
+  //   return const Material();
+  // };
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+  await remoteConfig.fetchAndActivate();
   await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(app.path);

@@ -18,7 +18,7 @@ Future getNews() async {
 List<News> JSONValue() {
   List<News> json = [];
   for (int i = 0; i < myJson.length; i++) {
-    if (myJson[i].isShow) {
+    if (myJson[i].isShow!) {
       print("json[${i}].isShow!: ${myJson[i].isShow}");
       json.add(myJson[i]);
     }

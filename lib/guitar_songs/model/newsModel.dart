@@ -9,41 +9,41 @@ List<News> newsFromJson(String str) => List<News>.from(json.decode(str).map((x) 
 String newsToJson(List<News> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class News {
-    String name;
-    String user;
-    String lang;
-    List<String> description;
-    String type;
-    String imageUrl;
-    bool isDonate;
-    bool isUpdate;
-    String textColorClick;
-    bool isClick;
-    bool isShow;
-    bool isSupport;
-    String websiteUrl;
+    final String? name;
+    final String? user;
+    final String? lang;
+    final List<String>? description;
+    final String? type;
+    final String? imageUrl;
+    final bool? isDonate;
+    final bool? isUpdate;
+    final String? textColorClick;
+    final bool? isClick;
+    final bool? isShow;
+    final bool? isSupport;
+    final String? websiteUrl;
 
     News({
-        required this.name,
-        required this.user,
-        required this.lang,
-        required this.description,
-        required this.type,
-        required this.imageUrl,
-        required this.isDonate,
-        required this.isUpdate,
-        required this.textColorClick,
-        required this.isClick,
-        required this.isShow,
-        required this.isSupport,
-        required this.websiteUrl,
+        this.name,
+        this.user,
+        this.lang,
+        this.description,
+        this.type,
+        this.imageUrl,
+        this.isDonate,
+        this.isUpdate,
+        this.textColorClick,
+        this.isClick,
+        this.isShow,
+        this.isSupport,
+        this.websiteUrl,
     });
 
     factory News.fromJson(Map<String, dynamic> json) => News(
         name: json["name"],
         user: json["user"],
         lang: json["lang"],
-        description: List<String>.from(json["description"].map((x) => x)),
+        description: json["description"] == null ? [] : List<String>.from(json["description"]!.map((x) => x)),
         type: json["type"],
         imageUrl: json["imageUrl"],
         isDonate: json["isDonate"],
@@ -59,7 +59,7 @@ class News {
         "name": name,
         "user": user,
         "lang": lang,
-        "description": List<dynamic>.from(description.map((x) => x)),
+        "description": description == null ? [] : List<dynamic>.from(description!.map((x) => x)),
         "type": type,
         "imageUrl": imageUrl,
         "isDonate": isDonate,
