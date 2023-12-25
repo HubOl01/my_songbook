@@ -38,6 +38,7 @@ abstract class  LocaleKeys {
   static const settings_translate = 'settings_translate';
   static const settings_help = 'settings_help';
   static const settings_help_other_quest = 'settings_help_other_quest';
+  static const settings_help_other_quest_email = 'settings_help_other_quest_email';
   static const settings_help_other_quest_or = 'settings_help_other_quest_or';
   static const settings_call_tech = 'settings_call_tech';
   static const appbar_settings_call_tech = 'appbar_settings_call_tech';

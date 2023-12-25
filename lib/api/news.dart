@@ -1,4 +1,5 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:path/path.dart';
 
 import '../components/remote_config.dart';
 import '../guitar_songs/model/newsModel.dart';
@@ -15,10 +16,20 @@ Future getNews() async {
   return myJson;
 }
 
-List<News> JSONValue() {
+List<News> JSONValueRU() {
   List<News> json = [];
   for (int i = 0; i < myJson.length; i++) {
-    if (myJson[i].isShow!) {
+    if (myJson[i].isShow! && myJson[i].lang == "ru") {
+      print("json[${i}].isShow!: ${myJson[i].isShow}");
+      json.add(myJson[i]);
+    }
+  }
+  return json;
+}
+List<News> JSONValueEN() {
+  List<News> json = [];
+  for (int i = 0; i < myJson.length; i++) {
+    if (myJson[i].isShow! && myJson[i].lang == "en") {
       print("json[${i}].isShow!: ${myJson[i].isShow}");
       json.add(myJson[i]);
     }

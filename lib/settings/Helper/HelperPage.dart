@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:my_songbook/components/sendToSupport.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/locale_keys.g.dart';
@@ -55,37 +56,34 @@ class HelperPage extends StatelessWidget {
                             .color),
                   ),
                   new TextSpan(
-                    text: "VK",
+                    text: tr(LocaleKeys.settings_help_other_quest_email),
                     style: new TextStyle(
                         color: Colors.blue[700], fontWeight: FontWeight.bold),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(
-                          Uri.parse("https://vk.com/topic-222084855_49405619"),
-                          mode: LaunchMode.externalApplication,
-                        );
+                       sendToSupport();
                       },
                   ),
-                  new TextSpan(
-                    text: tr(LocaleKeys.settings_help_other_quest_or),
-                    style: new TextStyle(
-                        color: Theme.of(context)
-                            .primaryTextTheme
-                            .titleMedium!
-                            .color),
-                  ),
-                  new TextSpan(
-                    text: "Telegram",
-                    style: new TextStyle(
-                        color: Colors.blue[700], fontWeight: FontWeight.bold),
-                    recognizer: new TapGestureRecognizer()
-                      ..onTap = () {
-                        launchUrl(
-                          Uri.parse("https://t.me/mysongbook01_discussions/8"),
-                          mode: LaunchMode.externalApplication,
-                        );
-                      },
-                  ),
+                  // new TextSpan(
+                  //   text: tr(LocaleKeys.settings_help_other_quest_or),
+                  //   style: new TextStyle(
+                  //       color: Theme.of(context)
+                  //           .primaryTextTheme
+                  //           .titleMedium!
+                  //           .color),
+                  // ),
+                  // new TextSpan(
+                  //   text: "Telegram",
+                  //   style: new TextStyle(
+                  //       color: Colors.blue[700], fontWeight: FontWeight.bold),
+                  //   recognizer: new TapGestureRecognizer()
+                  //     ..onTap = () {
+                  //       launchUrl(
+                  //         Uri.parse("https://t.me/mysongbook01_discussions/8"),
+                  //         mode: LaunchMode.externalApplication,
+                  //       );
+                  //     },
+                  // ),
                 ]),
               ),
             )

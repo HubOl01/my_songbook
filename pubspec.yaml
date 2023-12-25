@@ -67,6 +67,8 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   carousel_slider: ^4.2.1
   flutter_markdown: ^0.6.18+2
+  yandex_mobileads: ^6.2.0
+  huawei_in_app_update: ^1.2.1
 
 
   # The following adds the Cupertino Icons font to your application.

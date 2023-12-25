@@ -14,12 +14,16 @@ class AboutPage extends GetView<AboutController> {
 
   @override
   Widget build(BuildContext context) {
+    final _navigatorKey = GlobalKey<NavigatorState>();
     final customTextStyle = TextStyle(
-        fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).primaryTextTheme.titleMedium!.color);
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(context).primaryTextTheme.titleMedium!.color);
     return Obx(() => Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.white,
-            foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
+            backgroundColor: Colors.transparent,
+            foregroundColor:
+                Theme.of(context).primaryTextTheme.titleMedium!.color,
             elevation: 0,
           ),
           body: controller.isloading.value
@@ -54,38 +58,40 @@ class AboutPage extends GetView<AboutController> {
                               ),
                             ],
                           )),
-                      ListTile(
-                          title: Text(tr(LocaleKeys.settings_about_subscribe)),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://vk.com/mysongbook01"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.vk,
-                                  // size: 30,
-                                ),
-                              ),
-                              SizedBox(width: 10,),
-                              IconButton(
-                                onPressed: () {
-                                  launchUrl(
-                                    Uri.parse("https://t.me/mysongbook01"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                },
-                                icon: Logo(
-                                  Logos.telegram,
-                                  // size: 30,
-                                ),
-                              ),
-                            ],
-                          )),
+                      // ListTile(
+                      //     title: Text(tr(LocaleKeys.settings_about_subscribe)),
+                      //     trailing: Row(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         IconButton(
+                      //           onPressed: () {
+                      //             launchUrl(
+                      //               Uri.parse("https://vk.com/mysongbook01"),
+                      //               mode: LaunchMode.externalApplication,
+                      //             );
+                      //           },
+                      //           icon: Logo(
+                      //             Logos.vk,
+                      //             // size: 30,
+                      //           ),
+                      //         ),
+                      //         SizedBox(
+                      //           width: 10,
+                      //         ),
+                      //         IconButton(
+                      //           onPressed: () {
+                      //             launchUrl(
+                      //               Uri.parse("https://t.me/mysongbook01"),
+                      //               mode: LaunchMode.externalApplication,
+                      //             );
+                      //           },
+                      //           icon: Logo(
+                      //             Logos.telegram,
+                      //             // size: 30,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
                       // Spacer(),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -94,7 +100,7 @@ class AboutPage extends GetView<AboutController> {
                           height: 50,
                           child: ElevatedButton(
                               onPressed: () {
-                                updateApp();
+                                updateApp(_navigatorKey, context);
                               },
                               child: Text(
                                   tr(LocaleKeys.settings_about_check_update))),

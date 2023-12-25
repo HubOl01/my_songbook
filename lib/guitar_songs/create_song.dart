@@ -14,6 +14,7 @@ import '../settings/currentNumber.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';
 import 'model/songsModel.dart';
+import 'works_file.dart';
 
 class Create_song extends StatefulWidget {
   const Create_song({super.key});
@@ -316,11 +317,11 @@ class _Create_songState extends State<Create_song> {
     }
   }
 
-  Future<File> saveFilePermanently(PlatformFile file) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final newFile = File('${appStorage.path}/${file.name}');
-    return File(file.path!).copy(newFile.path);
-  }
+  // Future<File> saveFilePermanently(PlatformFile file) async {
+  //   final appStorage = await getApplicationDocumentsDirectory();
+  //   final newFile = File('${appStorage.path}/${file.name}');
+  //   return File(file.path!).copy(newFile.path);
+  // }
 
   void autotext(String name) {
     if (name.contains(" - ")) {

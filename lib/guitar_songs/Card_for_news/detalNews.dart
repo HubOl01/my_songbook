@@ -1,9 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/customButton.dart';
 import '../../components/sendToSupport.dart';
@@ -14,6 +18,7 @@ class DetalNews extends StatelessWidget {
   final News newData;
   DetalNews({required this.newData});
   double fontSize = 16;
+  final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +58,16 @@ class DetalNews extends StatelessWidget {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                   ),
+                if (newData.audio!.isNotEmpty || newData.audio == [])
+                  for (var audio in newData.audio!)
+                    ListTile(
+                      title: Text(audio.nameSong ?? ''),
+                      subtitle: Text(audio.nameSinger ?? ''),
+                      trailing: Icon(Icons.play_circle),
+                      onTap: () => launchUrl(
+                        Uri.parse(audio.audioUrl!),
+                      ),
+                    ),
               ],
             ),
           ),
@@ -66,7 +81,7 @@ class DetalNews extends StatelessWidget {
                         onPressed: () {
                           AppMetrica.reportEvent(
                               'Информация о приложении (обновление)');
-                          updateApp();
+                          updateApp(_navigatorKey, context);
                         },
                         child: Text("Обновиться до последней версии")),
                   ),
@@ -93,11 +108,14 @@ class DetalNews extends StatelessWidget {
                                         .color),
                                 children: [
                               TextSpan(
-                                text:
-                                    "Если вы обнаружили проблему или у вас есть пожелания по улучшению нашего сервиса, свяжитесь с разработчиком ",
+                                text: context.locale == Locale('ru')
+                                    ? "Если вы обнаружили проблему или у вас есть пожелания по улучшению нашего сервиса, свяжитесь с разработчиком "
+                                    : "If you find a problem or have any suggestions for improving our service, please contact the developer ",
                               ),
                               TextSpan(
-                                text: "по электронной почте.",
+                                text: context.locale == Locale("ru")
+                                    ? "по электронной почте."
+                                    : "by email.",
                                 style: TextStyle(
                                     color: Colors.blue[700],
                                     fontWeight: FontWeight.bold),

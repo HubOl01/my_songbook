@@ -1,44 +1,80 @@
 [
-    {
-      "name": "Вышло обновление!",
-      "user": "ru-developer",
-      "lang": "ru",
-      "description": [
-        "Предновогоднее обновление нашего приложения сделало его еще удобнее и функциональнее!",
-        "1. Раздел Moodle стал другим!",
-        "  Появились: ",
-        "   - Баннер с важной информацией",
-        "   - Moodle",
-        "   - Сессия, где вы можете посмотреть расписание экзаменов",
-        "2. В настройках уведомлений добавили возможность настраивать в удобное для вас время",
-        "3. Исправлены мелкие ошибки для повышения производительности",
-        "_Счастливого Нового года и успехов в учебе!_"
-      ],
-      "type": "text",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-university---isuct.appspot.com/o/Update.png?alt=media&token=e9659e3d-ac6e-4605-b304-3cf4b835265c",
-      "isDonate": false,
-      "isUpdate": true,
-      "textColorClick": "0xFFFFFFFF",
-      "isClick": true,
-      "isShow": false,
-      "isSupport": true,
-      "websiteUrl": ""
-    },
-    {
-      "name": "С Новым Годом!!!",
-      "user": "ru-developer",
-      "lang": "ru",
-      "description": [
-        
-      ],
-      "type": "text",
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
-      "isDonate": false,
-      "isUpdate": false,
-      "textColorClick": "0xFFFFFFFF",
-      "isClick": true,
-      "isShow": false,
-      "isSupport": false,
-      "websiteUrl": ""
-    }
-  ]
+  {
+    "name": "Results of the year!",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [
+      "[record](https://pub.dev/packages/record)"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
+    "audio": [
+      {
+        "name_song": "Твыфв",
+        "name_singer": "",
+        "audioURL": "",
+        "name_URLWEB":""
+      },
+      {
+        "name_song": "Твыфв",
+        "name_singer": "",
+        "audioURL": "",
+        "name_URLWEB":""
+      }
+    ],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Итоги года!",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [
+      "[record](https://pub.dev/packages/record)"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
+    "audio": [
+      {
+        "name_song": "Твыфв",
+        "name_singer": "",
+        "audioURL": "",
+        "name_URLWEB":""
+      },
+      {
+        "name_song": "Твыфв",
+        "name_singer": "",
+        "audioURL": "",
+        "name_URLWEB":""
+      }
+    ],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "С Новым Годом!!!",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": false,
+    "websiteUrl": ""
+  }
+]

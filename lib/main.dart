@@ -35,11 +35,16 @@ void main() async {
   // ErrorWidget.builder = (FlutterErrorDetails details) {
   //   return const Material();
   // };
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
-  await remoteConfig.fetchAndActivate();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+  } catch (ex) {
+    print("Firebase ex: ${ex}");
+  }
+
   await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(app.path);
