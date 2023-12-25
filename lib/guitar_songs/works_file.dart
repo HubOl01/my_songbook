@@ -4,23 +4,28 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 // Future<File> saveFilePermanently(PlatformFile file) async {
-//   final directory = await getApplicationDocumentsDirectory();
-//   final mySongsDirectory = Directory('${directory.path}');
-
-//   // Создание папки "Master", если она еще не существует
-//   if (!await mySongsDirectory.exists()) {
-//     await mySongsDirectory.create(recursive: true);
-//   }
-//   // final mySongsDirectory = Directory('${directory.path}');
-
-//   final filePath = File('${mySongsDirectory.path}/${file.name}');
-//   return filePath;
+//   final appStorage = await getApplicationDocumentsDirectory();
+//   final newFile = File('${appStorage.path}/${file.name}');
+//   return File(file.path!).copy(newFile.path);
 // }
+
 
 Future<File> saveFilePermanently(PlatformFile file) async {
   final appStorage = await getApplicationDocumentsDirectory();
-  final newFile = File('${appStorage.path}/${file.name}');
+  final newFileName = await _getUniqueFileName(appStorage.path, file.name);
+  final newFile = File('$appStorage/$newFileName');
   return File(file.path!).copy(newFile.path);
+}
+
+Future<String> _getUniqueFileName(String directoryPath, String originalName) async {
+  String fileName = originalName;
+  int index = 1;
+
+  while (await File('$directoryPath/$fileName').exists()) {
+    fileName = '${originalName.replaceAll('.', '_')}_$index.${originalName.split('.').last}';
+    index++;
+  }
+  return fileName;
 }
 
 Future<void> deleteFile(String filePath) async {

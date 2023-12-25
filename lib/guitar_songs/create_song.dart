@@ -72,36 +72,36 @@ class _Create_songState extends State<Create_song> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                !isClosedWarring
-                    ? SizedBox(
-                        // color: Colors.blue,
-                        height: 90,
-                        child: Stack(children: [
-                          Positioned(
-                              top: -10,
-                              right: -10,
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isClosedWarring = true;
-                                    isClosedWarringPut(isClosedWarring);
-                                  });
-                                },
-                                icon: Icon(Icons.close),
-                                color: Colors.red,
-                                iconSize: 22,
-                              )),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              tr(LocaleKeys.add_song_attention),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ]),
-                      )
-                    : SizedBox(),
+                // !isClosedWarring
+                //     ? SizedBox(
+                //         // color: Colors.blue,
+                //         height: 90,
+                //         child: Stack(children: [
+                //           Positioned(
+                //               top: -10,
+                //               right: -10,
+                //               child: IconButton(
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     isClosedWarring = true;
+                //                     isClosedWarringPut(isClosedWarring);
+                //                   });
+                //                 },
+                //                 icon: Icon(Icons.close),
+                //                 color: Colors.red,
+                //                 iconSize: 22,
+                //               )),
+                //           Align(
+                //             alignment: Alignment.bottomCenter,
+                //             child: Text(
+                //               tr(LocaleKeys.add_song_attention),
+                //               textAlign: TextAlign.center,
+                //               style: TextStyle(color: Colors.red),
+                //             ),
+                //           ),
+                //         ]),
+                //       )
+                //     : SizedBox(),
                 SizedBox(
                   height: !isClosedWarring ? 10 : 0,
                 ),
