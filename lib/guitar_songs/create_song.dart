@@ -207,7 +207,8 @@ class _Create_songState extends State<Create_song> {
                                 final GuitarController guitar =
                                     Get.put(GuitarController());
                                 guitar.refreshSongs();
-                                AppMetrica.reportEvent('create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
+                                AppMetrica.reportEvent(
+                                    'create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
                                 // if (isSuccess) {
                                 Get.back();
                                 // } else {
@@ -292,7 +293,7 @@ class _Create_songState extends State<Create_song> {
       // allowedExtensions: ['mp3'],
     );
     if (_picker != null) {
-      setState(()  {
+      setState(() {
         isAudio = false;
         customFile = null;
         PlatformFile file = _picker.files.first;
@@ -325,6 +326,10 @@ class _Create_songState extends State<Create_song> {
 
   void autotext(String name) {
     if (name.contains(" - ")) {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
       List<String> words = name.split(' - ');
       String nameSinger = words[0];
       String nameSong = words[1];
@@ -343,7 +348,58 @@ class _Create_songState extends State<Create_song> {
       setState(() {
         if (name_songController.text.trim().isNotEmpty ||
             name_singerController.text.trim().isNotEmpty) {
-           showDialog(
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(context.tr(LocaleKeys.confirmation_title)),
+                    content: Text(
+                        context.tr(LocaleKeys.add_song_confirmation_content)),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_no))),
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              name_songController.text = nameSong;
+                              name_singerController.text = nameSinger;
+                            });
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_yes)))
+                    ],
+                  ));
+        } else {
+          name_songController.text = nameSong;
+          name_singerController.text = nameSinger;
+        }
+      });
+    } else if (name.contains(" — ")) {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
+      List<String> words = name.split(' — ');
+      String nameSinger = words[0];
+      String nameSong = words[1];
+      if (nameSong.contains(".mp3")) {
+        nameSong = words[1].replaceAll(".mp3", "");
+        if (nameSong.contains("—")) {
+          nameSong = words[1].replaceAll("—", " ");
+        }
+      }
+      if (nameSong.contains(".m4a")) {
+        nameSong = words[1].replaceAll(".m4a", "");
+        if (nameSong.contains("—")) {
+          nameSong = words[1].replaceAll("—", " ");
+        }
+      }
+      setState(() {
+        if (name_songController.text.trim().isNotEmpty ||
+            name_singerController.text.trim().isNotEmpty) {
+          showDialog(
               context: context,
               builder: (context) => AlertDialog(
                     title: Text(context.tr(LocaleKeys.confirmation_title)),
@@ -372,6 +428,10 @@ class _Create_songState extends State<Create_song> {
         }
       });
     } else {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
       String nameSong = name;
       if (nameSong.contains(".mp3")) {
         nameSong = nameSong.replaceAll(".mp3", "");

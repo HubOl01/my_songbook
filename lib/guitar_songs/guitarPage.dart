@@ -5,6 +5,7 @@ import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
 
+import '../Storage/storage.dart';
 import '../settings/currentNumber.dart';
 import 'Card_for_news/cardNews.dart';
 import 'create_song.dart';
@@ -55,6 +56,29 @@ class GuitarPage extends GetView<GuitarController> {
                         if (index == 1) {
                           return !isDeleteTest
                               ? ListTile(
+                                  onLongPress: () async => await showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: Text(tr(LocaleKeys.confirmation_title)),
+                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_delete)),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      child: Text(tr(LocaleKeys.confirmation_no))),
+                                  TextButton(
+                                      onPressed: () async {
+                                        // setState(() {
+                                          isDeleteTest = true;
+                                          isDeleteTestPut(isDeleteTest);
+                                        // });
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
+                                      },
+                                      child: Text(tr(LocaleKeys.confirmation_yes)))
+                                ])),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:

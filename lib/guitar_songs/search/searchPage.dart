@@ -15,7 +15,7 @@ class SearchPage extends GetView<SearchPageController> {
             padding: EdgeInsets.only(right: 4, top: 6, bottom: 6),
             width: context.width - 65,
             child: TextField(
-              onChanged: (value) => controller.searchSong(value),
+              onChanged: (value) => controller.searchSong(value.obs),
               autofocus: true,
               controller: searchController,
               style: TextStyle(
@@ -43,30 +43,34 @@ class SearchPage extends GetView<SearchPageController> {
             ),
           )
         ]),
-        body: Obx(()=> ListView.builder(
-          itemCount: controller.searchedSong.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(controller.searchedSong[index].name_song,
-                      style: TextStyle(fontSize: 16)),
-                  Text(
-                    "${controller.searchedSong[index].name_singer}",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Get.to(GuitarDetal(
-                  id: controller.searchedSong[index].id,
-                ));
-              },
-            );
-          },
-        )));
+        body: FutureBuilder(
+            future: controller.refreshSongs(),
+            builder: (context, snapshot) {
+              return Obx(() => ListView.builder(
+                    itemCount: controller.searchedSong.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(controller.searchedSong[index].name_song,
+                                style: TextStyle(fontSize: 16)),
+                            Text(
+                              "${controller.searchedSong[index].name_singer}",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Get.to(GuitarDetal(
+                            id: controller.searchedSong[index].id,
+                          ));
+                        },
+                      );
+                    },
+                  ));
+            }));
   }
 }
 

@@ -84,6 +84,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   @override
   void dispose() {
     audioPlayer.stop();
+    stream.cancel();
     audioPlayer.dispose();
     stream.cancel();
     super.dispose();

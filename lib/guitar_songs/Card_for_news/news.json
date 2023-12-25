@@ -1,5 +1,71 @@
 [
   {
+    "name": "My Songbook 1.4",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/new%20version.png?alt=media&token=8616252d-a375-40ea-a4dc-edf29ab3bc2a",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": true,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "My Songbook 1.4",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/new%20version.png?alt=media&token=8616252d-a375-40ea-a4dc-edf29ab3bc2a",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": true,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Musical selection for the New Year",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/news_songsEN.png?alt=media&token=62a3915b-5d77-4146-9de1-370e5688c6b2",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Музыкальная подборка для Нового года",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [
+      "Привет, друзья! Совсем скоро наступит Новый год, и в эту волшебную новогоднюю ночь хочется веселиться и петь вместе с друзьями любимые песни. Специально для вас мы подготовили список из 12 самых популярных и лучших новогодних хитов, которые не оставят равнодушными ни одного из вас. Давайте вместе окунемся в мир музыки и праздника!"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/news_songsRU.png?alt=media&token=1168779c-a3f1-43ae-8761-02d0a061f434",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
     "name": "Results of the year!",
     "user": "ru-developer",
     "lang": "en",
@@ -10,16 +76,16 @@
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
     "audio": [
       {
-        "name_song": "Твыфв",
-        "name_singer": "",
-        "audioURL": "",
-        "name_URLWEB":""
+        "name_song": "Jingle Bells",
+        "name_singer": "James Lord Pierpont",
+        "audioURL": "https://music.yandex.ru/album/10420889/track/64744433",
+        "name_URLWEB": "Источник music.yandex"
       },
       {
-        "name_song": "Твыфв",
-        "name_singer": "",
-        "audioURL": "",
-        "name_URLWEB":""
+        "name_song": "Feliz Navidad",
+        "name_singer": "José Feliciano",
+        "audioURL": "https://music.yandex.ru/album/19237390/track/631773",
+        "name_URLWEB": "Источник music.yandex"
       }
     ],
     "isDonate": false,
@@ -41,16 +107,16 @@
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
     "audio": [
       {
-        "name_song": "Твыфв",
-        "name_singer": "",
-        "audioURL": "",
-        "name_URLWEB":""
+        "name_song": "Jingle Bells",
+        "name_singer": "James Lord Pierpont",
+        "audioURL": "https://music.yandex.ru/album/10420889/track/64744433",
+        "name_URLWEB": "Источник music.yandex"
       },
       {
-        "name_song": "Твыфв",
-        "name_singer": "",
-        "audioURL": "",
-        "name_URLWEB":""
+        "name_song": "Feliz Navidad",
+        "name_singer": "José Feliciano",
+        "audioURL": "https://music.yandex.ru/album/19237390/track/631773",
+        "name_URLWEB": "Источник music.yandex "
       }
     ],
     "isDonate": false,

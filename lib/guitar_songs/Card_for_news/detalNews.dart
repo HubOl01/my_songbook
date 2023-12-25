@@ -43,33 +43,65 @@ class DetalNews extends StatelessWidget {
                           : 'assets/images/isuct.png')),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var description in newData.description!)
-                  Markdown(
-                    padding: EdgeInsets.all(0),
-                    styleSheet:
-                        MarkdownStyleSheet(p: TextStyle(fontSize: fontSize)),
-                    data: description,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                  ),
-                if (newData.audio!.isNotEmpty || newData.audio == [])
-                  for (var audio in newData.audio!)
-                    ListTile(
-                      title: Text(audio.nameSong ?? ''),
-                      subtitle: Text(audio.nameSinger ?? ''),
-                      trailing: Icon(Icons.play_circle),
-                      onTap: () => launchUrl(
-                        Uri.parse(audio.audioUrl!),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              for (var description in newData.description!)
+                Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Markdown(
+                      padding: EdgeInsets.all(0),
+                      styleSheet:
+                          MarkdownStyleSheet(p: TextStyle(fontSize: fontSize)),
+                      data: description,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                    )),
+              if (newData.audio!.isNotEmpty || newData.audio == [])
+                for (var audio in newData.audio!)
+                  ListTile(
+                    title: Text(audio.nameSong ?? ''),
+                    subtitle: Text(audio.nameSinger ?? ''),
+                    trailing: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color:context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                                size: 12,
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Text(
+                                audio.nameUrlweb ?? '',
+                                style: TextStyle(fontSize: 10, color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+                              ),
+                              Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Icon(Icons.play_circle),
+                          ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
-              ],
-            ),
+                    onTap: () => launchUrl(
+                      Uri.parse(audio.audioUrl!),
+                    ),
+                  ),
+            ],
           ),
           newData.isUpdate!
               ? Padding(

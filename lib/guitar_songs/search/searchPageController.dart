@@ -28,14 +28,15 @@ var searchedSong = <Song>[].obs;
     
     isLoading.value = false;
   }
-  Future searchSong(String name) async {
+  Future searchSong(RxString name) async {
     searchedSong.clear();
     for(var song in songs) {
-        if(song.name_song.contains(name)){
+        if(song.name_song.toLowerCase().contains(name.value.toLowerCase())){
           searchedSong.add(song);
-          print("Запрос ответа :=: ${searchedSong.toList()}");
-        }else if(song.name_singer.contains(name)){
+          print("Запрос ответа name_song :=: ${searchedSong.toList()}");
+        }else if(song.name_singer.toLowerCase().contains(name.value.toLowerCase())){
           searchedSong.add(song);
+          print("Запрос ответа name_singer :=: ${searchedSong.toList()}");
         }
     }
   }
