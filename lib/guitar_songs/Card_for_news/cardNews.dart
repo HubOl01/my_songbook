@@ -125,7 +125,7 @@ class _CardNewsState extends State<CardNews> {
                                                 ? GestureDetector(
                                                     onTap: () {
                                                       AppMetrica.reportEvent(
-                                                          'Open Information Banners');
+                                                          'Open Information Banners ${JSONValueRU()[index].type}');
                                                       JSONValueRU()[index]
                                                               .isClick!
                                                           ? JSONValueRU()[index]
@@ -200,7 +200,7 @@ class _CardNewsState extends State<CardNews> {
                                         ? GestureDetector(
                                             onTap: () {
                                               AppMetrica.reportEvent(
-                                                  'Open Information Banners');
+                                                  'Open Information Banners ${JSONValueRU()[index].type}');
                                               JSONValueEN()[index].isClick!
                                                   ? JSONValueEN()[index].type !=
                                                           'website'

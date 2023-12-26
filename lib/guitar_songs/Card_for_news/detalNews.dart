@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/customButton.dart';
+import '../../components/customListTile.dart';
 import '../../components/sendToSupport.dart';
 import '../../components/updateApp.dart';
 import '../model/newsModel.dart';
@@ -49,7 +50,7 @@ class DetalNews extends StatelessWidget {
             children: [
               for (var description in newData.description!)
                 Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Markdown(
                       padding: EdgeInsets.all(0),
                       styleSheet:
@@ -60,45 +61,89 @@ class DetalNews extends StatelessWidget {
                     )),
               if (newData.audio!.isNotEmpty || newData.audio == [])
                 for (var audio in newData.audio!)
-                  ListTile(
-                    title: Text(audio.nameSong ?? ''),
-                    subtitle: Text(audio.nameSinger ?? ''),
-                    trailing: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.info_outline,
-                                color:context.isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                                size: 12,
+                  InkWell(
+                    onTap: () {
+                      AppMetrica.reportEvent(
+                          'Clicked music: ${audio.nameSong.toString()} ${audio.audioUrl.toString()}');
+                      launchUrl(Uri.parse(audio.audioUrl!));
+                    },
+                    child: Column(
+                      children: [
+                        CustomListTile(
+                          title: SizedBox(
+                            width: context.width - 50,
+                            child: Text(
+                              audio.nameSong ?? '',
+                              style: TextStyle(
+                                fontSize: 16,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                audio.nameUrlweb ?? '',
-                                style: TextStyle(fontSize: 10, color: context.isDarkMode ? Colors.grey[400] : Colors.grey[600]),
-                              ),
-                              Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Icon(Icons.play_circle),
+                            ),
                           ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    onTap: () => launchUrl(
-                      Uri.parse(audio.audioUrl!),
+                          subtitle: SizedBox(
+                            width: context.width - 50,
+                            child: Text(
+                              audio.nameSinger ?? '',
+                              style: TextStyle(
+                                color: context.isDarkMode
+                                    ? Colors.grey[400]
+                                    : Colors.grey[600],
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          trailing: Icon(Icons.play_circle),
+                          paddingBottom:
+                              audio.nameUrlweb!.trim() == '' ? true : false,
+                        ),
+                        audio.nameUrlweb!.trim() == ''
+                            ? SizedBox()
+                            : Column(
+                                children: [
+                                  Divider(
+                                    color: context.isDarkMode
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      // mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.info_outline,
+                                          color: context.isDarkMode
+                                              ? Colors.grey[400]
+                                              : Colors.grey[600],
+                                          size: 13,
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          audio.nameUrlweb ?? '',
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              color: context.isDarkMode
+                                                  ? Colors.grey[400]
+                                                  : Colors.grey[600]),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: context.isDarkMode
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
+                                  ),
+                                ],
+                              ),
+                      ],
                     ),
                   ),
             ],

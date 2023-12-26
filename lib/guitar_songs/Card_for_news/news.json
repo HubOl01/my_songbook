@@ -19,7 +19,16 @@
     "name": "My Songbook 1.4",
     "user": "ru-developer",
     "lang": "ru",
-    "description": [],
+    "description": [
+      "# Что нового",
+      "- Безграничный редактор: С новейшим обновлением, вы теперь можете изменять название исполнителя, песни и даже аудиофайл в любое время!",
+      "- Новый баннер: Мы добавили баннер, который показывает предстоящие события, рекомендации и другую полезную информацию!",
+      "- Быстрый поиск: Наслаждайтесь мгновенным поиском своих песен с помощью нового поисковика по исполнителю или названию песни!",
+      "- Исправлены мелкие ошибки.",
+      "             ",
+      "             ",
+      "___С наступающим Новым Годом!___"
+    ],
     "type": "text",
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/new%20version.png?alt=media&token=8616252d-a375-40ea-a4dc-edf29ab3bc2a",
     "audio": [],
@@ -56,7 +65,80 @@
     ],
     "type": "text",
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/news_songsRU.png?alt=media&token=1168779c-a3f1-43ae-8761-02d0a061f434",
-    "audio": [],
+    "audio": [
+      {
+        "name_song": "Jingle Bells",
+        "name_singer": "James Lord Pierpont",
+        "audioURL": "https://my.mail.ru/music/songs/238fc498f7327a0daff92a0878cda889",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Feliz Navidad",
+        "name_singer": "José Feliciano",
+        "audioURL": "https://youtu.be/N8NcQzMQN_U?si=ago74GxTJQW27xCY",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Happy New Year",
+        "name_singer": "ABBA",
+        "audioURL": "https://youtu.be/3Uo0JAUWijM?si=ZaxYLL9FlC2a0sk3",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Новый год к нам мчится",
+        "name_singer": "Дискотека Авария",
+        "audioURL": "https://my.mail.ru/music/songs/089295561d432805fee5a77285c2b323",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "С Новым годом (Время чудес)",
+        "name_singer": "Dabro",
+        "audioURL": "https://my.mail.ru/music/songs/8a89a059888988f8220c614e245d184b",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Кабы не было зимы",
+        "name_singer": "Валентина Толкунова",
+        "audioURL": "https://my.mail.ru/music/songs/047c815abe93f6e735292deea6d41dcd",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Пока часы двенадцать бьют",
+        "name_singer": "Снежинка",
+        "audioURL": "https://my.mail.ru/music/songs/12122b8821eb4242155dbf54acaf67cf",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "All I Want For Christmas Is You",
+        "name_singer": "Mariah Carey",
+        "audioURL": "https://youtu.be/yXQViqx6GMY?si=SOvqg5kBFPQ3_7qA",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Last Christmas",
+        "name_singer": "Wham!",
+        "audioURL": "https://youtu.be/E8gmARGvPlI?si=r3PjEVSvuOPDn9F_",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Там, где Новый год",
+        "name_singer": "Волшебники двора",
+        "audioURL": "https://my.mail.ru/music/songs/315827b7a54c4021013202d9cbbc06dc",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "В лесу родилась елочка",
+        "name_singer": "Детская новогодняя песня",
+        "audioURL": "https://my.mail.ru/music/songs/cdd73eef6fdc282bdff575220be6e6eb",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Jingle Bell Rock",
+        "name_singer": "Bobby Helms",
+        "audioURL": "https://my.mail.ru/music/songs/e6f31aabf61379ec218c7063b86b9532",
+        "name_URLWEB": ""
+      }
+    ],
     "isDonate": false,
     "isUpdate": false,
     "textColorClick": "0xFFFFFFFF",
@@ -69,9 +151,7 @@
     "name": "Results of the year!",
     "user": "ru-developer",
     "lang": "en",
-    "description": [
-      "[record](https://pub.dev/packages/record)"
-    ],
+    "description": ["[record](https://pub.dev/packages/record)"],
     "type": "text",
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
     "audio": [
@@ -101,38 +181,27 @@
     "user": "ru-developer",
     "lang": "ru",
     "description": [
-      "[record](https://pub.dev/packages/record)"
+"___My Songbook___ — это мобильное приложение, разработанное специально для гитаристов, певцов, композиторов и всех тех, кто увлечен созданием и исполнением музыки. Это идеальный инструмент для тех, кто хочет записывать свои песни или вдохновляться созданием новых композиций. Приложение предлагает удобный автоскролл, гитарную аппликатуру аккордов и возможность воспроизведения аудиофайлов с песнями. Кроме того, My Songbook обладает функцией отправки песен через социальные сети, что делает процесс обмена и совместной работы еще более удобным и эффективным.",
+"",
+"В ходе своего развития приложение прошло через ряд обновлений, начиная с первоначальной версии 1.0.0 и заканчивая версией 1.4.6. В процессе обновлений было внедрено множество новых функций и улучшений, которые значительно расширили его возможности и повысили удобство использования.",
+"",
+"### Основные нововведения:",
+"",
+"- Добавлен темный режим для комфортного просмотра.",
+"- Расширена локализация, включая английский и экспериментальный китайский языки.",
+"- Внедрены функции обратной связи.",
+"- Введены усовершенствованные функции отправки песен и изменения локализаций.",
+"- Внедрен безграничный редактор, новый баннер с событиями и быстрый поиск.",
+"",
+"### Перспективы на следующий год:",
+"",
+"- Пользователи могут ожидать дополнительного расширения функционала и новых возможностей.",
+"- В планах создание музыкальной игры в стиле 'Угадай мелодию'.",
+"",
+"",
+"Мы всегда открыты к идеям и предложениям от вас. Если у вас есть какие-либо идеи или предложения по улучшению приложения, пожалуйста, обращайтесь по электронному адресу ru-developer@mail.ru."
     ],
-    "type": "text",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
-    "audio": [
-      {
-        "name_song": "Jingle Bells",
-        "name_singer": "James Lord Pierpont",
-        "audioURL": "https://music.yandex.ru/album/10420889/track/64744433",
-        "name_URLWEB": "Источник music.yandex"
-      },
-      {
-        "name_song": "Feliz Navidad",
-        "name_singer": "José Feliciano",
-        "audioURL": "https://music.yandex.ru/album/19237390/track/631773",
-        "name_URLWEB": "Источник music.yandex "
-      }
-    ],
-    "isDonate": false,
-    "isUpdate": false,
-    "textColorClick": "0xFFFFFFFF",
-    "isClick": true,
-    "isShow": true,
-    "isSupport": true,
-    "websiteUrl": ""
-  },
-  {
-    "name": "С Новым Годом!!!",
-    "user": "ru-developer",
-    "lang": "ru",
-    "description": [],
-    "type": "text",
+    "type": "website",
     "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
     "audio": [],
     "isDonate": false,
@@ -140,7 +209,7 @@
     "textColorClick": "0xFFFFFFFF",
     "isClick": true,
     "isShow": true,
-    "isSupport": false,
-    "websiteUrl": ""
+    "isSupport": true,
+    "websiteUrl": "https://telegra.ph/Itogi-goda-2023-12-26"
   }
 ]

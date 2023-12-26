@@ -57,28 +57,33 @@ class GuitarPage extends GetView<GuitarController> {
                           return !isDeleteTest
                               ? ListTile(
                                   onLongPress: () async => await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: Text(tr(LocaleKeys.confirmation_title)),
-                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_delete)),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: Text(tr(LocaleKeys.confirmation_no))),
-                                  TextButton(
-                                      onPressed: () async {
-                                        // setState(() {
-                                          isDeleteTest = true;
-                                          isDeleteTestPut(isDeleteTest);
-                                        // });
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                      },
-                                      child: Text(tr(LocaleKeys.confirmation_yes)))
-                                ])),
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: Text(tr(LocaleKeys
+                                                  .confirmation_title)),
+                                              content: Text(tr(LocaleKeys
+                                                  .edit_song_confirmation_content_delete)),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_no))),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      // setState(() {
+                                                      isDeleteTest = true;
+                                                      isDeleteTestPut(
+                                                          isDeleteTest);
+                                                      // });
+                                                      Get.back();
+                                                      Get.back();
+                                                      Get.back();
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_yes)))
+                                              ])),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -197,7 +202,10 @@ class GuitarPage extends GetView<GuitarController> {
                                             style: TextStyle(fontSize: 16)),
                                         Text(
                                           "${controller.songs[index - 2].name_singer}",
-                                          style: TextStyle(fontSize: 14),
+                                          style: TextStyle(fontSize: 14, 
+                                          color: context.isDarkMode
+                                        ? Colors.grey[300]
+                                        : Colors.grey[600],),
                                         ),
                                       ],
                                     ),
