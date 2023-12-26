@@ -52,7 +52,14 @@ class DetalNews extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Markdown(
-                      padding: EdgeInsets.all(0),
+                      onTapLink: (text, href, title) => href != ''
+                          ? href!.contains("@mail.ru") ||
+                                  href.contains("@gmail.com")
+                              ? sendToSupport()
+                              : launchUrl(Uri.parse(href),
+                                  mode: LaunchMode.inAppWebView)
+                          : null,
+                      padding: EdgeInsets.all(2),
                       styleSheet:
                           MarkdownStyleSheet(p: TextStyle(fontSize: fontSize)),
                       data: description,

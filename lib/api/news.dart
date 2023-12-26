@@ -12,7 +12,7 @@ Future getNews() async {
   RemoteConfigValue myJsonValue = remoteConfig.getValue('news');
   // String myJsonString = myJsonValue.asString();
   // myJson = newsFromJson(myJsonString);
-  String myJsonString = await rootBundle.loadString('lib/guitar_songs/Card_for_news/news.json');
+  String myJsonString = await rootBundle.loadString('assets/dataJson/news.json');
 
   myJson = newsFromJson(myJsonString);
   // myJson = newsListTest;
