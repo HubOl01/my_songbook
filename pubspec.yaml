@@ -40,7 +40,7 @@ dependencies:
   get: ^4.6.5
   sqflite: any
   cupertino_icons: ^1.0.2
-  icons_plus: ^4.0.0
+  icons_plus: ^5.0.0
   flutter_chord: ^0.1.2
   package_info_plus: any
   intl: any

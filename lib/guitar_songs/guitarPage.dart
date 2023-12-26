@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
-
+import 'package:yandex_mobileads/mobile_ads.dart';
 import '../Storage/storage.dart';
 import '../settings/currentNumber.dart';
 import 'Card_for_news/cardNews.dart';
@@ -48,12 +48,19 @@ class GuitarPage extends GetView<GuitarController> {
                     color: colorFiolet.withOpacity(0.3),
                     child: ListView.builder(
                       // physics: BouncingScrollPhysics(),
-                      itemCount: controller.songs.length + 2,
+                      itemCount: controller.songs.length + 3,
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return CardNews();
                         }
                         if (index == 1) {
+                          //return Align(
+                          //   alignment: Alignment.bottomCenter,
+                          //   child: ADSBanner()
+                          // );
+                          return controller.isBannerAlreadyCreated.value ? AdWidget(bannerAd: controller.banner) : SizedBox();
+                        }
+                        if (index == 2) {
                           return !isDeleteTest
                               ? ListTile(
                                   onLongPress: () async => await showDialog(
@@ -149,10 +156,10 @@ class GuitarPage extends GetView<GuitarController> {
                                                         await deleteFile(
                                                             controller
                                                                 .songs[
-                                                                    index - 2]
+                                                                    index - 3]
                                                                 .path_music!);
                                                         deleteSong(controller
-                                                            .songs[index - 2]
+                                                            .songs[index - 3]
                                                             .id!);
                                                         final GuitarController
                                                             guitar = Get.put(
@@ -198,20 +205,22 @@ class GuitarPage extends GetView<GuitarController> {
                                       children: [
                                         Text(
                                             controller
-                                                .songs[index - 2].name_song,
+                                                .songs[index - 3].name_song,
                                             style: TextStyle(fontSize: 16)),
                                         Text(
-                                          "${controller.songs[index - 2].name_singer}",
-                                          style: TextStyle(fontSize: 14, 
-                                          color: context.isDarkMode
-                                        ? Colors.grey[300]
-                                        : Colors.grey[600],),
+                                          "${controller.songs[index - 3].name_singer}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: context.isDarkMode
+                                                ? Colors.grey[300]
+                                                : Colors.grey[600],
+                                          ),
                                         ),
                                       ],
                                     ),
                                     onTap: () {
                                       Get.to(GuitarDetal(
-                                        id: controller.songs[index - 2].id,
+                                        id: controller.songs[index - 3].id,
                                       ));
                                     },
                                   );

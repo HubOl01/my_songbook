@@ -240,33 +240,6 @@ class _CardNewsState extends State<CardNews> {
                                                                       .textColorClick!))),
                                                         ))
                                                     : SizedBox(),
-                                                JSONValueEN().length > 1
-                                                    ? Positioned(
-                                                        bottom: 8,
-                                                        left: 0,
-                                                        right: 0,
-                                                        child: Center(
-                                                          child:
-                                                              AnimatedSmoothIndicator(
-                                                            activeIndex:
-                                                                activePage,
-                                                            count: JSONValueEN()
-                                                                .length,
-                                                            // textDirection: TextDirection(),
-                                                            effect: WormEffect(
-                                                                dotColor: Colors
-                                                                    .white
-                                                                    .withOpacity(
-                                                                        0.4),
-                                                                activeDotColor:
-                                                                    Colors.white
-                                                                        .withOpacity(
-                                                                            0.9),
-                                                                dotWidth: 6,
-                                                                dotHeight: 6),
-                                                          ),
-                                                        ))
-                                                    : SizedBox(),
                                               ],
                                             ),
                                           )

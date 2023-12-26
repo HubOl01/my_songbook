@@ -60,8 +60,18 @@ class DetalNews extends StatelessWidget {
                                   mode: LaunchMode.inAppWebView)
                           : null,
                       padding: EdgeInsets.all(2),
-                      styleSheet:
-                          MarkdownStyleSheet(p: TextStyle(fontSize: fontSize)),
+                      styleSheet: MarkdownStyleSheet(
+                          p: TextStyle(fontSize: fontSize),
+                          blockquotePadding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                          h3: TextStyle(fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize!),
+                          blockquoteDecoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                color: Colors.grey,
+                                width: 5.0, // Толщина стенки
+                              ),
+                            ),
+                          )),
                       data: description,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),

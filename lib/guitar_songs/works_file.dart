@@ -9,13 +9,33 @@ import 'package:path_provider/path_provider.dart';
 // }
 
 
+// Future<File> saveFilePermanently(PlatformFile file) async {
+//   final appStorage = await getApplicationDocumentsDirectory();
+//   final newFile = File('${appStorage.path}/${file.name}');
+//   return File(file.path!).copy(newFile.path);
+// }
 Future<File> saveFilePermanently(PlatformFile file) async {
   final appStorage = await getApplicationDocumentsDirectory();
-  // final newFileName = await _getUniqueFileName(appStorage.path, file.name);
-  final newFile = File('${appStorage.path}/${file.name}');
-  return File(file.path!).copy(newFile.path);
+  String fileNameWithoutExtension = getFileNameWithoutExtension(file.name);
+  String filePath = '${appStorage.path}/$fileNameWithoutExtension.${file.extension}';
+
+  int index = 1;
+  while (await File(filePath).exists()) {
+    // Файл с таким именем уже существует. Увеличиваем индекс.
+    filePath = '${appStorage.path}/$fileNameWithoutExtension$index.${file.extension}';
+    index++;
+  }
+
+  return File(file.path!).copy(filePath);
 }
 
+String getFileNameWithoutExtension(String fileName) {
+  int dotIndex = fileName.lastIndexOf('.');
+  if (dotIndex != -1) {
+    return fileName.substring(0, dotIndex);
+  }
+  return fileName; // Если расширение отсутствует или файл не имеет расширения.
+}
 // Future<String> _getUniqueFileName(String directoryPath, String originalName) async {
 //   String fileName = originalName;
 //   int index = 1;

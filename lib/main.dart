@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -15,6 +14,7 @@ import 'package:my_songbook/settings/currentNumber.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_mobileads/mobile_ads.dart';
 import 'applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'guitar_songs/guitarPage.dart';
@@ -44,7 +44,8 @@ void main() async {
   } catch (ex) {
     print("Firebase ex: ${ex}");
   }
-
+  MobileAds.initialize();
+  // MobileAds.setUserConsent(true);
   await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(app.path);

@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/guitarDetalController.dart';
-import 'package:path_provider/path_provider.dart';
-
 import '../components/player_widget.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';

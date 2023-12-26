@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
-import '../Storage/storage.dart';
 import '../components/player_widget.dart';
 import '../generated/locale_keys.g.dart';
 import '../settings/currentNumber.dart';
