@@ -228,7 +228,7 @@ class _CardNewsState extends State<CardNews> {
                                                                   right: 10,
                                                                   bottom: 10,
                                                                   child: Text(
-                                                                    "Нажмите для просмотра",
+                                                                    "Click to view",
                                                                     style: TextStyle(
                                                                         color: Color(
                                                                             int.parse(JSONValueEN()[index].textColorClick!))),
