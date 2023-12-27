@@ -176,76 +176,146 @@ class _CardNewsState extends State<CardNews> {
                                 )
                       : JSONValueEN().length == 0
                           ? SizedBox()
-                          : CarouselSlider.builder(
-                              carouselController: _controller,
-                              itemCount: JSONValueEN().length,
-                              options: CarouselOptions(
-                                  aspectRatio: 16 / 9,
-                                  enableInfiniteScroll: false,
-                                  viewportFraction: 1,
-                                  autoPlay:
-                                      JSONValueEN().length > 1 ? true : false,
-                                  autoPlayInterval: Duration(seconds: 15),
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      activePage = index;
-                                    });
-                                  }),
-                              itemBuilder: (context, index, realIndex) =>
-                                  Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: JSONValueEN()[index].imageUrl != ''
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              AppMetrica.reportEvent(
-                                                  'Open Information Banners ${JSONValueRU()[index].type}');
-                                              JSONValueEN()[index].isClick!
-                                                  ? JSONValueEN()[index].type !=
-                                                          'website'
-                                                      ? Get.to(DetalNews(
-                                                          newData:
+                          : context.isLandscape
+                              ? SizedBox(
+                                  height: context.width / 3.6,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: JSONValueEN().length,
+                                    itemBuilder: (context, index) => Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child:
+                                              JSONValueEN()[index].imageUrl !=
+                                                      ''
+                                                  ? GestureDetector(
+                                                      onTap: () {
+                                                        AppMetrica.reportEvent(
+                                                            'Open Information Banners');
+                                                        JSONValueEN()[index]
+                                                                .isClick!
+                                                            ? JSONValueEN()[index]
+                                                                        .type !=
+                                                                    'website'
+                                                                ? Get.to(DetalNews(
+                                                                    newData:
+                                                                        JSONValueEN()[
+                                                                            index]))
+                                                                : JSONValueEN()[index]
+                                                                            .websiteUrl !=
+                                                                        ''
+                                                                    ? launchUrl(
+                                                                        Uri.parse(JSONValueEN()[index]
+                                                                            .websiteUrl!),
+                                                                        mode: LaunchMode
+                                                                            .inAppWebView)
+                                                                    : null
+                                                            : null;
+                                                      },
+                                                      child: Stack(
+                                                        children: [
+                                                          CachedNetworkImage(
+                                                            imageUrl:
+                                                                JSONValueEN()[
+                                                                        index]
+                                                                    .imageUrl!,
+                                                          ),
+                                                          JSONValueEN()[index]
+                                                                  .isClick!
+                                                              ? Positioned(
+                                                                  right: 10,
+                                                                  bottom: 10,
+                                                                  child: Text(
+                                                                    "Нажмите для просмотра",
+                                                                    style: TextStyle(
+                                                                        color: Color(
+                                                                            int.parse(JSONValueEN()[index].textColorClick!))),
+                                                                  ))
+                                                              : SizedBox()
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : SizedBox()),
+                                    ),
+                                  ),
+                                )
+                              : CarouselSlider.builder(
+                                  carouselController: _controller,
+                                  itemCount: JSONValueEN().length,
+                                  options: CarouselOptions(
+                                      aspectRatio: 16 / 9,
+                                      enableInfiniteScroll: false,
+                                      viewportFraction: 1,
+                                      autoPlay: JSONValueEN().length > 1
+                                          ? true
+                                          : false,
+                                      autoPlayInterval: Duration(seconds: 15),
+                                      onPageChanged: (index, reason) {
+                                        setState(() {
+                                          activePage = index;
+                                        });
+                                      }),
+                                  itemBuilder: (context, index, realIndex) =>
+                                      Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child:
+                                            JSONValueEN()[index].imageUrl != ''
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      AppMetrica.reportEvent(
+                                                          'Open Information Banners ${JSONValueRU()[index].type}');
+                                                      JSONValueEN()[index]
+                                                              .isClick!
+                                                          ? JSONValueEN()[index]
+                                                                      .type !=
+                                                                  'website'
+                                                              ? Get.to(DetalNews(
+                                                                  newData:
+                                                                      JSONValueEN()[
+                                                                          index]))
+                                                              : JSONValueEN()[index]
+                                                                          .websiteUrl !=
+                                                                      ''
+                                                                  ? launchUrl(
+                                                                      Uri.parse(
+                                                                          JSONValueEN()[index]
+                                                                              .websiteUrl!),
+                                                                      mode: LaunchMode
+                                                                          .inAppWebView)
+                                                                  : null
+                                                          : null;
+                                                    },
+                                                    child: Stack(
+                                                      children: [
+                                                        CachedNetworkImage(
+                                                          imageUrl:
                                                               JSONValueEN()[
-                                                                  index]))
-                                                      : JSONValueEN()[index]
-                                                                  .websiteUrl !=
-                                                              ''
-                                                          ? launchUrl(
-                                                              Uri.parse(
-                                                                  JSONValueEN()[
-                                                                          index]
-                                                                      .websiteUrl!),
-                                                              mode: LaunchMode
-                                                                  .inAppWebView)
-                                                          : null
-                                                  : null;
-                                            },
-                                            child: Stack(
-                                              children: [
-                                                CachedNetworkImage(
-                                                  imageUrl: JSONValueEN()[index]
-                                                      .imageUrl!,
-                                                ),
-                                                JSONValueEN()[index].isClick!
-                                                    ? Positioned(
-                                                        right: 10,
-                                                        bottom: 10,
-                                                        child: Text(
-                                                          "Click to view",
-                                                          style: TextStyle(
-                                                              color: Color(int.parse(
-                                                                  JSONValueEN()[
-                                                                          index]
-                                                                      .textColorClick!))),
-                                                        ))
-                                                    : SizedBox(),
-                                              ],
-                                            ),
-                                          )
-                                        : SizedBox()),
-                              ),
-                            ),
+                                                                      index]
+                                                                  .imageUrl!,
+                                                        ),
+                                                        JSONValueEN()[index]
+                                                                .isClick!
+                                                            ? Positioned(
+                                                                right: 10,
+                                                                bottom: 10,
+                                                                child: Text(
+                                                                  "Click to view",
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          int.parse(
+                                                                              JSONValueEN()[index].textColorClick!))),
+                                                                ))
+                                                            : SizedBox(),
+                                                      ],
+                                                    ),
+                                                  )
+                                                : SizedBox()),
+                                  ),
+                                ),
 
                   // ),
                   context.isLandscape
