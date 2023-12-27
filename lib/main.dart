@@ -32,9 +32,9 @@ Future getMode() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  // ErrorWidget.builder = (FlutterErrorDetails details) {
-  //   return const Material();
-  // };
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return const Material();
+  };
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -57,8 +57,8 @@ void main() async {
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
   try {
-    // AppMetrica.activate(
-    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+    AppMetrica.activate(
+        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
     print("app_metrica: ${ex}");
   }

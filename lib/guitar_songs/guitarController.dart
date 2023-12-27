@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
@@ -47,7 +48,7 @@ class GuitarController extends GetxController {
 
   _createBanner() {
     return BannerAd(
-        adUnitId: 'R-M-4686945-1', // or 'demo-banner-yandex'
+        adUnitId: dotenv.env['ADs']!, // or 'demo-banner-yandex'
         adSize: getAdSize(),
         adRequest: const AdRequest(),
         onAdLoaded: () {

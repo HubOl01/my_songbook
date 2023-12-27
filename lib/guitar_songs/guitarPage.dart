@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,7 @@ class GuitarPage extends GetView<GuitarController> {
             actions: [
               IconButton(
                   onPressed: () {
+                    AppMetrica.reportEvent('Search');
                     Get.to(SearchPage());
                   },
                   icon: Icon(Icons.search)),

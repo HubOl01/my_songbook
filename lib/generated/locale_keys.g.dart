@@ -62,5 +62,6 @@ abstract class  LocaleKeys {
   static const theme_mode_auto = 'theme_mode_auto';
   static const theme_mode_light = 'theme_mode_light';
   static const theme_mode_dark = 'theme_mode_dark';
+  static const search = 'search';
 
 }

@@ -59,5 +59,6 @@
     "testWarning": "There are translations only in Russian and in English!",
     "theme_mode_auto": "Auto (default)",
     "theme_mode_light": "Light mode",
-    "theme_mode_dark": "Dark mode"
+    "theme_mode_dark": "Dark mode",
+    "search": "Track, artist"
 }

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/guitar_songs/search/searchPageController.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../guitarDetal.dart';
 
 class SearchPage extends GetView<SearchPageController> {
@@ -26,7 +28,7 @@ class SearchPage extends GetView<SearchPageController> {
                 contentPadding: EdgeInsets.all(6),
                 filled: true,
                 fillColor: Colors.white.withOpacity(.3),
-                hintText: "Трек, исполнитель",
+                hintText: tr(LocaleKeys.search),
                 hintStyle: TextStyle(
                     color: Colors.white.withOpacity(.8),
                     fontSize: 18,

@@ -4,8 +4,8 @@ class FirebaseRemoteConfigClass {
   final remoteConfig = FirebaseRemoteConfig.instance;
   Future initializeConfig() async {
     await remoteConfig.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: Duration(seconds: 1),
-        minimumFetchInterval: Duration(seconds: 1)));
+        fetchTimeout: Duration(hours: 1),
+        minimumFetchInterval: Duration(hours: 1)));
     await remoteConfig.fetchAndActivate();
     var temp = remoteConfig.getString('news');
     return temp;

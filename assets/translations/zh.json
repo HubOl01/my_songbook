@@ -59,5 +59,6 @@
     "testWarning": "只有俄语和英语的翻译！",
     "theme_mode_auto": "自动(默认)",
     "theme_mode_light": "灯光模式",
-    "theme_mode_dark": "暗模式"
+    "theme_mode_dark": "暗模式",
+    "search": "曲目，艺术家"
 }
