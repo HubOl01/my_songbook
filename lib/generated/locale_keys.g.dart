@@ -38,6 +38,7 @@ abstract class  LocaleKeys {
   static const settings_translate = 'settings_translate';
   static const settings_help = 'settings_help';
   static const settings_help_other_quest = 'settings_help_other_quest';
+  static const settings_help_other_quest_email = 'settings_help_other_quest_email';
   static const settings_help_other_quest_or = 'settings_help_other_quest_or';
   static const settings_call_tech = 'settings_call_tech';
   static const appbar_settings_call_tech = 'appbar_settings_call_tech';
@@ -61,5 +62,6 @@ abstract class  LocaleKeys {
   static const theme_mode_auto = 'theme_mode_auto';
   static const theme_mode_light = 'theme_mode_light';
   static const theme_mode_dark = 'theme_mode_dark';
+  static const search = 'search';
 
 }

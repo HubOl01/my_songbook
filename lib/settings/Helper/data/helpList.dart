@@ -20,11 +20,11 @@ List<HelpModel> questionsRU = [
           HelpModel(
       question: "Как добавить новую песню?",
       answer:
-          "Нужно заполнить название песни, исполнителя и аудиофайла корректно, т.к. в будущем вы не сможете изменить, а текст песни можно изменить)"),
+          "Вы можете заполнить название песни, исполнителя и аудиофайла, нажав на иконку \"+\" в главной странице приложения"),
           HelpModel(
       question: "Как изменить песню?",
       answer:
-          "Название песни, исполнителя и аудиофайла невозможно изменить в целях безопасности данных. Только если можно удалить и заново заполнить! А сам текст песни можно в любое время и неограниченно редактировать)"),
+          "Вы можете редактировать песню, нажав на иконку \"Карандаш\" в выбранной песни, после этого вы можете менять аудиофайл, название песни и исполнителя"),
 ];
 
 List<HelpModel> questionsEN = [
@@ -47,11 +47,11 @@ List<HelpModel> questionsEN = [
           HelpModel(
       question: "How to add a new song?",
       answer:
-          "You need to fill in the name of the song, artist and audio file correctly, because in the future you will not be able to change, and the lyrics can be changed)"),
+          "You can fill in the name of the song, artist and audio file by clicking on the \"+\" icon on the main page of the application"),
           HelpModel(
       question: "How to change a song?",
       answer:
-          "The name of the song, artist, and audio file cannot be changed for data security reasons. Only if you can delete and re-fill! And the lyrics of the song can be edited at any time and indefinitely)"),
+          "You can edit the song by clicking on the \"Pencil\" icon in the selected song, after that you can change the audio file, the name of the song and the artist"),
 ];
 
 List<HelpModel> questionsZH = [
@@ -74,9 +74,9 @@ List<HelpModel> questionsZH = [
           HelpModel(
       question: "如何添加新歌？",
       answer:
-          "您需要正确填写歌曲，艺术家和音频文件的名称，因为将来您将无法更改，歌词可以更改）"),
+          "您可以通过点击应用程序主页上的\"+\"图标来填写歌曲，艺术家和音频文件的名称"),
           HelpModel(
       question: "如何更改歌曲？",
       answer:
-          "出于数据安全原因，无法更改歌曲、艺术家和音频文件的名称。 只有当你可以删除并重新填充！ 而且歌曲的歌词可以随时无限编辑）"),
+          "您可以通过点击所选歌曲中的\"铅笔\"图标来编辑歌曲，之后您可以更改音频文件，歌曲名称和艺术家"),
 ];

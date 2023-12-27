@@ -1,0 +1,294 @@
+[
+  {
+    "name": "My Songbook 1.4",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [
+      "# What's new",
+      "- Unlimited editor: With the latest update, you can now change the name of the artist, songs and even the audio file at any time!",
+      "- New banner: We have added a banner that shows upcoming events, recommendations and other useful information!",
+      "- Quick search: Enjoy instant search for your songs using the new search engine by artist or song title!",
+      "- Minor bugs fixed.",
+      " ",
+      " ",
+      "___Happy New Year!___"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/new%20version.png?alt=media&token=8616252d-a375-40ea-a4dc-edf29ab3bc2a",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": true,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "My Songbook 1.4",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [
+      "# Что нового",
+      "- Безграничный редактор: С новейшим обновлением, вы теперь можете изменять название исполнителя, песни и даже аудиофайл в любое время!",
+      "- Новый баннер: Мы добавили баннер, который показывает предстоящие события, рекомендации и другую полезную информацию!",
+      "- Быстрый поиск: Наслаждайтесь мгновенным поиском своих песен с помощью нового поисковика по исполнителю или названию песни!",
+      "- Исправлены мелкие ошибки.",
+      "             ",
+      "             ",
+      "___С наступающим Новым Годом!___"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/new%20version.png?alt=media&token=8616252d-a375-40ea-a4dc-edf29ab3bc2a",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": true,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Musical selection for the New Year",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [
+      "Hello, friends! The New Year is coming very soon, and on this magical New Year's Eve you want to have fun and sing your favorite songs with your friends. Especially for you, we have prepared a list of the 12 most popular and best New Year's hits that will not leave any of you indifferent. Let's plunge into the world of music and celebration together!"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/news_songsEN.png?alt=media&token=62a3915b-5d77-4146-9de1-370e5688c6b2",
+    "audio": [
+      {
+        "name_song": "Jingle Bells",
+        "name_singer": "Frank Sinatra",
+        "audioURL": "https://youtu.be/hLf0-lro8X8?si=yGQJRJR8G1zC27Fe",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Feliz Navidad",
+        "name_singer": "José Feliciano",
+        "audioURL": "https://youtu.be/N8NcQzMQN_U?si=ago74GxTJQW27xCY",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Happy New Year",
+        "name_singer": "ABBA",
+        "audioURL": "https://youtu.be/3Uo0JAUWijM?si=ZaxYLL9FlC2a0sk3",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "All I Want For Christmas Is You",
+        "name_singer": "Mariah Carey",
+        "audioURL": "https://youtu.be/yXQViqx6GMY?si=SOvqg5kBFPQ3_7qA",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Last Christmas",
+        "name_singer": "Wham!",
+        "audioURL": "https://youtu.be/E8gmARGvPlI?si=r3PjEVSvuOPDn9F_",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Jingle Bell Rock",
+        "name_singer": "Bobby Helms",
+        "audioURL": "https://www.shazam.com/ru/track/54640449/jingle-bell-rock",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Mary's Boy Child",
+        "name_singer": "Boney M.",
+        "audioURL": "https://youtu.be/cmm1gt_2SkQ?si=kAJZUEDM-58Q2Y_7",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Let It Snow! Let It Snow! Let It Snow!",
+        "name_singer": "Dean Martin",
+        "audioURL": "https://youtu.be/Rnil5LyK_B0?si=iPp1eMLIFAkS6dNL",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Wonderful Christmastime",
+        "name_singer": "Paul McCartney",
+        "audioURL": "https://youtu.be/94Ye-3C1FC8?si=qYj55aBtAVEZWfSh",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Blue Christmas",
+        "name_singer": "Elvis Presley",
+        "audioURL": "https://youtu.be/B6WnnZRSKYs?si=Gw4VsvwGS7wEGgGF",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "It's the Most Wonderful Time of the Year",
+        "name_singer": "Andy Williams",
+        "audioURL": "https://youtu.be/AN_R4pR1hck?si=DyooKCOIbE5rIxrw",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Driving Home for Christmas",
+        "name_singer": "Chris Rea",
+        "audioURL": "https://youtu.be/DDt3u2Ev1cI?si=DO5Ufqn-UmXcx1Ul",
+        "name_URLWEB": ""
+      }
+    ],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Музыкальная подборка для Нового года",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [
+      "Привет, друзья! Совсем скоро наступит Новый год, и в эту волшебную новогоднюю ночь хочется веселиться и петь вместе с друзьями любимые песни. Специально для вас мы подготовили список из 12 самых популярных и лучших новогодних хитов, которые не оставят равнодушными ни одного из вас. Давайте вместе окунемся в мир музыки и праздника!"
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/news_songsRU.png?alt=media&token=1168779c-a3f1-43ae-8761-02d0a061f434",
+    "audio": [
+      {
+        "name_song": "Jingle Bells",
+        "name_singer": "Frank Sinatra",
+        "audioURL": "https://my.mail.ru/music/songs/238fc498f7327a0daff92a0878cda889",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Feliz Navidad",
+        "name_singer": "José Feliciano",
+        "audioURL": "https://youtu.be/N8NcQzMQN_U?si=ago74GxTJQW27xCY",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Happy New Year",
+        "name_singer": "ABBA",
+        "audioURL": "https://youtu.be/3Uo0JAUWijM?si=ZaxYLL9FlC2a0sk3",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Новый год к нам мчится",
+        "name_singer": "Дискотека Авария",
+        "audioURL": "https://my.mail.ru/music/songs/089295561d432805fee5a77285c2b323",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "С Новым годом (Время чудес)",
+        "name_singer": "Dabro",
+        "audioURL": "https://my.mail.ru/music/songs/8a89a059888988f8220c614e245d184b",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Кабы не было зимы",
+        "name_singer": "Валентина Толкунова",
+        "audioURL": "https://my.mail.ru/music/songs/047c815abe93f6e735292deea6d41dcd",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Пока часы двенадцать бьют",
+        "name_singer": "Снежинка",
+        "audioURL": "https://my.mail.ru/music/songs/12122b8821eb4242155dbf54acaf67cf",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "All I Want For Christmas Is You",
+        "name_singer": "Mariah Carey",
+        "audioURL": "https://youtu.be/yXQViqx6GMY?si=SOvqg5kBFPQ3_7qA",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Last Christmas",
+        "name_singer": "Wham!",
+        "audioURL": "https://youtu.be/E8gmARGvPlI?si=r3PjEVSvuOPDn9F_",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Там, где Новый год",
+        "name_singer": "Волшебники двора",
+        "audioURL": "https://my.mail.ru/music/songs/315827b7a54c4021013202d9cbbc06dc",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "В лесу родилась елочка",
+        "name_singer": "Детская новогодняя песня",
+        "audioURL": "https://my.mail.ru/music/songs/cdd73eef6fdc282bdff575220be6e6eb",
+        "name_URLWEB": ""
+      },
+      {
+        "name_song": "Jingle Bell Rock",
+        "name_singer": "Bobby Helms",
+        "audioURL": "https://my.mail.ru/music/songs/e6f31aabf61379ec218c7063b86b9532",
+        "name_URLWEB": ""
+      }
+    ],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Results of the year!",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [
+      "___My Songbook___ is a mobile application designed specifically for guitarists, singers, composers and all those who are passionate about creating and performing music. It is an ideal tool for those who want to record their own songs or be inspired to create new compositions. The application offers a convenient auto-scroll, guitar chord fingering and the ability to play audio files with songs. In addition, My Songbook has the function of sending songs via social networks, which makes the process of sharing and collaboration even more convenient and efficient.",
+      "During its development, the application has gone through a number of updates, starting with the initial version 1.0.0 and ending with version 1.4.6. During the updates, many new features and improvements were introduced, which significantly expanded its capabilities and increased usability.",
+      "## Main innovations:",
+      "- Added a dark mode for comfortable viewing.",
+      "- Expanded localization, including English and experimental Chinese.",
+      "- Implemented feedback functions.",
+      "- Improved functions for sending songs and changing localizations have been introduced.",
+      "- An unlimited editor, a new banner with events and a quick search have been introduced.",
+      "## Prospects for next year:",
+      "- Additional functional extensions and new features will appear in the future.",
+      "- Plans to create a music game in the style of \"Guess the melody\".",
+      "With all the achievements and innovations, My Songbook could not have achieved such high standards without the active participation and support of our users. I would like to express my sincere gratitude to all guitarists, singers, composers and just music enthusiasts who choose our application to embody their musical ideas and creative ideas. Your active support and feedback help us improve My Songbook and make it better every day. Thank you for being with us!",
+      "> We are always open to ideas and suggestions from you. If you have any ideas or suggestions for improving the app, please contact us by email ru-developer@mail.ru ."
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": false,
+    "websiteUrl": ""
+  },
+  {
+    "name": "Итоги года!",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [
+      "___My Songbook___ — это мобильное приложение, разработанное специально для гитаристов, певцов, композиторов и всех тех, кто увлечен созданием и исполнением музыки. Это идеальный инструмент для тех, кто хочет записывать свои песни или вдохновляться созданием новых композиций. Приложение предлагает удобный автоскролл, гитарную аппликатуру аккордов и возможность воспроизведения аудиофайлов с песнями. Кроме того, My Songbook обладает функцией отправки песен через социальные сети, что делает процесс обмена и совместной работы еще более удобным и эффективным.",
+      "В ходе своего развития приложение прошло через ряд обновлений, начиная с первоначальной версии 1.0.0 и заканчивая версией 1.4.6. В процессе обновлений было внедрено множество новых функций и улучшений, которые значительно расширили его возможности и повысили удобство использования.",
+      "## Основные нововведения:",
+      "- Добавлен темный режим для комфортного просмотра.",
+      "- Расширена локализация, включая английский и экспериментальный китайский языки.",
+      "- Внедрены функции обратной связи.",
+      "- Введены усовершенствованные функции отправки песен и изменения локализаций.",
+      "- Внедрен безграничный редактор, новый баннер с событиями и быстрый поиск.",
+      "## Перспективы на следующий год:",
+      "- В будущем появятся дополнительные расширения функционала и новых возможностей.",
+      "- В планах создание музыкальной игры в стиле \"Угадай мелодию\".",
+      "С учетом всех достижений и инноваций, My Songbook не мог бы достичь таких высоких стандартов без активного участия и поддержки наших пользователей. Хотелось бы выразить искреннюю благодарность всем гитаристам, певцам, композиторам и просто музыкальным энтузиастам, которые выбирают наше приложение для воплощения своих музыкальных идей и творческих замыслов. Ваша активная поддержка и отзывы помогают нам совершенствовать My Songbook и делать его лучше каждый день. Спасибо за то, что вы с нами!",
+      "> Мы всегда открыты к идеям и предложениям от вас. Если у вас есть какие-либо идеи или предложения по улучшению приложения, пожалуйста, обращайтесь по электронному адресу ru-developer@mail.ru."
+    ],
+    "type": "text",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/Slide%2016_9%20-%201.png?alt=media&token=4112f6f6-8156-4293-b731-17f36945c73b",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": true,
+    "isShow": true,
+    "isSupport": false,
+    "websiteUrl": ""
+  }
+]

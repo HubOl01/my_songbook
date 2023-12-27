@@ -35,11 +35,12 @@
     "settings_theme_mode": "Режим темы",
     "settings_translate": "Язык",
     "settings_help": "Помощь",
-    "settings_help_other_quest": "Не нашли вопрос? Вы можете написать любые вопросы через сообщества ",
+    "settings_help_other_quest": "Не нашли вопрос? Вы можете написать разработчику любые вопросы по ",
+    "settings_help_other_quest_email": "электронной почте",
     "settings_help_other_quest_or": " или ",
     "settings_call_tech": "Обратиться в техподдержку",
     "appbar_settings_call_tech": "Техподдержка",
-    "settings_call_tech_text": "Вы можете обратиться в техподдержку через сообщества VK или Telegram",
+    "settings_call_tech_text": "Вы можете обратиться в техподдержку по электронной почте ru-developer@mail.ru",
     "settings_call_tech_personally": "Написать лично",
     "settings_call_tech_discussions": "Написать в обсуждениях",
     "settings_about": "О приложении",
@@ -54,9 +55,10 @@
     "alertDialog_error_OK": "ОК",
     "alertDialogWarningTitle": "Информация",
     "alertDialogWarningContent": "Вы выбрали язык, чтобы работало вам нужно перезагрузить приложение",
-    "alertDialogWarningExit": "Выйти из приложения",
+    "alertDialogWarningExit": "Перезапустить приложение",
     "testWarning": "Есть переводы только на русском и на английском!",
     "theme_mode_auto": "Авто (по умолчанию)",
     "theme_mode_light": "Светлый режим",
-    "theme_mode_dark": "Темный режим"
+    "theme_mode_dark": "Темный режим",
+    "search": "Трек, исполнитель"
 }

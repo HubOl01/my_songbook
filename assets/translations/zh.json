@@ -35,11 +35,12 @@
     "settings_theme_mode": "主题模式",
     "settings_translate": "语言",
     "settings_help": "帮助",
-    "settings_help_other_quest": "没找到问题？ 你可以通过社区写任何问题 ",
+    "settings_help_other_quest": "没找到问题？ 您可以写信给开发人员有关的任何问题 ",
+    "settings_help_other_quest_email": "通过电子邮件",
     "settings_help_other_quest_or": " 或 ",
     "settings_call_tech": "联系技术支持",
     "appbar_settings_call_tech": "技术支持",
-    "settings_call_tech_text": "您可以通过VK或Telegram社区联系技术支持",
+    "settings_call_tech_text": "您可以通过电子邮件联系技术支持 ru-developer@mail.ru",
     "settings_call_tech_personally": "亲自写",
     "settings_call_tech_discussions": "在讨论中写",
     "settings_about": "关于应用程序",
@@ -54,9 +55,10 @@
     "alertDialog_error_OK":"确定",
     "alertDialogWarningTitle": "资料",
     "alertDialogWarningContent": "您已经选择了工作的语言，您需要重新启动应用程序",
-    "alertDialogWarningExit": "退出应用程序",
+    "alertDialogWarningExit": "重新启动应用程序",
     "testWarning": "只有俄语和英语的翻译！",
     "theme_mode_auto": "自动(默认)",
     "theme_mode_light": "灯光模式",
-    "theme_mode_dark": "暗模式"
+    "theme_mode_dark": "暗模式",
+    "search": "曲目，艺术家"
 }

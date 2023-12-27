@@ -35,11 +35,12 @@
     "settings_theme_mode": "Theme Mode",
     "settings_translate": "Language",
     "settings_help": "Help",
-    "settings_help_other_quest": "Didn't find the question? You can write any questions through the community ",
+    "settings_help_other_quest": "Didn't find the question? You can write to the developer any questions by ",
+    "settings_help_other_quest_email": "e-mail",
     "settings_help_other_quest_or": " or ",
     "settings_call_tech": "Contact tech Support",
     "appbar_settings_call_tech": "Tech Support",
-    "settings_call_tech_text": "You can contact technical support via VK or Telegram communities",
+    "settings_call_tech_text": "You can contact technical support by e-mail ru-developer@mail.ru",
     "settings_call_tech_personally": "Write personally",
     "settings_call_tech_discussions": "Write in discussions",
     "settings_about": "About the application",
@@ -54,9 +55,10 @@
     "alertDialog_error_OK": "OK",
     "alertDialogWarningTitle": "Information",
     "alertDialogWarningContent": "You have chosen the language to work, you need to restart the application",
-    "alertDialogWarningExit": "Exit the app",
+    "alertDialogWarningExit": "Restart the application",
     "testWarning": "There are translations only in Russian and in English!",
     "theme_mode_auto": "Auto (default)",
     "theme_mode_light": "Light mode",
-    "theme_mode_dark": "Dark mode"
+    "theme_mode_dark": "Dark mode",
+    "search": "Track, artist"
 }

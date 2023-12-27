@@ -1,14 +1,20 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
-
+import 'package:yandex_mobileads/mobile_ads.dart';
+import '../Storage/storage.dart';
 import '../settings/currentNumber.dart';
+import 'Card_for_news/cardNews.dart';
 import 'create_song.dart';
+import 'edit_song.dart';
 import 'guitarController.dart';
 import 'guitarDetal.dart';
+import 'search/searchPage.dart';
+import 'works_file.dart';
 
 class GuitarPage extends GetView<GuitarController> {
   const GuitarPage({super.key});
@@ -19,6 +25,12 @@ class GuitarPage extends GetView<GuitarController> {
           appBar: AppBar(
             title: Text(tr(LocaleKeys.appbar_list_songs)),
             actions: [
+              IconButton(
+                  onPressed: () {
+                    AppMetrica.reportEvent('Search');
+                    Get.to(SearchPage());
+                  },
+                  icon: Icon(Icons.search)),
               IconButton(
                   onPressed: () {
                     Get.to(Create_song());
@@ -38,11 +50,49 @@ class GuitarPage extends GetView<GuitarController> {
                     color: colorFiolet.withOpacity(0.3),
                     child: ListView.builder(
                       // physics: BouncingScrollPhysics(),
-                      itemCount: controller.songs.length + 1,
+                      itemCount: controller.songs.length + 3,
                       itemBuilder: (context, index) {
                         if (index == 0) {
+                          return CardNews();
+                        }
+                        if (index == 1) {
+                          //return Align(
+                          //   alignment: Alignment.bottomCenter,
+                          //   child: ADSBanner()
+                          // );
+                          return controller.isBannerAlreadyCreated.value ? AdWidget(bannerAd: controller.banner) : SizedBox();
+                        }
+                        if (index == 2) {
                           return !isDeleteTest
                               ? ListTile(
+                                  onLongPress: () async => await showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: Text(tr(LocaleKeys
+                                                  .confirmation_title)),
+                                              content: Text(tr(LocaleKeys
+                                                  .edit_song_confirmation_content_delete)),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_no))),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      // setState(() {
+                                                      isDeleteTest = true;
+                                                      isDeleteTestPut(
+                                                          isDeleteTest);
+                                                      // });
+                                                      Get.back();
+                                                      Get.back();
+                                                      Get.back();
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_yes)))
+                                              ])),
                                   title: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
@@ -60,7 +110,8 @@ class GuitarPage extends GetView<GuitarController> {
                                                   BorderRadius.circular(15),
                                               child: Container(
                                                 color: colorFiolet,
-                                                child: Text(tr(LocaleKeys.example),
+                                                child: Text(
+                                                    tr(LocaleKeys.example),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 10)),
@@ -84,36 +135,97 @@ class GuitarPage extends GetView<GuitarController> {
                             ? const Center(
                                 child: CircularProgressIndicator(),
                               )
-                            :  controller.songs.isEmpty 
-                        ? const SizedBox() :
-                            ListTile(
-                                title: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(controller.songs[index - 1].name_song,
-                                        style: TextStyle(fontSize: 16)),
-                                    Text(
-                                      "${controller.songs[index - 1].name_singer}",
-                                      style: TextStyle(fontSize: 14),
+                            : controller.songs.isEmpty
+                                ? const SizedBox()
+                                : ListTile(
+                                    onLongPress: () async => await showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title: Text(tr(LocaleKeys
+                                                  .confirmation_title)),
+                                              content: Text(tr(LocaleKeys
+                                                  .edit_song_confirmation_content_delete)),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_no))),
+                                                TextButton(
+                                                    onPressed: () async {
+                                                      try {
+                                                        await deleteFile(
+                                                            controller
+                                                                .songs[
+                                                                    index - 3]
+                                                                .path_music!);
+                                                        deleteSong(controller
+                                                            .songs[index - 3]
+                                                            .id!);
+                                                        final GuitarController
+                                                            guitar = Get.put(
+                                                                GuitarController());
+                                                        guitar.refreshSongs();
+                                                        Get.back();
+                                                        Get.back();
+                                                        Get.back();
+                                                      } catch (ex) {
+                                                        print(
+                                                            "delete ex ${ex}");
+                                                        await showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    AlertDialog(
+                                                                      title: Text(tr(
+                                                                          LocaleKeys
+                                                                              .alertDialog_error_title)),
+                                                                      content: Text(tr(
+                                                                          LocaleKeys
+                                                                              .alertDialog_error_delete_content)),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                            child:
+                                                                                Text(tr(LocaleKeys.alertDialog_error_OK)))
+                                                                      ],
+                                                                    ));
+                                                      }
+                                                    },
+                                                    child: Text(tr(LocaleKeys
+                                                        .confirmation_yes)))
+                                              ],
+                                            )),
+                                    title: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Text(
+                                            controller
+                                                .songs[index - 3].name_song,
+                                            style: TextStyle(fontSize: 16)),
+                                        Text(
+                                          "${controller.songs[index - 3].name_singer}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: context.isDarkMode
+                                                ? Colors.grey[300]
+                                                : Colors.grey[600],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Get.to(GuitarDetal(
-                                    // songModel: controller.songs[index-1],
-                                    id: controller.songs[index - 1].id,
-                                    // name_song: controller.songs[index - 1].name_song,
-                                    // name_singer:
-                                    // controller.songs[index - 1].name_singer,
-                                    // song: controller.songs[index - 1].song,
-                                    // audio: controller.songs[index - 1].path_music,
-                                    // date_created:
-                                    // controller.songs[index - 1].date_created));
-                                  ));
-                                },
-                              );
+                                    onTap: () {
+                                      Get.to(GuitarDetal(
+                                        id: controller.songs[index - 3].id,
+                                      ));
+                                    },
+                                  );
                       },
                     ),
                   ))),

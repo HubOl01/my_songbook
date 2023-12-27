@@ -51,11 +51,12 @@ class CodegenLoader extends AssetLoader{
   "settings_theme_mode": "Theme Mode",
   "settings_translate": "Language",
   "settings_help": "Help",
-  "settings_help_other_quest": "Didn't find the question? You can write any questions through the community ",
+  "settings_help_other_quest": "Didn't find the question? You can write to the developer any questions by ",
+  "settings_help_other_quest_email": "e-mail",
   "settings_help_other_quest_or": " or ",
   "settings_call_tech": "Contact tech Support",
   "appbar_settings_call_tech": "Tech Support",
-  "settings_call_tech_text": "You can contact technical support via VK or Telegram communities",
+  "settings_call_tech_text": "You can contact technical support by e-mail ru-developer@mail.ru",
   "settings_call_tech_personally": "Write personally",
   "settings_call_tech_discussions": "Write in discussions",
   "settings_about": "About the application",
@@ -70,11 +71,12 @@ class CodegenLoader extends AssetLoader{
   "alertDialog_error_OK": "OK",
   "alertDialogWarningTitle": "Information",
   "alertDialogWarningContent": "You have chosen the language to work, you need to restart the application",
-  "alertDialogWarningExit": "Exit the app",
+  "alertDialogWarningExit": "Restart the application",
   "testWarning": "There are translations only in Russian and in English!",
   "theme_mode_auto": "Auto (default)",
   "theme_mode_light": "Light mode",
-  "theme_mode_dark": "Dark mode"
+  "theme_mode_dark": "Dark mode",
+  "search": "Track, artist"
 };
 static const Map<String,dynamic> zh = {
   "appbar_list_songs": "歌曲列表",
@@ -113,11 +115,12 @@ static const Map<String,dynamic> zh = {
   "settings_theme_mode": "主题模式",
   "settings_translate": "语言",
   "settings_help": "帮助",
-  "settings_help_other_quest": "没找到问题？ 你可以通过社区写任何问题 ",
+  "settings_help_other_quest": "没找到问题？ 您可以写信给开发人员有关的任何问题 ",
+  "settings_help_other_quest_email": "通过电子邮件",
   "settings_help_other_quest_or": " 或 ",
   "settings_call_tech": "联系技术支持",
   "appbar_settings_call_tech": "技术支持",
-  "settings_call_tech_text": "您可以通过VK或Telegram社区联系技术支持",
+  "settings_call_tech_text": "您可以通过电子邮件联系技术支持 ru-developer@mail.ru",
   "settings_call_tech_personally": "亲自写",
   "settings_call_tech_discussions": "在讨论中写",
   "settings_about": "关于应用程序",
@@ -132,11 +135,12 @@ static const Map<String,dynamic> zh = {
   "alertDialog_error_OK": "确定",
   "alertDialogWarningTitle": "资料",
   "alertDialogWarningContent": "您已经选择了工作的语言，您需要重新启动应用程序",
-  "alertDialogWarningExit": "退出应用程序",
+  "alertDialogWarningExit": "重新启动应用程序",
   "testWarning": "只有俄语和英语的翻译！",
   "theme_mode_auto": "自动(默认)",
   "theme_mode_light": "灯光模式",
-  "theme_mode_dark": "暗模式"
+  "theme_mode_dark": "暗模式",
+  "search": "曲目，艺术家"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -175,11 +179,12 @@ static const Map<String,dynamic> ru = {
   "settings_theme_mode": "Режим темы",
   "settings_translate": "Язык",
   "settings_help": "Помощь",
-  "settings_help_other_quest": "Не нашли вопрос? Вы можете написать любые вопросы через сообщества ",
+  "settings_help_other_quest": "Не нашли вопрос? Вы можете написать разработчику любые вопросы по ",
+  "settings_help_other_quest_email": "электронной почте",
   "settings_help_other_quest_or": " или ",
   "settings_call_tech": "Обратиться в техподдержку",
   "appbar_settings_call_tech": "Техподдержка",
-  "settings_call_tech_text": "Вы можете обратиться в техподдержку через сообщества VK или Telegram",
+  "settings_call_tech_text": "Вы можете обратиться в техподдержку по электронной почте ru-developer@mail.ru",
   "settings_call_tech_personally": "Написать лично",
   "settings_call_tech_discussions": "Написать в обсуждениях",
   "settings_about": "О приложении",
@@ -194,11 +199,12 @@ static const Map<String,dynamic> ru = {
   "alertDialog_error_OK": "ОК",
   "alertDialogWarningTitle": "Информация",
   "alertDialogWarningContent": "Вы выбрали язык, чтобы работало вам нужно перезагрузить приложение",
-  "alertDialogWarningExit": "Выйти из приложения",
+  "alertDialogWarningExit": "Перезапустить приложение",
   "testWarning": "Есть переводы только на русском и на английском!",
   "theme_mode_auto": "Авто (по умолчанию)",
   "theme_mode_light": "Светлый режим",
-  "theme_mode_dark": "Темный режим"
+  "theme_mode_dark": "Темный режим",
+  "search": "Трек, исполнитель"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": en, "zh": zh, "ru": ru};
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "498046852468",
+    "project_id": "my-songbook-5fb9f",
+    "storage_bucket": "my-songbook-5fb9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498046852468:android:380172308733ea7cbe6021",
+        "android_client_info": {
+          "package_name": "ru.ru_developer.my_songbook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSNW11-4ot5WHkmV4pgjjchODSHGn3zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/settings/Themes/themePage.dart';
 import 'package:my_songbook/settings/Translate/translatePage.dart';
-import 'package:my_songbook/settings/techSupport/techSupportPage.dart';
 
+import '../components/sendToSupport.dart';
 import '../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
@@ -59,9 +59,8 @@ class SettingsPage extends GetView<SettingsController> {
         ListTile(
           leading: Icon(Icons.support_agent),
           title: Text(tr(LocaleKeys.settings_call_tech)),
-          onTap: () {
-            AppMetrica.reportEvent('TechSupportPage');
-            Get.to(TechSupportPage());
+          onTap: () async {
+            sendToSupport();
           },
         ),
         ListTile(

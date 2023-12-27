@@ -17,7 +17,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 
-version: 1.3.4+70
+
+version: 1.4.6+92
+
 
 
 environment:
@@ -40,7 +42,7 @@ dependencies:
   get: ^4.6.5
   sqflite: any
   cupertino_icons: ^1.0.2
-  icons_plus: ^4.0.0
+  icons_plus: ^5.0.0
   flutter_chord: ^0.1.2
   package_info_plus: any
   intl: any
@@ -61,6 +63,15 @@ dependencies:
   share_plus: ^7.2.1
   flutter_email_sender: ^6.0.2
   restart_app: ^1.2.1
+  cached_network_image: ^3.3.0
+  firebase_core: ^2.24.2
+  firebase_remote_config: ^4.3.8
+  smooth_page_indicator: ^1.1.0
+  carousel_slider: ^4.2.1
+  flutter_markdown: ^0.6.18+2
+  yandex_mobileads: ^6.2.0
+  huawei_in_app_update: ^1.2.1
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -129,6 +140,7 @@ flutter:
       - assets/icon/
       - assets/
       - .env
+      - assets/dataJson/news.json
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

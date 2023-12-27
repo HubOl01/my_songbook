@@ -13,6 +13,7 @@ import '../components/player_widget.dart';
 import '../settings/currentNumber.dart';
 import 'edit_song.dart';
 import 'guitarDetalController.dart';
+import 'model/songsModel.dart';
 // import 'package:get/get.dart';
 
 // import '../components/player_widget.dart';
@@ -160,7 +161,7 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                                       controller.songModel.value.name_singer,
                                   audio: controller.songModel.value.path_music,
                                   asset: false)
-                              : SizedBox(),
+                              : TitleContent(song: controller.songModel.value),
                           LyricsRenderer(
                             // horizontalAlignment: CrossAxisAlignment.stretch,
                             lyrics: controller.songModel.value.song,
@@ -202,3 +203,31 @@ class GuitarDetal extends GetView<GuitarDetalController> {
 
 
 // final GuitarDetalController controller = Get.put(GuitarDetalController());
+class TitleContent extends StatelessWidget {
+  final Song song;
+  const TitleContent({required this.song});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        song.name_song != ""
+            ? Text(
+                song.name_song,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              )
+            : SizedBox(),
+        song.name_song != ""
+            ? SizedBox(
+                height: 4,
+              )
+            : SizedBox(),
+        song.name_singer != ""
+            ? Text(song.name_singer, style: TextStyle(fontSize: 20))
+            : SizedBox(),
+      ],
+    );
+  }
+}

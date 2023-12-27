@@ -1,19 +1,16 @@
-import 'dart:io';
-
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
-import '../Storage/storage.dart';
 import '../components/player_widget.dart';
 import '../generated/locale_keys.g.dart';
 import '../settings/currentNumber.dart';
 import 'db/dbSongs.dart';
 import 'guitarController.dart';
 import 'model/songsModel.dart';
+import 'works_file.dart';
 
 class Create_song extends StatefulWidget {
   const Create_song({super.key});
@@ -71,36 +68,36 @@ class _Create_songState extends State<Create_song> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                !isClosedWarring
-                    ? SizedBox(
-                        // color: Colors.blue,
-                        height: 90,
-                        child: Stack(children: [
-                          Positioned(
-                              top: -10,
-                              right: -10,
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isClosedWarring = true;
-                                    isClosedWarringPut(isClosedWarring);
-                                  });
-                                },
-                                icon: Icon(Icons.close),
-                                color: Colors.red,
-                                iconSize: 22,
-                              )),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              tr(LocaleKeys.add_song_attention),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ]),
-                      )
-                    : SizedBox(),
+                // !isClosedWarring
+                //     ? SizedBox(
+                //         // color: Colors.blue,
+                //         height: 90,
+                //         child: Stack(children: [
+                //           Positioned(
+                //               top: -10,
+                //               right: -10,
+                //               child: IconButton(
+                //                 onPressed: () {
+                //                   setState(() {
+                //                     isClosedWarring = true;
+                //                     isClosedWarringPut(isClosedWarring);
+                //                   });
+                //                 },
+                //                 icon: Icon(Icons.close),
+                //                 color: Colors.red,
+                //                 iconSize: 22,
+                //               )),
+                //           Align(
+                //             alignment: Alignment.bottomCenter,
+                //             child: Text(
+                //               tr(LocaleKeys.add_song_attention),
+                //               textAlign: TextAlign.center,
+                //               style: TextStyle(color: Colors.red),
+                //             ),
+                //           ),
+                //         ]),
+                //       )
+                //     : SizedBox(),
                 SizedBox(
                   height: !isClosedWarring ? 10 : 0,
                 ),
@@ -206,7 +203,8 @@ class _Create_songState extends State<Create_song> {
                                 final GuitarController guitar =
                                     Get.put(GuitarController());
                                 guitar.refreshSongs();
-                                AppMetrica.reportEvent('create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
+                                AppMetrica.reportEvent(
+                                    'create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
                                 // if (isSuccess) {
                                 Get.back();
                                 // } else {
@@ -291,7 +289,7 @@ class _Create_songState extends State<Create_song> {
       // allowedExtensions: ['mp3'],
     );
     if (_picker != null) {
-      setState(()  {
+      setState(() {
         isAudio = false;
         customFile = null;
         PlatformFile file = _picker.files.first;
@@ -316,14 +314,18 @@ class _Create_songState extends State<Create_song> {
     }
   }
 
-  Future<File> saveFilePermanently(PlatformFile file) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final newFile = File('${appStorage.path}/${file.name}');
-    return File(file.path!).copy(newFile.path);
-  }
+  // Future<File> saveFilePermanently(PlatformFile file) async {
+  //   final appStorage = await getApplicationDocumentsDirectory();
+  //   final newFile = File('${appStorage.path}/${file.name}');
+  //   return File(file.path!).copy(newFile.path);
+  // }
 
   void autotext(String name) {
     if (name.contains(" - ")) {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
       List<String> words = name.split(' - ');
       String nameSinger = words[0];
       String nameSong = words[1];
@@ -342,7 +344,58 @@ class _Create_songState extends State<Create_song> {
       setState(() {
         if (name_songController.text.trim().isNotEmpty ||
             name_singerController.text.trim().isNotEmpty) {
-           showDialog(
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(context.tr(LocaleKeys.confirmation_title)),
+                    content: Text(
+                        context.tr(LocaleKeys.add_song_confirmation_content)),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_no))),
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              name_songController.text = nameSong;
+                              name_singerController.text = nameSinger;
+                            });
+                            Get.back();
+                          },
+                          child: Text(context.tr(LocaleKeys.confirmation_yes)))
+                    ],
+                  ));
+        } else {
+          name_songController.text = nameSong;
+          name_singerController.text = nameSinger;
+        }
+      });
+    } else if (name.contains(" — ")) {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
+      List<String> words = name.split(' — ');
+      String nameSinger = words[0];
+      String nameSong = words[1];
+      if (nameSong.contains(".mp3")) {
+        nameSong = words[1].replaceAll(".mp3", "");
+        if (nameSong.contains("—")) {
+          nameSong = words[1].replaceAll("—", " ");
+        }
+      }
+      if (nameSong.contains(".m4a")) {
+        nameSong = words[1].replaceAll(".m4a", "");
+        if (nameSong.contains("—")) {
+          nameSong = words[1].replaceAll("—", " ");
+        }
+      }
+      setState(() {
+        if (name_songController.text.trim().isNotEmpty ||
+            name_singerController.text.trim().isNotEmpty) {
+          showDialog(
               context: context,
               builder: (context) => AlertDialog(
                     title: Text(context.tr(LocaleKeys.confirmation_title)),
@@ -371,6 +424,10 @@ class _Create_songState extends State<Create_song> {
         }
       });
     } else {
+      setState(() {
+        RegExp exp = RegExp(r'\(.*?\)');
+        name = name.replaceAll(exp, '');
+      });
       String nameSong = name;
       if (nameSong.contains(".mp3")) {
         nameSong = nameSong.replaceAll(".mp3", "");
