@@ -1,5 +1,37 @@
 [
   {
+    "name": "Happy New Year!",
+    "user": "ru-developer",
+    "lang": "en",
+    "description": [],
+    "type": "image",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/New-YearEN.png?alt=media&token=1ad582fb-a64a-4a0d-bfed-d308e4f87375",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": false,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
+    "name": "С Новым годом!",
+    "user": "ru-developer",
+    "lang": "ru",
+    "description": [],
+    "type": "image",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/New-YearRU.png?alt=media&token=2e194402-99c6-41b1-8959-a9043dcab719",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "textColorClick": "0xFFFFFFFF",
+    "isClick": false,
+    "isShow": true,
+    "isSupport": true,
+    "websiteUrl": ""
+  },
+  {
     "name": "My Songbook 1.4",
     "user": "ru-developer",
     "lang": "en",

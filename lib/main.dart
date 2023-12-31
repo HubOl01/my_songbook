@@ -44,7 +44,7 @@ void main() async {
   } catch (ex) {
     print("Firebase ex: ${ex}");
   }
-  MobileAds.initialize();
+  // MobileAds.initialize();
   // MobileAds.setUserConsent(true);
   await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
@@ -56,12 +56,12 @@ void main() async {
   isClosedWarring = box.get("isClosedWarring") ?? false;
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
-  try {
-    AppMetrica.activate(
-        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
-  } catch (ex) {
-    print("app_metrica: ${ex}");
-  }
+  // try {
+  //   AppMetrica.activate(
+  //       AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+  // } catch (ex) {
+  //   print("app_metrica: ${ex}");
+  // }
   runApp(EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
       path: 'assets/translations',

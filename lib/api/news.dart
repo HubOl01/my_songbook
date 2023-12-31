@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import '../components/remote_config.dart';
-// import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show rootBundle;
 import '../guitar_songs/model/newsModel.dart';
 
 List<News> myJson = [];
@@ -9,9 +9,9 @@ Future getNews() async {
   await remoteConfig.fetch();
   await remoteConfig.activate();
   await FirebaseRemoteConfigClass().initializeConfig();
-  RemoteConfigValue myJsonValue = remoteConfig.getValue('news');
-  String myJsonString = myJsonValue.asString();
-  // String myJsonString = await rootBundle.loadString('assets/dataJson/news.json');
+  // RemoteConfigValue myJsonValue = remoteConfig.getValue('news');
+  // String myJsonString = myJsonValue.asString();
+  String myJsonString = await rootBundle.loadString('assets/dataJson/news.json');
   myJson = newsFromJson(myJsonString);
   return myJson;
 }
