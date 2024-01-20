@@ -36,7 +36,8 @@ class SearchPage extends GetView<SearchPageController> {
                 prefixIcon: Icon(Icons.search),
                 prefixIconColor: Colors.white,
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none),
