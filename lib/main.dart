@@ -14,7 +14,7 @@ import 'package:my_songbook/settings/currentNumber.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:yandex_mobileads/mobile_ads.dart';
+// import 'package:yandex_mobileads/mobile_ads.dart';
 import 'applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'guitar_songs/guitarPage.dart';

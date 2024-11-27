@@ -1,8 +1,8 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide CarouselController;
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,7 +19,7 @@ class CardNews extends StatefulWidget {
 int activePage = 0;
 
 class _CardNewsState extends State<CardNews> {
-  final CarouselController _controller = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class _CardNewsState extends State<CardNews> {
                                   ),
                                 )
                               : CarouselSlider.builder(
-                                  carouselController: _controller,
+                                  controller: _controller,
                                   itemCount: JSONValueRU().length,
                                   options: CarouselOptions(
                                       aspectRatio: 16 / 9,
@@ -242,7 +242,7 @@ class _CardNewsState extends State<CardNews> {
                                   ),
                                 )
                               : CarouselSlider.builder(
-                                  carouselController: _controller,
+                                  controller: _controller,
                                   itemCount: JSONValueEN().length,
                                   options: CarouselOptions(
                                       aspectRatio: 16 / 9,

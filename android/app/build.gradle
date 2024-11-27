@@ -28,6 +28,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "ru.ru_developer.my_songbook"
+    testNamespace "ru.ru_developer.my_songbook"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

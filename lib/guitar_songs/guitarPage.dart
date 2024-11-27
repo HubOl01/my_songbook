@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/guitar_songs/testPage.dart';
 import 'package:my_songbook/styles/colors.dart';
-import 'package:yandex_mobileads/mobile_ads.dart';
+// import 'package:yandex_mobileads/mobile_ads.dart';
 import '../Storage/storage.dart';
 import '../settings/currentNumber.dart';
 import 'Card_for_news/cardNews.dart';
@@ -50,19 +50,19 @@ class GuitarPage extends GetView<GuitarController> {
                     color: colorFiolet.withOpacity(0.3),
                     child: ListView.builder(
                       // physics: BouncingScrollPhysics(),
-                      itemCount: controller.songs.length + 3,
+                      itemCount: controller.songs.length + 2,
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return CardNews();
                         }
+                        // if (index == 1) {
+                        //   //return Align(
+                        //   //   alignment: Alignment.bottomCenter,
+                        //   //   child: ADSBanner()
+                        //   // );
+                        //   return controller.isBannerAlreadyCreated.value ? AdWidget(bannerAd: controller.banner) : SizedBox();
+                        // }
                         if (index == 1) {
-                          //return Align(
-                          //   alignment: Alignment.bottomCenter,
-                          //   child: ADSBanner()
-                          // );
-                          return controller.isBannerAlreadyCreated.value ? AdWidget(bannerAd: controller.banner) : SizedBox();
-                        }
-                        if (index == 2) {
                           return !isDeleteTest
                               ? ListTile(
                                   onLongPress: () async => await showDialog(

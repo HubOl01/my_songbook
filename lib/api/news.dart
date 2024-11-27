@@ -9,9 +9,9 @@ Future getNews() async {
   await remoteConfig.fetch();
   await remoteConfig.activate();
   await FirebaseRemoteConfigClass().initializeConfig();
-  // RemoteConfigValue myJsonValue = remoteConfig.getValue('news');
-  // String myJsonString = myJsonValue.asString();
-  String myJsonString = await rootBundle.loadString('assets/dataJson/news.json');
+  RemoteConfigValue myJsonValue = remoteConfig.getValue('news');
+  String myJsonString = myJsonValue.asString();
+  // String myJsonString = await rootBundle.loadString('assets/dataJson/news.json');
   myJson = newsFromJson(myJsonString);
   return myJson;
 }

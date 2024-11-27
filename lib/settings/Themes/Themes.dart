@@ -18,7 +18,7 @@ class Themes {
         inactiveTrackColor: colorFiolet.withOpacity(0.3)),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(colorFiolet))),
+            backgroundColor: WidgetStatePropertyAll(colorFiolet))),
     // progressIndicatorTheme: const ProgressIndicatorThemeData(
     // color: Colors.blue, linearTrackColor: Colors.blue),
     // inputDecorationTheme: InputDecorationTheme(
@@ -41,7 +41,7 @@ class Themes {
     textTheme: TextTheme(
         bodyLarge: TextStyle(color: textColorDark),
         bodySmall: TextStyle(color: subColorDark)),
-    backgroundColor: backgroundColorDark,
+    // c: backgroundColorDark,
     dialogBackgroundColor: backgroundColorDark,
     primaryTextTheme:
         const TextTheme(titleMedium: TextStyle(color: Colors.white)),
@@ -112,8 +112,8 @@ class Themes {
         const TextTheme(titleMedium: TextStyle(color: Colors.black)),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(colorFiolet),
-            foregroundColor: MaterialStatePropertyAll(Colors.white))),
+            backgroundColor: WidgetStatePropertyAll(colorFiolet),
+            foregroundColor: WidgetStatePropertyAll(Colors.white))),
     inputDecorationTheme: InputDecorationTheme(),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: colorFiolet),
     indicatorColor: colorFiolet,
@@ -128,7 +128,7 @@ class Themes {
     primaryColor: Colors.white,
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-       foregroundColor: MaterialStatePropertyAll(colorFiolet)
+       foregroundColor: WidgetStatePropertyAll(colorFiolet)
       )
     ),
     dialogTheme: DialogTheme(
