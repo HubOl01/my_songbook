@@ -3,22 +3,27 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/settings/Themes/Themes.dart';
-import 'package:my_songbook/settings/currentNumber.dart';
+import 'package:my_songbook/core/styles/Themes.dart';
+import 'package:my_songbook/core/utils/currentNumber.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
-import 'applications_guitar/applicationsPage.dart';
+import 'core/bloc/songs_bloc.dart';
+import 'core/data/songsRepository.dart';
+import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
-import 'guitar_songs/guitarPage.dart';
-import 'settings/settingsPage.dart';
+import 'core/data/dbSongs.dart';
+import 'core/data/testDataSongs.dart';
+import 'pages/guitar_songs/guitarPage.dart';
+import 'pages/settings/settingsPage.dart';
 
 int? indexMode;
 Future getMode() async {
@@ -27,6 +32,14 @@ Future getMode() async {
   var box = await Hive.openBox('my_songbook');
   indexMode = box.get('themeMode') ?? 0;
   print("Mode = ${indexMode!}");
+}
+
+Future testDB() async {
+  final dbSongs = DBSongs.instance;
+  dbSongs.deleteAll();
+  for (var song in songs) {
+    await dbSongs.create(song);
+  }
 }
 
 void main() async {
@@ -56,18 +69,21 @@ void main() async {
   isClosedWarring = box.get("isClosedWarring") ?? false;
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
+  // testDB();
   // try {
   //   AppMetrica.activate(
   //       AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   // } catch (ex) {
   //   print("app_metrica: ${ex}");
   // }
-  runApp(EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
-      path: 'assets/translations',
-      fallbackLocale: Locale('en'),
-      assetLoader: CodegenLoader(),
-      child: MyApp()));
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
+        path: 'assets/translations',
+        fallbackLocale: Locale('en'),
+        assetLoader: CodegenLoader(),
+        child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -86,7 +102,14 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
               locale: context.locale,
-              home: MyHomePage(),
+              home: MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                      create: (context) =>
+                          SongsBloc(SongsRepository())..add(LoadSongs())),
+                ],
+                child: MyHomePage(),
+              ),
             ));
   }
 }

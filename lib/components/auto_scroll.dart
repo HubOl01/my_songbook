@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../settings/currentNumber.dart';
+import '../core/utils/currentNumber.dart';
 
 autoScroll(ScrollController _scrollController) {
     double maxScrollExtent = _scrollController.position.maxScrollExtent;
