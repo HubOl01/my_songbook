@@ -56,5 +56,21 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
         emit(SongsError(e.toString()));
       }
     });
+    
+    on<UpdateSongsOrder>((event, emit) async {
+  try {
+    // Пример сохранения нового порядка (можно сохранить порядок в базе данных).
+    for (int i = 0; i < event.updatedSongs.length; i++) {
+      final updatedSong = event.updatedSongs[i].copy(order: i);
+      await _repository.updateSong(updatedSong);
+    }
+
+    // После обновления, загружаем обновленный список.
+    add(LoadSongs());
+  } catch (e) {
+    emit(SongsError(e.toString()));
+  }
+});
+
   }
 }

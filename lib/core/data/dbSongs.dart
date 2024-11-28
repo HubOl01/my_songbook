@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import '../model/groupModel.dart';
 import '../model/songsModel.dart';
 
 bool isSuccess = false;
@@ -22,12 +23,14 @@ class DBSongs {
     final dbPath = await getDatabasesPath();
 
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path,
+        version: 2, onCreate: _createDB, onUpgrade: _updateDB);
   }
 
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT';
+    final intType = 'INTEGER';
     await db.execute('''
     CREATE TABLE $tableSongs (
     ${Songs.id} $idType,
@@ -38,6 +41,26 @@ class DBSongs {
     ${Songs.date_created} $textType
     )
     ''');
+  }
+
+  // Future _updateDB(Database db, int oldVersion, int newVersion) async {
+  //   if (oldVersion < 2) {
+  // await db.execute(
+  //     'ALTER TABLE $tableSongs ADD COLUMN `${Songs.order}` INTEGER DEFAULT 0');
+  //   }
+  Future _updateDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN `${Songs.order}` INTEGER DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN `${Songs.group}` INTEGER DEFAULT 0');
+      await db.execute('''
+      CREATE TABLE $tableGroups (
+        ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+        ${Groups.name} TEXT NOT NULL
+      )
+    ''');
+    }
   }
 
   Future<Song> create(Song song) async {
@@ -65,7 +88,7 @@ class DBSongs {
 
   Future<List<Song>> readAllSongs() async {
     final db = await instance.database;
-    final orderBy = '${Songs.date_created} DESC';
+    final orderBy = '`${Songs.order}` ASC';
     // final result = await db.rawQuery('select * from $tableSongs order by $orderBy');
     final result = await db.query(tableSongs, orderBy: orderBy);
     print("Reading all songs");
@@ -91,6 +114,56 @@ class DBSongs {
     print("!!! Deleting all records from $tableSongs !!!");
 
     return await db.delete(tableSongs);
+  }
+
+  Future<GroupModel> createGroup(GroupModel group) async {
+    final db = await instance.database;
+
+    final id = await db.insert(tableGroups, group.toJson());
+    print("!!! Successed create group id = ${id} !!!");
+    return group.copy(id: id);
+  }
+
+  Future<List<GroupModel>> readAllGroups() async {
+    final db = await instance.database;
+
+    final result = await db.query(tableGroups);
+    print("Reading all groups");
+    return result.map((json) => GroupModel.fromJson(json)).toList();
+  }
+
+  Future<int> updateGroup(GroupModel group) async {
+    final db = await instance.database;
+
+    print("!!! Successed update group id = ${group.id} !!!");
+    return await db.update(tableGroups, group.toJson(),
+        where: '${Groups.id} = ?', whereArgs: [group.id]);
+  }
+
+  Future<int> deleteGroup(int id) async {
+    final db = await instance.database;
+
+    // Удаляем все песни, связанные с этой группой
+    await db.update(tableSongs, {'${Songs.group}': 0},
+        where: '`${Songs.group}` = ?', whereArgs: [id]);
+
+    print("!!! Successed delete group id = ${id} !!!");
+    return await db
+        .delete(tableGroups, where: '${Groups.id} = ?', whereArgs: [id]);
+  }
+
+  Future<List<Song>> readSongsByGroup(int groupId) async {
+    final db = await instance.database;
+
+    final result = await db.query(
+      tableSongs,
+      where: '`${Songs.group}` = ?',
+      whereArgs: [groupId],
+      orderBy: '`${Songs.order}` ASC',
+    );
+
+    print("Reading songs for group $groupId");
+    return result.map((json) => Song.fromJson(json)).toList();
   }
 
   Future close() async {

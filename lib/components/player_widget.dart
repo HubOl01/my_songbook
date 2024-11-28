@@ -28,7 +28,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-    var stream;
+  var stream;
 
   @override
   void initState() {
@@ -37,7 +37,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       AppMetrica.reportEvent('Катюша');
     } else {
       setAudio();
-      AppMetrica.reportEvent('${widget.name_song} - ${widget.name_singer} (${widget.audio})');
+      AppMetrica.reportEvent(
+          '${widget.name_song} - ${widget.name_singer} (${widget.audio})');
     }
 
     stream = audioPlayer.onPlayerStateChanged.listen((event) {
@@ -64,8 +65,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     final urlRU = await player.load("katusha.mp3");
     final urlEN = await player.load("katushaEN.mp3");
     audioPlayer.setSourceUrl(
-      context.locale == Locale('ru') ?
-      urlRU.path : urlEN.path,
+      context.locale == Locale('ru') ? urlRU.path : urlEN.path,
     );
   }
 
@@ -73,7 +73,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
     // final player = AudioCache(prefix: "assets/audio/");
     // final url = await player.load("kino-kukushka-mp3.mp3");
-  
+
     // File file = File(widget.audio);
     // String content = await file.readAsString(encoding: latin1);
     String encodedUrl = Uri.encodeFull(widget.audio);

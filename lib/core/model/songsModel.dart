@@ -9,6 +9,8 @@ class Songs {
     name_singer,
     song,
     path_music,
+    order,
+    group,
     date_created,
   ];
 
@@ -17,6 +19,8 @@ class Songs {
   static final String name_singer = 'name_singer';
   static final String song = 'song';
   static final String path_music = 'path_music';
+  static final String order = 'order';
+  static final String group = 'group';
   static final String date_created = 'date_created';
 }
 
@@ -26,6 +30,8 @@ class Song {
   final String name_singer;
   final String song;
   final String? path_music;
+  final int? order;
+  final int? group;
   final DateTime date_created;
 
   const Song({
@@ -34,6 +40,8 @@ class Song {
     required this.name_singer,
     required this.song,
     this.path_music = '',
+    this.order = 0,
+    this.group = 0,
     required this.date_created,
   });
   Song copy({
@@ -42,6 +50,8 @@ class Song {
     String? name_singer,
     String? song,
     String? path_music,
+    int? order,
+    int? group,
     DateTime? date_created,
   }) =>
       Song(
@@ -50,6 +60,8 @@ class Song {
         name_singer: name_singer ?? this.name_singer,
         song: song ?? this.song,
         path_music: path_music ?? this.path_music,
+        order: order ?? this.order,
+        group: group ?? this.group,
         date_created: date_created ?? this.date_created,
       );
   static Song fromJson(Map<String, Object?> json) => Song(
@@ -58,6 +70,8 @@ class Song {
       name_singer: json[Songs.name_singer] as String,
       song: json[Songs.song] as String,
       path_music: json[Songs.path_music] as String,
+      order: json[Songs.order] as int,
+      group: json[Songs.group] as int,
       date_created: DateTime.parse(json[Songs.date_created] as String));
 
   Map<String, Object?> toJson() => {
@@ -66,6 +80,8 @@ class Song {
         Songs.name_singer: name_singer,
         Songs.song: song,
         Songs.path_music: path_music,
+        Songs.order: order,
+        Songs.group: group,
         Songs.date_created: date_created.toIso8601String(),
       };
 }

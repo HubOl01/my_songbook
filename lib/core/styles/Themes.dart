@@ -43,6 +43,8 @@ class Themes {
         bodySmall: TextStyle(color: subColorDark)),
     // c: backgroundColorDark,
     dialogBackgroundColor: backgroundColorDark,
+    bottomSheetTheme:
+        BottomSheetThemeData(backgroundColor: backgroundColorDark),
     primaryTextTheme:
         const TextTheme(titleMedium: TextStyle(color: Colors.white)),
     // colorSchemeSeed: Colors.black,

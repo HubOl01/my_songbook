@@ -37,3 +37,12 @@ class DeleteSong extends SongsEvent {
 }
 
 class DeleteAllSongs extends SongsEvent {}
+
+class UpdateSongsOrder extends SongsEvent {
+  final List<Song> updatedSongs;
+
+  UpdateSongsOrder(this.updatedSongs);
+
+  @override
+  List<Object?> get props => [updatedSongs];
+}

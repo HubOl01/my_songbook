@@ -11,7 +11,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: child,
         style: ButtonStyle(
-            shape: MaterialStatePropertyAll(
+            shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             // Change your radius here
             borderRadius: BorderRadius.circular(10),

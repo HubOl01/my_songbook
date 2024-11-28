@@ -37,7 +37,7 @@ Future getMode() async {
 Future testDB() async {
   final dbSongs = DBSongs.instance;
   dbSongs.deleteAll();
-  for (var song in songs) {
+  for (var song in testSongs) {
     await dbSongs.create(song);
   }
 }
@@ -167,10 +167,13 @@ List<String> pagesString = [
 
 class MyHomePageController extends GetxController {
   var tabIndex = 0.obs;
-
   void changeTabIndex(int index) {
-    tabIndex.value = index;
     AppMetrica.reportEvent('Раздел ${pagesString[index]}');
+    // print('Раздел ${pagesString[index]}');
+    if (tabIndex == index && tabIndex == 0) {
+      controllerScroll.jumpTo(-1);
+    } else {}
+    tabIndex.value = index;
     update();
   }
 }
