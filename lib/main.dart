@@ -17,6 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/bloc/songs_bloc.dart';
+import 'core/cubit/songs_cubit.dart';
 import 'core/data/songsRepository.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
@@ -107,6 +108,9 @@ class MyApp extends StatelessWidget {
                   BlocProvider(
                       create: (context) =>
                           SongsBloc(SongsRepository())..add(LoadSongs())),
+                  BlocProvider(
+                      create: (context) =>
+                          Songs1Cubit(SongsRepository())..loadSongs()),
                 ],
                 child: MyHomePage(),
               ),
