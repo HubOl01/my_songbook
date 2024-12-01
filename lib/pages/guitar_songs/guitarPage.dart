@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:my_songbook/components/customButtonSheet.dart';
-import 'package:my_songbook/components/customTextField.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/core/data/testDataGroup.dart';
 import 'package:my_songbook/pages/guitar_songs/editGroupPage.dart';
@@ -19,12 +17,12 @@ import '../../core/utils/currentNumber.dart';
 import 'Card_for_news/cardNews.dart';
 import 'create_song.dart';
 import 'edit_song.dart';
-import 'guitarController.dart';
 import 'guitarDetal.dart';
 import 'search/searchPage.dart';
 import 'works_file.dart';
 
-  ScrollController controllerScroll = ScrollController();
+ScrollController controllerScroll = ScrollController();
+
 class GuitarPage extends StatefulWidget {
   const GuitarPage({super.key});
 
@@ -34,29 +32,54 @@ class GuitarPage extends StatefulWidget {
 
 class _GuitarPageState extends State<GuitarPage> {
   int indexGroup = -1;
+  int indexAdd = 0;
+  List<Song> songGroup = [];
+  List<int> groupIndex = [];
+  bool isSecondButton = false;
   @override
   void initState() {
     super.initState();
+  }
+
+  int globalValue(int id, List<Song> globalValues) {
+    for (Song value in globalValues) {
+      if (value.id == id) {
+        return value.id!;
+      }
+    }
+    return -1;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(tr(LocaleKeys.appbar_list_songs)),
-        actions: [
-          IconButton(
-              onPressed: () {
-                AppMetrica.reportEvent('Search');
-                Get.to(SearchPage());
-              },
-              icon: Icon(Icons.search)),
-          IconButton(
-              onPressed: () {
-                Get.to(Create_song());
-              },
-              icon: Icon(Icons.add))
-        ],
+        leading: isSecondButton
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    isSecondButton = false;
+                    indexAdd = 0;
+                  });
+                },
+                icon: Icon(Icons.close))
+            : null,
+        title: isSecondButton ? null : Text(tr(LocaleKeys.appbar_list_songs)),
+        actions: isSecondButton
+            ? []
+            : [
+                IconButton(
+                    onPressed: () {
+                      AppMetrica.reportEvent('Search');
+                      Get.to(SearchPage());
+                    },
+                    icon: Icon(Icons.search)),
+                IconButton(
+                    onPressed: () {
+                      Get.to(Create_song());
+                    },
+                    icon: Icon(Icons.add))
+              ],
       ),
       body: RefreshIndicator(
           color: colorFiolet,
@@ -75,18 +98,15 @@ class _GuitarPageState extends State<GuitarPage> {
                 //     } else if (state is SongsLoaded) {
                 //       // Используем временный список для управления порядком.
                 //       final List<Song> songs = List.from(state.songs);
-
                 //       return ReorderableListView(
                 //         onReorder: (oldIndex, newIndex) {
                 //           // Учитываем возможное смещение индекса.
                 //           if (newIndex > oldIndex) {
                 //             newIndex -= 1;
                 //           }
-
                 //           // Перемещаем элемент внутри списка.
                 //           final Song movedSong = songs.removeAt(oldIndex);
                 //           songs.insert(newIndex, movedSong);
-
                 //           // Отправляем обновленный порядок в BLoC.
                 //           BlocProvider.of<SongsBloc>(context)
                 //               .add(UpdateSongsOrder(songs));
@@ -183,8 +203,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                     child: Container(
                                         alignment: Alignment.center,
                                         margin: EdgeInsets.only(left: 15),
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 15),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15),
                                         decoration: BoxDecoration(
                                             color: colorFiolet,
                                             borderRadius:
@@ -327,84 +347,131 @@ class _GuitarPageState extends State<GuitarPage> {
                               : SizedBox();
                         }
                         final song = state.songs[index - 3];
-                        return ListTile(
-                          key: ValueKey(song.id),
-                          onLongPress: () async => await showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title:
-                                        Text(tr(LocaleKeys.confirmation_title)),
-                                    content: Text(tr(LocaleKeys
-                                        .edit_song_confirmation_content_delete)),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          child: Text(
-                                              tr(LocaleKeys.confirmation_no))),
-                                      TextButton(
-                                          onPressed: () async {
-                                            try {
-                                              await deleteFile(
-                                                  song.path_music!);
-                                              deleteSong(song.id!);
-                                              // final GuitarController
-                                              //     guitar = Get.put(
-                                              //         GuitarController());
-                                              // guitar.refreshSongs();
-                                              Get.back();
-                                              Get.back();
-                                              Get.back();
-                                            } catch (ex) {
-                                              print("delete ex ${ex}");
-                                              await showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                        title: Text(tr(LocaleKeys
-                                                            .alertDialog_error_title)),
-                                                        content: Text(tr(LocaleKeys
-                                                            .alertDialog_error_delete_content)),
-                                                        actions: [
-                                                          TextButton(
-                                                              onPressed: () {
-                                                                Get.back();
-                                                              },
-                                                              child: Text(tr(
-                                                                  LocaleKeys
-                                                                      .alertDialog_error_OK)))
-                                                        ],
-                                                      ));
-                                            }
-                                          },
-                                          child: Text(
-                                              tr(LocaleKeys.confirmation_yes)))
-                                    ],
-                                  )),
-                          title: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(song.name_song,
-                                  style: TextStyle(fontSize: 16)),
-                              Text(
-                                "${song.name_singer}",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: context.isDarkMode
-                                      ? Colors.grey[300]
-                                      : Colors.grey[600],
+                        return StatefulBuilder(builder: (context, setState1) {
+                          return ListTile(
+                            key: ValueKey(song.id),
+                            minLeadingWidth: !isSecondButton ? null : 0,
+                            leading: !isSecondButton
+                                ? null
+                                : Container(
+                                    alignment: Alignment.center,
+                                    width: 25,
+                                    height: 25,
+                                    // padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: globalValue(
+                                                      song.id!, songGroup) ==
+                                                  song.id
+                                              ? colorFiolet
+                                              : Colors.grey,
+                                          width: 2),
+                                      color: globalValue(song.id!, songGroup) ==
+                                              song.id
+                                          ? colorFiolet
+                                          : Colors.transparent,
+                                    ),
+                                    child: Text(
+                                      indexAdd.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                  ),
+                            onLongPress: () async => setState(() {
+                              isSecondButton = true;
+                            }),
+
+                            // await showDialog(
+                            //     context: context,
+                            //     builder: (context) => AlertDialog(
+                            //           title:
+                            //               Text(tr(LocaleKeys.confirmation_title)),
+                            //           content: Text(tr(LocaleKeys
+                            //               .edit_song_confirmation_content_delete)),
+                            //           actions: [
+                            //             TextButton(
+                            //                 onPressed: () {
+                            //                   Get.back();
+                            //                 },
+                            //                 child: Text(
+                            //                     tr(LocaleKeys.confirmation_no))),
+                            //             TextButton(
+                            //                 onPressed: () async {
+                            //                   try {
+                            //                     await deleteFile(
+                            //                         song.path_music!);
+                            //                     deleteSong(song.id!);
+                            //                     // final GuitarController
+                            //                     //     guitar = Get.put(
+                            //                     //         GuitarController());
+                            //                     // guitar.refreshSongs();
+                            //                     Get.back();
+                            //                     Get.back();
+                            //                     Get.back();
+                            //                   } catch (ex) {
+                            //                     print("delete ex ${ex}");
+                            //                     await showDialog(
+                            //                         context: context,
+                            //                         builder: (context) =>
+                            //                             AlertDialog(
+                            //                               title: Text(tr(LocaleKeys
+                            //                                   .alertDialog_error_title)),
+                            //                               content: Text(tr(LocaleKeys
+                            //                                   .alertDialog_error_delete_content)),
+                            //                               actions: [
+                            //                                 TextButton(
+                            //                                     onPressed: () {
+                            //                                       Get.back();
+                            //                                     },
+                            //                                     child: Text(tr(
+                            //                                         LocaleKeys
+                            //                                             .alertDialog_error_OK)))
+                            //                               ],
+                            //                             ));
+                            //                   }
+                            //                 },
+                            //                 child: Text(
+                            //                     tr(LocaleKeys.confirmation_yes)))
+                            //           ],
+                            //         )),
+                            title: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(song.name_song,
+                                    style: TextStyle(fontSize: 16)),
+                                Text(
+                                  "${song.name_singer}",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: context.isDarkMode
+                                        ? Colors.grey[300]
+                                        : Colors.grey[600],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            Get.to(GuitarDetal(
-                              id: song.id,
-                            ));
-                          },
-                        );
+                              ],
+                            ),
+                            onTap: isSecondButton
+                                ? () {
+                                    if (globalValue(song.id!, songGroup) !=
+                                        song.id) {
+                                      setState1(() {
+                                        indexAdd++;
+                                      });
+                                    } else {
+                                      isSecondButton = false;
+                                      indexAdd = 0;
+                                    }
+                                  }
+                                : () {
+                                    Get.to(GuitarDetal(
+                                      id: song.id,
+                                    ));
+                                  },
+                          );
+                        });
                       },
                     );
                   } else if (state is SongsError) {

@@ -1,8 +1,5 @@
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // import 'package:flutter_rustore_update/flutter_rustore_update.dart';
-import 'package:huawei_in_app_update/huawei_in_app_update.dart';
 
 int availableVersionCode = 0;
 int installStatus = 0;

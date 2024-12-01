@@ -6,7 +6,6 @@ import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/pages/guitar_songs/guitarDetalController.dart';
 import '../../components/player_widget.dart';
 import '../../core/data/dbSongs.dart';
-import 'guitarController.dart';
 import '../../core/model/songsModel.dart';
 import 'works_file.dart';
 

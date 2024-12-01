@@ -86,8 +86,8 @@ class LabeledRadio extends StatelessWidget {
       },
       title: Text(label),
       trailing: Radio(
-          fillColor: MaterialStateColor.resolveWith((states) => colorFiolet),
-          focusColor: MaterialStateColor.resolveWith((states) => colorFiolet),
+          fillColor: WidgetStateColor.resolveWith((states) => colorFiolet),
+          focusColor: WidgetStateColor.resolveWith((states) => colorFiolet),
           value: value,
           groupValue: groupValue,
           onChanged: onChanged),

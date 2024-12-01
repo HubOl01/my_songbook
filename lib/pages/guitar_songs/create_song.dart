@@ -8,7 +8,6 @@ import '../../components/player_widget.dart';
 import '../../generated/locale_keys.g.dart';
 import '../../core/utils/currentNumber.dart';
 import '../../core/data/dbSongs.dart';
-import 'guitarController.dart';
 import '../../core/model/songsModel.dart';
 import 'works_file.dart';
 
