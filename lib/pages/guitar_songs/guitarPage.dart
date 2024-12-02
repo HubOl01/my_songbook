@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/model/groupModel.dart';
 import 'package:my_songbook/core/styles/colors.dart';
 import 'package:my_songbook/pages/guitar_songs/editGroupPage.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
-import '../../core/cubit/songs_cubit.dart';
-import '../../core/data/testDataGroup.dart';
+import '../../core/cubit/songs1_cubit.dart';
 import '../../core/model/songsModel.dart';
 import '../../core/storage/storage.dart';
 import '../../core/utils/currentNumber.dart';
@@ -33,7 +33,9 @@ class GuitarPage extends StatefulWidget {
 class _GuitarPageState extends State<GuitarPage> {
   int indexGroup = -1;
   int indexAdd = 0;
-  List<int> selectedSongs = [];
+  int groupId = 0;
+  List<int> selectedSongsId = [];
+  List<Song> selectedSongs = [];
   bool isSecondButton = false;
 
   @override
@@ -46,13 +48,14 @@ class _GuitarPageState extends State<GuitarPage> {
                   setState(() {
                     isSecondButton = false;
                     indexAdd = 0;
+                    selectedSongsId.clear();
                     selectedSongs.clear();
                   });
                 },
                 icon: Icon(Icons.close),
               )
             : null,
-        title: isSecondButton ? null : Text("List of Songs"),
+        title: isSecondButton ? null : Text(tr(LocaleKeys.appbar_list_songs)),
         actions: isSecondButton
             ? [
                 IconButton(
@@ -67,18 +70,19 @@ class _GuitarPageState extends State<GuitarPage> {
                                 topRight: Radius.circular(15))),
                         context: context,
                         builder: (context) => DraggableScrollableSheet(
-                            initialChildSize: 0.8,
+                            // initialChildSize: 0.5,
                             expand: false,
                             builder: (context, scrollController) {
-                              return Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Align(
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Align(
                                         alignment:
                                             AlignmentDirectional.topStart,
                                         child: Text(
@@ -87,51 +91,88 @@ class _GuitarPageState extends State<GuitarPage> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         )),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    CustomTextField(
-                                        controller: controller,
-                                        onChanged: (value) => setState(() {
-                                              controller.text = value;
-                                            }),
-                                        title: "Название группы"),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    CustomButtonSheet(
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  CustomTextField(
+                                      controller: controller,
+                                      onChanged: (value) => setState(() {
+                                            controller.text = value;
+                                          }),
+                                      title: "Название группы"),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  BlocListener<SongsBloc, SongsState>(
+                                    listener: (context, state) {
+                                      if (state is SongsLoaded &&
+                                          state.groups.isNotEmpty) {
+                                        final lastGroupId =
+                                            state.groups.first.id;
+                                        for (int i = 0;
+                                            i < selectedSongs.length;
+                                            i++) {
+                                          context.read<SongsBloc>().add(
+                                                  UpdateSong(
+                                                      selectedSongs[i].copy(
+                                                order: i + 1,
+                                                group: lastGroupId,
+                                              )));
+                                          print("lastGroup: ${lastGroupId}");
+                                        }
+                                      }
+                                    },
+                                    child: CustomButtonSheet(
                                         // width: context.width,
                                         title: "Добавить",
                                         onPressed: () {
+                                          context.read<SongsBloc>().add(
+                                              AddGroup(GroupModel(
+                                                  name: controller.text)));
+
                                           Get.back();
                                         }),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Expanded(
-                                        child: ListView.builder(
-                                      controller: scrollController,
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount: 20,
-                                      itemBuilder: (context, index) => ListTile(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        // horizontalTitleGap: 0,
-                                        minTileHeight: 45,
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                        contentPadding: EdgeInsets.only(
-                                            left: 20,
-                                            right: 20,
-                                            top: 0,
-                                            bottom: 0),
-                                        title: Text("Text"),
-                                      ),
-                                    ))
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(child:
+                                      BlocBuilder<SongsBloc, SongsState>(
+                                          builder: (context, state) {
+                                    if (state is SongsLoading) {
+                                      return Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (state is SongsLoaded) {
+                                      return ListView.builder(
+                                        controller: scrollController,
+                                        physics: BouncingScrollPhysics(),
+                                        itemCount: state.groups.length,
+                                        itemBuilder: (context, index) =>
+                                            ListTile(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          // horizontalTitleGap: 0,
+                                          minTileHeight: 45,
+                                          onTap: () {
+                                            Get.back();
+                                          },
+                                          contentPadding: EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 0,
+                                              bottom: 0),
+                                          title: Text(state.groups[index].name),
+                                        ),
+                                      );
+                                    } else if (state is SongsError) {
+                                      return const SizedBox();
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  }))
+                                ],
                               );
                             }));
                   },
@@ -143,7 +184,7 @@ class _GuitarPageState extends State<GuitarPage> {
                       return const SizedBox();
                     } else if (state is Songs1Loaded) {
                       bool allSelected = state.songs
-                          .every((song) => selectedSongs.contains(song.id));
+                          .every((song) => selectedSongsId.contains(song.id));
                       return IconButton(
                         onPressed: () {
                           if (allSelected) {
@@ -169,7 +210,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15))),
                         context: context,
-                        builder: (context) => Padding(
+                        builder: (modalContext) => Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -178,7 +219,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                     height: 5,
                                   ),
                                   Text(
-                                    "Удалить ${selectedSongs.length == 1 ? "песню" : "песни"}?",
+                                    "Удалить ${selectedSongsId.length == 1 ? "песню" : "песни"}?",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -188,7 +229,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                     height: 20,
                                   ),
                                   Text(
-                                    "${selectedSongs.length == 1 ? "Песня будет удалена" : "Песни будут удалены"}, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
+                                    "${selectedSongsId.length == 1 ? "Песня будет удалена" : "Песни будут удалены"}, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
                                     style: TextStyle(
                                       fontSize: 14,
                                     ),
@@ -201,11 +242,18 @@ class _GuitarPageState extends State<GuitarPage> {
                                     width: context.width,
                                     height: 40,
                                     onPressed: () {
-                                      for (int id in selectedSongs) {
+                                      for (int id in selectedSongsId) {
                                         context
                                             .read<SongsBloc>()
                                             .add(DeleteSong(id));
                                       }
+                                      setState(() {
+                                        isSecondButton = false;
+                                        indexAdd = 0;
+                                        selectedSongsId.clear();
+                                        selectedSongs.clear();
+                                      });
+                                      Get.back();
                                     },
                                     title: "Удалить",
                                     fontSize: 14,
@@ -254,79 +302,104 @@ class _GuitarPageState extends State<GuitarPage> {
         onRefresh: () {
           return controller.refreshSongs();
         },
-        child: BlocBuilder<SongsBloc, SongsState>(
-          builder: (context, state) {
-            if (state is SongsLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is SongsLoaded) {
-              return ScrollConfiguration(
-                behavior: ScrollBehavior(),
-                child: GlowingOverscrollIndicator(
-                  axisDirection: AxisDirection.down,
-                  color: colorFiolet.withOpacity(0.3),
-                  child: ListView.builder(
-                    controller: controllerScroll,
-                    itemCount: state.songs.length + 3,
-                    itemBuilder: (context, index) {
-                      if (index < 3) {
-                        return _buildHeader(context, index);
-                      }
-                      final song = state.songs[index - 3];
-                      return ListTile(
-                        key: ValueKey(song.id),
-                        minLeadingWidth: !isSecondButton ? null : 0,
-                        leading: isSecondButton
-                            ? _buildSelectionIndicator(song.id!)
-                            : null,
-                        onLongPress: () {
-                          setState(() {
-                            isSecondButton = true;
-                          });
-                          _toggleSongSelection(song.id!);
-                        },
-                        title: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ScrollConfiguration(
+            behavior: ScrollBehavior(),
+            child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: colorFiolet.withOpacity(0.3),
+                child: ListView(controller: controllerScroll, children: [
+                  _buildHeader(context, 0),
+                  // _buildHeader(context, 1),
+
+                  BlocBuilder<SongsBloc, SongsState>(
+                    builder: (context, state) {
+                      if (state is SongsLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is SongsLoaded) {
+                        // Фильтрация песен по выбранной группе
+                        List<Song> filteredSongs = indexGroup == -1
+                            ? state.songs
+                            : state.songs
+                                .where((song) =>
+                                    song.group == state.groups[indexGroup].id)
+                                .toList();
+
+                        // if (filteredSongs.isEmpty) {
+                        //   return Center(
+                        //       child: Text("Нет песен в выбранной группе"));
+                        // }
+
+                        return Column(
                           children: [
-                            Text(song.name_song,
-                                style: TextStyle(fontSize: 16)),
-                            Text(
-                              song.name_singer ?? "",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: context.isDarkMode
-                                    ? Colors.grey[300]
-                                    : Colors.grey[600],
-                              ),
-                            ),
+                            _buildHorizontalGroupSelector(state.groups),
+                            _buildHeader(context, 2),
+                            filteredSongs.isEmpty
+                                ? Center(
+                                    child: Text("Нет песен в выбранной группе"))
+                                : Column(
+                                    children: filteredSongs
+                                        .map((song) => ListTile(
+                                              key: ValueKey(song.id),
+                                              minLeadingWidth:
+                                                  !isSecondButton ? null : 0,
+                                              leading: isSecondButton
+                                                  ? _buildSelectionIndicator(
+                                                      song.id!)
+                                                  : null,
+                                              onLongPress: () {
+                                                setState(() {
+                                                  isSecondButton = true;
+                                                });
+                                                _toggleSongSelection(
+                                                    song.id!, song);
+                                              },
+                                              title: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Text(song.name_song,
+                                                      style: TextStyle(
+                                                          fontSize: 16)),
+                                                  Text(
+                                                    song.name_singer ?? "",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: context.isDarkMode
+                                                          ? Colors.grey[300]
+                                                          : Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              onTap: isSecondButton
+                                                  ? () => _toggleSongSelection(
+                                                      song.id!, song)
+                                                  : () {
+                                                      Get.to(GuitarDetal(
+                                                        id: song.id,
+                                                      ));
+                                                    },
+                                            ))
+                                        .toList(),
+                                  ),
                           ],
-                        ),
-                        onTap: isSecondButton
-                            ? () => _toggleSongSelection(song.id!)
-                            : () {
-                                Get.to(GuitarDetal(
-                                  id: song.id,
-                                ));
-                              },
-                      );
+                        );
+                      } else if (state is SongsError) {
+                        return const SizedBox();
+                      } else {
+                        return _buildHeader(context, 2);
+                      }
                     },
-                  ),
-                ),
-              );
-            } else if (state is SongsError) {
-              return Center(child: Text(state.message));
-            } else {
-              return Center(child: Text('No data available'));
-            }
-          },
-        ),
+                  )
+                ]))),
       ),
     );
   }
 
   Widget _buildSelectionIndicator(int songId) {
-    final isSelected = selectedSongs.contains(songId);
-    final songIndex = isSelected ? selectedSongs.indexOf(songId) + 1 : null;
+    final isSelected = selectedSongsId.contains(songId);
+    final songIndex = isSelected ? selectedSongsId.indexOf(songId) + 1 : null;
 
     return Container(
       alignment: Alignment.center,
@@ -353,17 +426,19 @@ class _GuitarPageState extends State<GuitarPage> {
     );
   }
 
-  void _toggleSongSelection(int songId) {
+  void _toggleSongSelection(int songId, Song song) {
     setState(() {
-      if (selectedSongs.contains(songId)) {
+      if (selectedSongsId.contains(songId)) {
+        selectedSongsId.remove(songId);
         selectedSongs.remove(songId);
-        if (selectedSongs.isEmpty) {
+        if (selectedSongsId.isEmpty) {
           isSecondButton = false;
         }
       } else {
-        selectedSongs.add(songId);
+        selectedSongsId.add(songId);
+        selectedSongs.add(song);
       }
-      indexAdd = selectedSongs.length;
+      indexAdd = selectedSongsId.length;
     });
   }
 
@@ -371,8 +446,8 @@ class _GuitarPageState extends State<GuitarPage> {
     switch (index) {
       case 0:
         return CardNews();
-      case 1:
-        return !isSecondButton ? _buildHorizontalGroupSelector() : SizedBox();
+      // case 1:
+      //   return !isSecondButton ? _buildHorizontalGroupSelector() : SizedBox();
       case 2:
         return !isSecondButton ? _buildTestDeleteWidget(context) : SizedBox();
       default:
@@ -383,90 +458,105 @@ class _GuitarPageState extends State<GuitarPage> {
   void _toggleAllSelections(List<Song> songs, bool selectAll) {
     setState(() {
       if (selectAll) {
-        selectedSongs.addAll(songs
+        selectedSongsId.addAll(songs
             .map((song) => song.id!)
-            .where((id) => !selectedSongs.contains(id)));
+            .where((id) => !selectedSongsId.contains(id)));
         isSecondButton = true;
       } else {
-        selectedSongs.clear();
+        selectedSongsId.clear();
         isSecondButton = false;
       }
-      indexAdd = selectedSongs.length;
+      indexAdd = selectedSongsId.length;
     });
   }
 
-  Widget _buildHorizontalGroupSelector() {
-    return Container(
-        margin: EdgeInsets.only(top: 15, bottom: 8),
-        alignment: Alignment.center,
-        height: 30,
-        child: ListView(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Get.to(EditGroupPage());
-              },
-              child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 15),
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
+  Widget _buildHorizontalGroupSelector(List<GroupModel> groups) {
+    return isSecondButton
+        ? const SizedBox()
+        : Container(
+            margin: EdgeInsets.only(top: 15, bottom: 8),
+            alignment: Alignment.centerLeft,
+            height: 30,
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to(EditGroupPage());
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 15),
+                    width: 50,
+                    // padding: EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
                       color: colorFiolet,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: colorFiolet)),
-                  child: Icon(
-                    EvaIcons.folder_outline,
-                    color: Colors.white,
-                  )),
-            ),
-            Row(
-              children: groups
-                  .asMap()
-                  .map((i, group) => MapEntry(
-                      i,
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          if (indexGroup != i) {
-                            setState(() {
-                              indexGroup = i;
-                            });
-                          } else {
-                            setState(() {
-                              indexGroup = -1;
-                            });
-                          }
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(
-                              left: i == 0 ? 10 : 10,
-                              right: i == groups.length - 1 ? 15 : 0),
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                              color: indexGroup == i
-                                  ? colorFiolet.withOpacity(.3)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: colorFiolet)),
-                          child: Text(
-                            group.name,
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: indexGroup == i
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                                color: indexGroup == i ? colorFiolet : null),
-                          ),
-                        ),
-                      )))
-                  .values
-                  .toList(),
-            )
-          ],
-        ));
+                      border: Border.all(color: colorFiolet),
+                    ),
+                    child: Icon(
+                      EvaIcons.folder_outline,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Row(
+                  children: groups
+                      .asMap()
+                      .map((i, group) => MapEntry(
+                            i,
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                if (indexGroup != i) {
+                                  setState(() {
+                                    indexGroup = i;
+                                    groupId = group.id!;
+                                    context
+                                        .read<SongsBloc>()
+                                        .add(LoadSongsByGroup(group.id!));
+                                  });
+                                } else {
+                                  setState(() {
+                                    indexGroup = -1;
+                                    groupId = 0;
+                                    context.read<SongsBloc>().add(LoadSongs());
+                                  });
+                                }
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(
+                                  left: i == 0 ? 10 : 10,
+                                  right: i == groups.length - 1 ? 15 : 0,
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: indexGroup == i
+                                      ? colorFiolet.withOpacity(.3)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: colorFiolet),
+                                ),
+                                child: Text(
+                                  group.id!.toString() + ". " + group.name,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: indexGroup == i
+                                        ? FontWeight.w600
+                                        : FontWeight.normal,
+                                    color: indexGroup == i ? colorFiolet : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ))
+                      .values
+                      .toList(),
+                )
+              ],
+            ));
   }
 
   Widget _buildTestDeleteWidget(BuildContext context) {

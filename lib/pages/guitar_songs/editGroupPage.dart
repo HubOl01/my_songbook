@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/components/customButtonSheet.dart';
 import 'package:my_songbook/components/customTextField.dart';
+
+import '../../core/bloc/songs_bloc.dart';
+import '../../core/model/groupModel.dart';
 
 class EditGroupPage extends StatefulWidget {
   const EditGroupPage({super.key});
@@ -13,39 +17,95 @@ class EditGroupPage extends StatefulWidget {
 
 class _EditGroupPageState extends State<EditGroupPage> {
   TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Управление группами")),
-      body: Column(
+        appBar: AppBar(title: Text("Управление группами")),
+        body: Column(
+          children: [
+            // Поле для создания новой группы
+            _buildCreateGroupField(context),
+            const SizedBox(height: 15),
+            // Список существующих групп
+            Expanded(
+              child: BlocBuilder<SongsBloc, SongsState>(
+                builder: (context, state) {
+                  if (state is SongsLoading) {
+                    // Индикатор загрузки
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state is SongsLoaded) {
+                    // Группы успешно загружены
+                    final groups = state.groups;
+
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: groups.length,
+                      itemBuilder: (context, index) {
+                        final group = groups[index];
+                        return ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                          title: Text(group.name),
+                          trailing: Icon(
+                            EvaIcons.minus_circle_outline,
+                            size: 20,
+                            color: context.isDarkMode
+                                ? Colors.white.withOpacity(.7)
+                                : Colors.grey[600],
+                          ),
+                          onTap: () {
+                            _showDeleteConfirmation(context, group);
+                          },
+                        );
+                      },
+                    );
+                  } else if (state is SongsError) {
+                    return Center(
+                      child: Text(
+                        "Ошибка загрузки групп: ${state.message}",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ],
+        ));
+  }
+
+  // Поле для создания новой группы
+  Widget _buildCreateGroupField(BuildContext context) {
+    return Container(
+      height: 150,
+      alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.only(bottom: 10, top: 10),
+      child: Column(
         children: [
-          Container(
-            height: 100,
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.only(bottom: 10, top: 10),
-            child: Column(
-              children: [
-                CustomTextField(
-                  controller: controller,
-                  title: "Назовите новую группу",
-                  onChanged: (value) => setState(() {
-                    controller.text = value;
-                  }),
-                ),
-                Text(
-                  "${controller.text.length}/20",
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: context.isDarkMode
-                          ? Colors.white.withOpacity(.7)
-                          : Colors.grey[600]),
-                )
-              ],
+          CustomTextField(
+            controller: controller,
+            title: "Назовите новую группу",
+            onChanged: (value) {
+              setState(() {
+                controller.text = value;
+              });
+            },
+          ),
+          Text(
+            "${controller.text.length}/20",
+            style: TextStyle(
+              fontSize: 12,
+              color: context.isDarkMode
+                  ? Colors.white.withOpacity(.7)
+                  : Colors.grey[600],
             ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           controller.text.isNotEmpty
               ? SizedBox(
                   height: 30,
@@ -53,109 +113,92 @@ class _EditGroupPageState extends State<EditGroupPage> {
                   child: Row(
                     children: [
                       Expanded(
-                          child: CustomButtonSheet(
-                        onPressed: () {},
-                        title: "Создать",
-                      )),
-                      const SizedBox(
-                        width: 15,
+                        child: CustomButtonSheet(
+                          onPressed: () {
+                            context.read<SongsBloc>().add(
+                                AddGroup(GroupModel(name: controller.text)));
+                            setState(() {
+                              controller.clear();
+                            });
+                          },
+                          title: "Создать",
+                        ),
                       ),
+                      const SizedBox(width: 15),
                       Expanded(
-                          child: CustomButtonSheet(
-                        isSecond: true,
-                        onPressed: () {
-                          setState(() {
-                            controller.clear();
-                          });
-                        },
-                        title: "Отменить",
-                      ))
+                        child: CustomButtonSheet(
+                          isSecond: true,
+                          onPressed: () {
+                            setState(() {
+                              controller.clear();
+                            });
+                          },
+                          title: "Отменить",
+                        ),
+                      ),
                     ],
                   ),
                 )
               : const SizedBox(),
-          const SizedBox(
-            height: 15,
-          ),
-          Expanded(
-              child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            itemCount: 20,
-            itemBuilder: (context, index) => ListTile(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                // horizontalTitleGap: 0,
-                minTileHeight: 45,
-                onTap: () {
-                  showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15))),
-                      context: context,
-                      builder: (context) => Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "Удалить группу?",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  "Группа \"${"название группы"}\" будет удалена, и вы не сможете её восстановить. Сохранённые в группе песни будут перемещены в общий список.",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                CustomButtonSheet(
-                                  width: context.width,
-                                  height: 40,
-                                  onPressed: () {},
-                                  title: "Удалить",
-                                  fontSize: 14,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                CustomButtonSheet(
-                                  width: context.width,
-                                  height: 40,
-                                  isSecond: true,
-                                  onPressed: () {},
-                                  title: "Отменить",
-                                  fontSize: 14,
-                                ),
-                              ],
-                            ),
-                          ));
-                },
-                contentPadding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 0),
-                title: Text("Text"),
-                trailing: Icon(
-                  EvaIcons.minus_circle_outline,
-                  size: 20,
-                  color: context.isDarkMode
-                      ? Colors.white.withOpacity(.7)
-                      : Colors.grey[600],
-                )),
-          ))
         ],
       ),
+    );
+  }
+
+  // Модальное окно подтверждения удаления группы
+  void _showDeleteConfirmation(BuildContext context, GroupModel group) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      context: context,
+      builder: (contextModal) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 5),
+              Text(
+                "Удалить группу?",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Группа \"${group.name}\" будет удалена, и вы не сможете её восстановить. Сохранённые в группе песни будут перемещены в общий список.",
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomButtonSheet(
+                width: context.width,
+                height: 40,
+                onPressed: () {
+                  context.read<SongsBloc>().add(DeleteGroup(group.id!));
+                  Navigator.pop(context);
+                },
+                title: "Удалить",
+                fontSize: 14,
+              ),
+              const SizedBox(height: 10),
+              CustomButtonSheet(
+                width: context.width,
+                height: 40,
+                isSecond: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                title: "Отменить",
+                fontSize: 14,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

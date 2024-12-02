@@ -46,3 +46,26 @@ class UpdateSongsOrder extends SongsEvent {
   @override
   List<Object?> get props => [updatedSongs];
 }
+
+
+class LoadGroups extends SongsEvent {}
+
+class AddGroup extends SongsEvent {
+  final GroupModel group;
+  AddGroup(this.group);
+}
+
+class UpdateGroup extends SongsEvent {
+  final GroupModel group;
+  UpdateGroup(this.group);
+}
+
+class DeleteGroup extends SongsEvent {
+  final int groupId;
+  DeleteGroup(this.groupId);
+}
+
+class LoadSongsByGroup extends SongsEvent {
+  final int groupId;
+  LoadSongsByGroup(this.groupId);
+}

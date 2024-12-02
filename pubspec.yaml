@@ -69,6 +69,7 @@ dependencies:
   carousel_slider_plus: ^7.0.2
   flutter_bloc: ^8.1.6
   equatable: ^2.0.7
+  flutter_keyboard_visibility: ^6.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

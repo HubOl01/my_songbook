@@ -5,6 +5,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -17,7 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/bloc/songs_bloc.dart';
-import 'core/cubit/songs_cubit.dart';
+import 'core/cubit/songs1_cubit.dart';
 import 'core/data/songsRepository.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
@@ -78,12 +79,21 @@ void main() async {
   //   print("app_metrica: ${ex}");
   // }
   runApp(
-    EasyLocalization(
-        supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en'),
-        assetLoader: CodegenLoader(),
-        child: MyApp()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                SongsBloc(SongsRepository())..add(LoadSongs())),
+        BlocProvider(
+            create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
+      ],
+      child: EasyLocalization(
+          supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
+          path: 'assets/translations',
+          fallbackLocale: Locale('en'),
+          assetLoader: CodegenLoader(),
+          child: MyApp()),
+    ),
   );
 }
 
@@ -93,28 +103,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppMetrica.reportEvent('locale: ${context.locale}');
-    return ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        builder: (context, child) => GetMaterialApp(
-              themeMode: Provider.of<ThemeProvider>(context).themeMode,
-              theme: Themes.light,
-              darkTheme: Themes.dark,
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              home: MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                      create: (context) =>
-                          SongsBloc(SongsRepository())..add(LoadSongs())),
-                  BlocProvider(
-                      create: (context) =>
-                          Songs1Cubit(SongsRepository())..loadSongs()),
-                ],
-                child: MyHomePage(),
-              ),
-            ));
+    return KeyboardDismissOnTap(
+      child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          builder: (context, child) => GetMaterialApp(
+                themeMode: Provider.of<ThemeProvider>(context).themeMode,
+                theme: Themes.light,
+                darkTheme: Themes.dark,
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                home: MyHomePage(),
+              )),
+    );
   }
 }
 

@@ -88,7 +88,7 @@ class DBSongs {
 
   Future<List<Song>> readAllSongs() async {
     final db = await instance.database;
-    final orderBy = '`${Songs.order}` ASC';
+    final orderBy = '`${Songs.id}` DESC';
     // final result = await db.rawQuery('select * from $tableSongs order by $orderBy');
     final result = await db.query(tableSongs, orderBy: orderBy);
     print("Reading all songs");
@@ -127,7 +127,10 @@ class DBSongs {
   Future<List<GroupModel>> readAllGroups() async {
     final db = await instance.database;
 
-    final result = await db.query(tableGroups);
+    final result = await db.query(
+      tableGroups,
+      orderBy: '`${Groups.id}` DESC',
+    );
     print("Reading all groups");
     return result.map((json) => GroupModel.fromJson(json)).toList();
   }
@@ -144,7 +147,7 @@ class DBSongs {
     final db = await instance.database;
 
     // Удаляем все песни, связанные с этой группой
-    await db.update(tableSongs, {'${Songs.group}': 0},
+    await db.update(tableSongs, {'${Songs.group}': 0, '${Songs.order}': 0},
         where: '`${Songs.group}` = ?', whereArgs: [id]);
 
     print("!!! Successed delete group id = ${id} !!!");

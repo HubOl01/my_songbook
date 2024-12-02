@@ -2,12 +2,14 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:my_songbook/core/bloc/songs_bloc.dart';
+import 'package:my_songbook/core/styles/colors.dart';
 
 import '../../components/player_widget.dart';
 import '../../generated/locale_keys.g.dart';
 import '../../core/utils/currentNumber.dart';
-import '../../core/data/dbSongs.dart';
 import '../../core/model/songsModel.dart';
 import 'works_file.dart';
 
@@ -67,69 +69,55 @@ class _Create_songState extends State<Create_song> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // !isClosedWarring
-                //     ? SizedBox(
-                //         // color: Colors.blue,
-                //         height: 90,
-                //         child: Stack(children: [
-                //           Positioned(
-                //               top: -10,
-                //               right: -10,
-                //               child: IconButton(
-                //                 onPressed: () {
-                //                   setState(() {
-                //                     isClosedWarring = true;
-                //                     isClosedWarringPut(isClosedWarring);
-                //                   });
-                //                 },
-                //                 icon: Icon(Icons.close),
-                //                 color: Colors.red,
-                //                 iconSize: 22,
-                //               )),
-                //           Align(
-                //             alignment: Alignment.bottomCenter,
-                //             child: Text(
-                //               tr(LocaleKeys.add_song_attention),
-                //               textAlign: TextAlign.center,
-                //               style: TextStyle(color: Colors.red),
-                //             ),
-                //           ),
-                //         ]),
-                //       )
-                //     : SizedBox(),
                 SizedBox(
                   height: !isClosedWarring ? 10 : 0,
                 ),
                 TextField(
                   controller: name_songController,
                   // maxLines: 30,
+                  cursorColor: colorFiolet,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_name_song)),
                       contentPadding: EdgeInsets.all(8),
-                      border: OutlineInputBorder()),
+                      // labelStyle: ,
+                      floatingLabelStyle: TextStyle(color: colorFiolet),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet))),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextField(
                   controller: name_singerController,
+                  cursorColor: colorFiolet,
                   // maxLines: 30,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_name_singer)),
                       contentPadding: EdgeInsets.all(8),
-                      border: OutlineInputBorder()),
+                      floatingLabelStyle: TextStyle(color: colorFiolet),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet))),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextField(
                   controller: songController,
+                  cursorColor: colorFiolet,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_text_song)),
                       contentPadding: EdgeInsets.all(8),
-                      border: OutlineInputBorder()),
+                      floatingLabelStyle: TextStyle(color: colorFiolet),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: colorFiolet))),
                 ),
                 SizedBox(
                   height: 10,
@@ -267,7 +255,8 @@ class _Create_songState extends State<Create_song> {
         song: song,
         path_music: path_music,
         date_created: DateTime.now());
-    DBSongs.instance.create(songM);
+    // DBSongs.instance.create(songM);
+    context.read<SongsBloc>().add(AddSong(songM));
   }
 
   Future addSong(String name_song, String name_singer, String song) async {
@@ -276,7 +265,7 @@ class _Create_songState extends State<Create_song> {
         name_singer: name_singer,
         song: song,
         date_created: DateTime.now());
-    DBSongs.instance.create(songM);
+    context.read<SongsBloc>().add(AddSong(songM));
   }
 
   bool isAudio = false;

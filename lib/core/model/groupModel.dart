@@ -14,7 +14,7 @@ class GroupModel {
   final int? id;
   final String name;
 
-  GroupModel({required this.id, required this.name});
+  GroupModel({this.id, required this.name});
   GroupModel copy({
     int? id,
     String? name,
