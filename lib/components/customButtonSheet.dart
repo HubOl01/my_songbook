@@ -5,6 +5,7 @@ class CustomButtonSheet extends StatelessWidget {
   final Function()? onPressed;
   final String title;
   final bool? isSecond;
+  final bool? isDelete;
   final double? fontSize;
   final double? width;
   final double? height;
@@ -13,6 +14,7 @@ class CustomButtonSheet extends StatelessWidget {
     this.onPressed,
     this.title = '',
     this.isSecond = false,
+    this.isDelete = false,
     this.height = null,
     this.width = null,
     this.fontSize = 12,
@@ -34,7 +36,7 @@ class CustomButtonSheet extends StatelessWidget {
           elevation: const WidgetStatePropertyAll(0),
           // foregroundColor: WidgetStatePropertyAll(TextColors.textButton),
           backgroundColor: WidgetStatePropertyAll(
-              isSecond! ? Colors.grey[600]!.withOpacity(.5) : colorFiolet),
+              isSecond! ? Colors.grey[600]!.withOpacity(.5) : isDelete! ? Colors.red[300] : colorFiolet),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),

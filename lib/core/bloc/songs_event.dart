@@ -65,7 +65,7 @@ class DeleteGroup extends SongsEvent {
   DeleteGroup(this.groupId);
 }
 
-class LoadSongsByGroup extends SongsEvent {
-  final int groupId;
-  LoadSongsByGroup(this.groupId);
-}
+// class LoadSongsByGroup extends SongsEvent {
+//   final int groupId;
+//   LoadSongsByGroup(this.groupId);
+// }

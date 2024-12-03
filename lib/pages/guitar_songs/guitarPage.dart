@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/cubit/group_id_cubit.dart';
+import 'package:my_songbook/core/cubit/index_group_cubit.dart';
 import 'package:my_songbook/core/model/groupModel.dart';
 import 'package:my_songbook/core/styles/colors.dart';
 import 'package:my_songbook/pages/guitar_songs/editGroupPage.dart';
@@ -31,9 +33,14 @@ class GuitarPage extends StatefulWidget {
 }
 
 class _GuitarPageState extends State<GuitarPage> {
-  int indexGroup = -1;
-  int indexAdd = 0;
-  int groupId = 0;
+  String getNameGroup(int groupId, List<GroupModel> groups) {
+    final group = groups.firstWhere(
+      (g) => g.id == groupId,
+      orElse: () => GroupModel(id: -1, name: ""),
+    );
+    return group.name;
+  }
+
   List<int> selectedSongsId = [];
   List<Song> selectedSongs = [];
   bool isSecondButton = false;
@@ -47,7 +54,7 @@ class _GuitarPageState extends State<GuitarPage> {
                 onPressed: () {
                   setState(() {
                     isSecondButton = false;
-                    indexAdd = 0;
+                    // indexAdd = 0;
                     selectedSongsId.clear();
                     selectedSongs.clear();
                   });
@@ -55,126 +62,206 @@ class _GuitarPageState extends State<GuitarPage> {
                 icon: Icon(Icons.close),
               )
             : null,
-        title: isSecondButton ? null : Text(tr(LocaleKeys.appbar_list_songs)),
+        title: isSecondButton
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(tr(LocaleKeys.appbar_list_songs)),
+                  const SizedBox(width: 30),
+                  // const Spacer(),
+                  Flexible(
+                    child: BlocBuilder<GroupCubit, GroupModel>(
+                      builder: (context, groupState) {
+                        return groupState.name == ""
+                            ? const SizedBox()
+                            : GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  // if (indexGroup != i) {
+                                  //   context.read<IndexGroupCubit>().swither(i);
+                                  //   context.read<GroupCubit>().swither(GroupModel(group.id!);
+                                  // }
+                                  // else {
+                                  context.read<IndexGroupCubit>().swither(-1);
+                                  context
+                                      .read<GroupCubit>()
+                                      .swither(GroupModel(name: ""));
+                                  // }
+                                },
+                                child: Container(
+                                  height: 30,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color: colorFiolet.withOpacity(.3),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: colorFiolet),
+                                  ),
+                                  child: Text(
+                                    groupState.name,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: colorFiolet,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              );
+                      },
+                    ),
+                  ),
+                ],
+              ),
         actions: isSecondButton
             ? [
                 IconButton(
                   onPressed: () {
                     TextEditingController controller = TextEditingController();
                     showModalBottomSheet(
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15))),
-                        context: context,
-                        builder: (context) => DraggableScrollableSheet(
-                            // initialChildSize: 0.5,
-                            expand: false,
-                            builder: (context, scrollController) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
+                      useSafeArea: true,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      context: context,
+                      builder: (context) => DraggableScrollableSheet(
+                        expand: false,
+                        builder: (context, scrollController) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Align(
+                                  alignment: AlignmentDirectional.topStart,
+                                  child: const Text(
+                                    "Выберите группу:",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    child: Align(
-                                        alignment:
-                                            AlignmentDirectional.topStart,
-                                        child: Text(
-                                          "Выберите группу:",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextField(
-                                      controller: controller,
-                                      onChanged: (value) => setState(() {
-                                            controller.text = value;
-                                          }),
-                                      title: "Название группы"),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  BlocListener<SongsBloc, SongsState>(
-                                    listener: (context, state) {
-                                      if (state is SongsLoaded &&
-                                          state.groups.isNotEmpty) {
-                                        final lastGroupId =
-                                            state.groups.first.id;
-                                        for (int i = 0;
-                                            i < selectedSongs.length;
-                                            i++) {
-                                          context.read<SongsBloc>().add(
-                                                  UpdateSong(
-                                                      selectedSongs[i].copy(
-                                                order: i + 1,
-                                                group: lastGroupId,
-                                              )));
-                                          print("lastGroup: ${lastGroupId}");
-                                        }
-                                      }
-                                    },
-                                    child: CustomButtonSheet(
-                                        // width: context.width,
-                                        title: "Добавить",
-                                        onPressed: () {
-                                          context.read<SongsBloc>().add(
-                                              AddGroup(GroupModel(
-                                                  name: controller.text)));
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              CustomTextField(
+                                onChanged: (value) => setState(() {
+                                  controller.text = value;
+                                }),
+                                controller: controller,
+                                title: "Название группы",
+                              ),
+                              const SizedBox(height: 10),
+                              CustomButtonSheet(
+                                title: "Добавить",
+                                onPressed: () async {
+                                  // Добавление группы
+                                  context.read<SongsBloc>().add(AddGroup(
+                                      GroupModel(name: controller.text)));
 
-                                          Get.back();
-                                        }),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Expanded(child:
-                                      BlocBuilder<SongsBloc, SongsState>(
-                                          builder: (context, state) {
+                                  // Дождитесь обновления состояния
+                                  await Future.delayed(
+                                      Duration(milliseconds: 300));
+
+                                  // Получение группы и обновление песен
+                                  final state = context.read<SongsBloc>().state;
+                                  if (state is SongsLoaded &&
+                                      state.groups.isNotEmpty) {
+                                    final lastGroupId = state.groups.last.id;
+                                    for (int i = 0;
+                                        i < selectedSongs.length;
+                                        i++) {
+                                      context.read<SongsBloc>().add(
+                                            UpdateSong(selectedSongs[i].copy(
+                                              order: i + 1,
+                                              group: lastGroupId,
+                                            )),
+                                          );
+                                    }
+                                  }
+                                  setState(() {
+                                    isSecondButton = false;
+                                    // indexAdd = 0;
+                                    selectedSongsId.clear();
+                                    selectedSongs.clear();
+                                  });
+                                  Get.back();
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              Expanded(
+                                child: BlocBuilder<SongsBloc, SongsState>(
+                                  builder: (context, state) {
                                     if (state is SongsLoading) {
-                                      return Center(
+                                      return const Center(
                                           child: CircularProgressIndicator());
                                     } else if (state is SongsLoaded) {
                                       return ListView.builder(
                                         controller: scrollController,
-                                        physics: BouncingScrollPhysics(),
+                                        physics: const BouncingScrollPhysics(),
                                         itemCount: state.groups.length,
                                         itemBuilder: (context, index) =>
                                             ListTile(
                                           shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          // horizontalTitleGap: 0,
-                                          minTileHeight: 45,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          minVerticalPadding: 10,
                                           onTap: () {
+                                            final groupId =
+                                                state.groups[index].id;
+                                            for (int i = 0;
+                                                i < selectedSongs.length;
+                                                i++) {
+                                              context.read<SongsBloc>().add(
+                                                    UpdateSong(
+                                                        selectedSongs[i].copy(
+                                                      order: i + 1,
+                                                      group: groupId,
+                                                    )),
+                                                  );
+                                            }
+                                            setState(() {
+                                              isSecondButton = false;
+                                              // indexAdd = 0;
+                                              selectedSongsId.clear();
+                                              selectedSongs.clear();
+                                            });
                                             Get.back();
                                           },
-                                          contentPadding: EdgeInsets.only(
-                                              left: 20,
-                                              right: 20,
-                                              top: 0,
-                                              bottom: 0),
-                                          title: Text(state.groups[index].name),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 5),
+                                          title: Text(
+                                            state.groups[index].name,
+                                            style:
+                                                const TextStyle(fontSize: 16),
+                                          ),
                                         ),
                                       );
                                     } else if (state is SongsError) {
-                                      return const SizedBox();
+                                      return const Center(
+                                          child: Text("Ошибка загрузки групп"));
                                     } else {
                                       return const SizedBox();
                                     }
-                                  }))
-                                ],
-                              );
-                            }));
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
                   },
                   icon: Icon(EvaIcons.folder_add),
                 ),
@@ -249,7 +336,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                       }
                                       setState(() {
                                         isSecondButton = false;
-                                        indexAdd = 0;
+                                        // indexAdd = 0;
                                         selectedSongsId.clear();
                                         selectedSongs.clear();
                                       });
@@ -311,85 +398,173 @@ class _GuitarPageState extends State<GuitarPage> {
                   _buildHeader(context, 0),
                   // _buildHeader(context, 1),
 
-                  BlocBuilder<SongsBloc, SongsState>(
-                    builder: (context, state) {
-                      if (state is SongsLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is SongsLoaded) {
-                        // Фильтрация песен по выбранной группе
-                        List<Song> filteredSongs = indexGroup == -1
-                            ? state.songs
-                            : state.songs
-                                .where((song) =>
-                                    song.group == state.groups[indexGroup].id)
-                                .toList();
+                  BlocBuilder<IndexGroupCubit, int>(
+                    builder: (context, indexGroup) {
+                      return BlocBuilder<SongsBloc, SongsState>(
+                        builder: (context, state) {
+                          if (state is SongsLoading) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (state is SongsLoaded) {
+                            // List<Song> filteredSongs = indexGroup == -1
+                            //     ? state.songs
+                            //     : state.songs
+                            //         .where((song) =>
+                            //             song.group ==
+                            //             state.groups[indexGroup].id)
+                            //         .toList()
+                            //   ..sort((a, b) => a.order!.compareTo(b.order!));
+                            List<Song> filteredSongs = indexGroup == -1
+                                ? (state.songs
+                                  ..sort((a, b) => b.id!.compareTo(
+                                      a.id!))) // Сортировка по id desc
+                                : (state.songs
+                                    .where((song) =>
+                                        song.group ==
+                                        state.groups[indexGroup].id)
+                                    .toList()
+                                  ..sort((a, b) => a.order!.compareTo(
+                                      b.order!))); // Сортировка по order asc
 
-                        // if (filteredSongs.isEmpty) {
-                        //   return Center(
-                        //       child: Text("Нет песен в выбранной группе"));
-                        // }
-
-                        return Column(
-                          children: [
-                            _buildHorizontalGroupSelector(state.groups),
-                            _buildHeader(context, 2),
-                            filteredSongs.isEmpty
-                                ? Center(
-                                    child: Text("Нет песен в выбранной группе"))
-                                : Column(
-                                    children: filteredSongs
-                                        .map((song) => ListTile(
-                                              key: ValueKey(song.id),
-                                              minLeadingWidth:
-                                                  !isSecondButton ? null : 0,
-                                              leading: isSecondButton
-                                                  ? _buildSelectionIndicator(
-                                                      song.id!)
-                                                  : null,
-                                              onLongPress: () {
-                                                setState(() {
-                                                  isSecondButton = true;
-                                                });
-                                                _toggleSongSelection(
-                                                    song.id!, song);
-                                              },
-                                              title: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Text(song.name_song,
-                                                      style: TextStyle(
-                                                          fontSize: 16)),
-                                                  Text(
-                                                    song.name_singer ?? "",
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: context.isDarkMode
-                                                          ? Colors.grey[300]
-                                                          : Colors.grey[600],
-                                                    ),
+                            return Column(
+                              children: [
+                                _buildHorizontalGroupSelector(state.groups),
+                                _buildHeader(context, 2),
+                                filteredSongs.isEmpty
+                                    ? SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: Text(
+                                              "Нет песен в выбранной группе"),
+                                        ),
+                                      )
+                                    : Column(
+                                        children: filteredSongs
+                                            .map((song) => ListTile(
+                                                  key: ValueKey(song.id),
+                                                  minLeadingWidth:
+                                                      !isSecondButton
+                                                          ? null
+                                                          : 0,
+                                                  leading: isSecondButton
+                                                      ? _buildSelectionIndicator(
+                                                          song.id!)
+                                                      : null,
+                                                  onLongPress: () {
+                                                    setState(() {
+                                                      isSecondButton = true;
+                                                    });
+                                                    _toggleSongSelection(
+                                                        song.id!, song);
+                                                  },
+                                                  title: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: [
+                                                      Text(song.name_song,
+                                                          style: TextStyle(
+                                                              fontSize: 16)),
+                                                      Text(
+                                                        song.name_singer ?? "",
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.grey[300]
+                                                              : Colors
+                                                                  .grey[600],
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              onTap: isSecondButton
-                                                  ? () => _toggleSongSelection(
-                                                      song.id!, song)
-                                                  : () {
-                                                      Get.to(GuitarDetal(
-                                                        id: song.id,
-                                                      ));
-                                                    },
-                                            ))
-                                        .toList(),
-                                  ),
-                          ],
-                        );
-                      } else if (state is SongsError) {
-                        return const SizedBox();
-                      } else {
-                        return _buildHeader(context, 2);
-                      }
+                                                  subtitle:
+                                                      song.group == null ||
+                                                              song.group == 0
+                                                          ? null
+                                                          : BlocBuilder<
+                                                              SongsBloc,
+                                                              SongsState>(
+                                                              // Если уже есть группа и по возможности можно поменять
+                                                              builder: (context,
+                                                                  state) {
+                                                                List<GroupModel>
+                                                                    groups = [];
+
+                                                                if (state
+                                                                    is SongsLoaded) {
+                                                                  groups = state
+                                                                      .groups;
+                                                                }
+                                                                return Row(
+                                                                  children: [
+                                                                    Container(
+                                                                      height:
+                                                                          20,
+                                                                      margin: EdgeInsets.only(
+                                                                          top:
+                                                                              5,
+                                                                          bottom:
+                                                                              5),
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              5),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: colorFiolet
+                                                                            .withOpacity(.3),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                colorFiolet),
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        getNameGroup(
+                                                                          song.group!,
+                                                                          groups,
+                                                                        ),
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          color:
+                                                                              colorFiolet,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            ),
+                                                  onTap: isSecondButton
+                                                      ? () =>
+                                                          _toggleSongSelection(
+                                                              song.id!, song)
+                                                      : () {
+                                                          Get.to(GuitarDetal(
+                                                            id: song.id,
+                                                          ));
+                                                        },
+                                                ))
+                                            .toList(),
+                                      ),
+                              ],
+                            );
+                          } else if (state is SongsError) {
+                            return const SizedBox();
+                          } else {
+                            return _buildHeader(context, 2);
+                          }
+                        },
+                      );
                     },
                   )
                 ]))),
@@ -438,7 +613,7 @@ class _GuitarPageState extends State<GuitarPage> {
         selectedSongsId.add(songId);
         selectedSongs.add(song);
       }
-      indexAdd = selectedSongsId.length;
+      // indexAdd = selectedSongsId.length;
     });
   }
 
@@ -463,10 +638,12 @@ class _GuitarPageState extends State<GuitarPage> {
             .where((id) => !selectedSongsId.contains(id)));
         isSecondButton = true;
       } else {
-        selectedSongsId.clear();
+        // selectedSongsId.clear();
+        // isSecondButton = false;
         isSecondButton = false;
+        selectedSongsId.clear();
+        selectedSongs.clear();
       }
-      indexAdd = selectedSongsId.length;
     });
   }
 
@@ -501,59 +678,64 @@ class _GuitarPageState extends State<GuitarPage> {
                     ),
                   ),
                 ),
-                Row(
-                  children: groups
-                      .asMap()
-                      .map((i, group) => MapEntry(
-                            i,
-                            GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                if (indexGroup != i) {
-                                  setState(() {
-                                    indexGroup = i;
-                                    groupId = group.id!;
-                                    context
-                                        .read<SongsBloc>()
-                                        .add(LoadSongsByGroup(group.id!));
-                                  });
-                                } else {
-                                  setState(() {
-                                    indexGroup = -1;
-                                    groupId = 0;
-                                    context.read<SongsBloc>().add(LoadSongs());
-                                  });
-                                }
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.only(
-                                  left: i == 0 ? 10 : 10,
-                                  right: i == groups.length - 1 ? 15 : 0,
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                  color: indexGroup == i
-                                      ? colorFiolet.withOpacity(.3)
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: colorFiolet),
-                                ),
-                                child: Text(
-                                  group.id!.toString() + ". " + group.name,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: indexGroup == i
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
-                                    color: indexGroup == i ? colorFiolet : null,
+                BlocBuilder<IndexGroupCubit, int>(
+                  builder: (context, indexGroup) {
+                    return Row(
+                      children: groups
+                          .asMap()
+                          .map((i, group) => MapEntry(
+                                i,
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    if (indexGroup != i) {
+                                      context
+                                          .read<IndexGroupCubit>()
+                                          .swither(i);
+                                      context.read<GroupCubit>().swither(group);
+                                    } else {
+                                      context
+                                          .read<IndexGroupCubit>()
+                                          .swither(-1);
+                                      context
+                                          .read<GroupCubit>()
+                                          .swither(GroupModel(name: ""));
+                                    }
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(
+                                      left: i == 0 ? 10 : 10,
+                                      right: i == groups.length - 1 ? 15 : 0,
+                                    ),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8),
+                                    decoration: BoxDecoration(
+                                      color: indexGroup == i
+                                          ? colorFiolet.withOpacity(.3)
+                                          : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: colorFiolet),
+                                    ),
+                                    child: Text(
+                                      group.name,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: indexGroup == i
+                                            ? FontWeight.w600
+                                            : FontWeight.normal,
+                                        color: indexGroup == i
+                                            ? colorFiolet
+                                            : null,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ))
-                      .values
-                      .toList(),
+                              ))
+                          .values
+                          .toList(),
+                    );
+                  },
                 )
               ],
             ));

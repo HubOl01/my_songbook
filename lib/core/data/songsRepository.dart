@@ -26,6 +26,6 @@ class SongsRepository {
 
   Future<void> deleteGroup(int id) async => await _dbSongs.deleteGroup(id);
 
-  Future<List<Song>> readSongsByGroup(int groupId) async =>
-      await _dbSongs.readSongsByGroup(groupId);
+  // Future<List<Song>> readSongsByGroup(int groupId) async =>
+  //     await _dbSongs.readSongsByGroup(groupId);
 }

@@ -113,15 +113,15 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
       }
     });
 
-    on<LoadSongsByGroup>((event, emit) async {
-      emit(SongsLoading());
-      try {
-        final songs = await _repository.readSongsByGroup(event.groupId);
-        emit(SongsLoadedForGroup(event.groupId, songs));
-        add(LoadSongs());
-      } catch (e) {
-        emit(GroupsError(e.toString()));
-      }
-    });
+    // on<LoadSongsByGroup>((event, emit) async {
+    //   emit(SongsLoading());
+    //   try {
+    //     final songs = await _repository.readSongsByGroup(event.groupId);
+    //     emit(SongsLoadedForGroup(event.groupId, songs));
+    //     add(LoadSongs());
+    //   } catch (e) {
+    //     emit(GroupsError(e.toString()));
+    //   }
+    // });
   }
 }

@@ -9,6 +9,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/cubit/group_id_cubit.dart';
+import 'package:my_songbook/core/cubit/index_group_cubit.dart';
 import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/core/styles/Themes.dart';
@@ -86,6 +88,8 @@ void main() async {
                 SongsBloc(SongsRepository())..add(LoadSongs())),
         BlocProvider(
             create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
+        BlocProvider(create: (context) => GroupCubit()),
+        BlocProvider(create: (context) => IndexGroupCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
