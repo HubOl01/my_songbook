@@ -6,6 +6,9 @@ import 'package:my_songbook/pages/settings/Themes/themePage.dart';
 import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
 
 import '../../components/sendToSupport.dart';
+import '../../core/data/dbSongs.dart';
+import '../../core/utils/backup.dart';
+import '../../core/utils/import.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
@@ -61,6 +64,20 @@ class SettingsPage extends GetView<SettingsController> {
           title: Text(tr(LocaleKeys.settings_call_tech)),
           onTap: () async {
             sendToSupport();
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.import_export),
+          title: Text("Бэкап"),
+          onTap: () async {
+            await createBackup();
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.import_export),
+          title: Text("Импорт"),
+          onTap: () async {
+            await importBackup();
           },
         ),
         ListTile(

@@ -41,21 +41,26 @@ class DBSongs {
     ${Songs.date_created} $textType
     )
     ''');
+    await db.execute('''
+    CREATE TABLE $tableGroups (
+      ${Groups.id} $idType,
+      ${Groups.name} $textType NOT NULL
+    )
+  ''');
   }
 
-  // Future _updateDB(Database db, int oldVersion, int newVersion) async {
-  //   if (oldVersion < 2) {
-  // await db.execute(
-  //     'ALTER TABLE $tableSongs ADD COLUMN `${Songs.order}` INTEGER DEFAULT 0');
-  //   }
   Future _updateDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
+      // Обновляем таблицу песен
       await db.execute(
           'ALTER TABLE $tableSongs ADD COLUMN `${Songs.order}` INTEGER DEFAULT 0');
       await db.execute(
           'ALTER TABLE $tableSongs ADD COLUMN `${Songs.group}` INTEGER DEFAULT 0');
+
+      // Таблица групп должна уже существовать, если она не была создана в _createDB.
+      // В случае если ее нет, можно использовать код для создания таблицы
       await db.execute('''
-      CREATE TABLE $tableGroups (
+      CREATE TABLE IF NOT EXISTS $tableGroups (
         ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
         ${Groups.name} TEXT NOT NULL
       )
@@ -65,10 +70,6 @@ class DBSongs {
 
   Future<Song> create(Song song) async {
     final db = await instance.database;
-    // final json = note.toJson();
-// final columns = '${NoteFields.title}, ${NoteFields.content}, ${NoteFields.date_created}, ${NoteFields.note_color}';
-// final values = '${json[NoteFields.title]}, ${json[NoteFields.content]}, ${json[NoteFields.date_created]}, ${json[NoteFields.note_color]}';
-// final id = await db.rawInsert('insert into $tableSongs ($columns) values ($values)');
     final id = await db.insert(tableSongs, song.toJson());
     print("!!! Successed create id = ${id} !!!");
     isSuccess = true;

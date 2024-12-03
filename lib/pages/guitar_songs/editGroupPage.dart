@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/components/customButtonSheet.dart';
 import 'package:my_songbook/components/customTextField.dart';
 import 'package:my_songbook/core/cubit/group_id_cubit.dart';
