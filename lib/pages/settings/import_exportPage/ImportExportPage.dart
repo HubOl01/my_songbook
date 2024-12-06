@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/components/customButton.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/variable_firebase.dart';
 import '../../../core/bloc/songs_bloc.dart';
@@ -32,20 +33,34 @@ class ImportExportPage extends StatelessWidget {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            "С новой версии приложения теперь доступны функции экспорта и импорта данных. Поскольку они находятся в стадии бета-тестирования, вы можете пройти анкетирование здесь.",
-                            textAlign: TextAlign.center,
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(
+                              context.locale == const Locale('ru')
+                                  ? "С новой версии приложения теперь доступны функции экспорта и импорта данных. Поскольку они находятся в стадии бета-тестирования, вы можете пройти анкетирование здесь."
+                                  : "With the new version of the application, data export and import functions are now available. Since they are in beta testing, you can take the survey here.",
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
                           CustomButton(
                             onPressed: () {
-                              // launchUrl("", mode: LaunchMode.inAppBrowserView);
+                              launchUrl(
+                                  context.locale == const Locale('ru')
+                                      ? Uri.parse(
+                                          "https://forms.yandex.ru/u/67533608493639198ef69f2d/")
+                                      : Uri.parse(
+                                          "https://forms.gle/xx8rZSggvvCGEmvh7"),
+                                  mode: LaunchMode.inAppBrowserView);
                             },
-                            child: const Text(
-                              "Пройти анкетирование",
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              context.locale == const Locale('ru')
+                                  ? "Пройти анкетирование"
+                                  : "Take a survey",
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ],
