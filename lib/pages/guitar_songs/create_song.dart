@@ -138,8 +138,8 @@ class _Create_songState extends State<Create_song> {
                   height: 10,
                 ),
                 Text(
-                  tr("Добавление группы (необязательно)"),
-                  style: const TextStyle(fontSize: 20),
+                  tr(LocaleKeys.title_add_group),
+                  style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(
                   height: 10,
@@ -147,8 +147,8 @@ class _Create_songState extends State<Create_song> {
                 groupID == 0
                     ? Row(
                         children: [
-                          const Text(
-                            "Выберите группу:",
+                          Text(
+                            "${tr(LocaleKeys.confirmation_group_title_select)}:",
                           ),
                           const SizedBox(
                             width: 10,
@@ -175,16 +175,17 @@ class _Create_songState extends State<Create_song> {
                                                 const SizedBox(
                                                   height: 20,
                                                 ),
-                                                const Padding(
-                                                  padding: EdgeInsets.symmetric(
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
                                                       horizontal: 20.0),
                                                   child: Align(
                                                       alignment:
                                                           AlignmentDirectional
                                                               .topStart,
                                                       child: Text(
-                                                        "Выберите группу: ",
-                                                        style: TextStyle(
+                                                        "${tr(LocaleKeys.confirmation_group_title_select)}: ",
+                                                        style: const TextStyle(
                                                             fontSize: 18,
                                                             fontWeight:
                                                                 FontWeight
@@ -201,7 +202,7 @@ class _Create_songState extends State<Create_song> {
                                                           controller.text =
                                                               value;
                                                         }),
-                                                    title: "Название группы"),
+                                                    title: tr(LocaleKeys.title_new_group)),
                                                 const SizedBox(
                                                   height: 10,
                                                 ),
@@ -227,7 +228,7 @@ class _Create_songState extends State<Create_song> {
                                                     }
                                                   },
                                                   child: CustomButtonSheet(
-                                                      title: "Добавить",
+                                                      title: tr(LocaleKeys.confirmation_create),
                                                       onPressed: () {
                                                         context
                                                             .read<SongsBloc>()
@@ -324,7 +325,7 @@ class _Create_songState extends State<Create_song> {
                           }
                           return Row(
                             children: [
-                              const Text("Группа: "),
+                               Text("${tr(LocaleKeys.confirmation_delete_group_content1)}: "),
                               const SizedBox(
                                 width: 5,
                               ),

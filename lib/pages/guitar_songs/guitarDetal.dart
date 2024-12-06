@@ -163,18 +163,13 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                             ],
                           ),
                           controller.songModel.value.path_music != ''
-                              ? Column(
-                                children: [
-                                  PlayerWidget(
-                                      name_song:
-                                          controller.songModel.value.name_song,
-                                      name_singer:
-                                          controller.songModel.value.name_singer,
-                                      audio: controller.songModel.value.path_music,
-                                      asset: false),
-                                      Text(controller.songModel.value.path_music!),
-                                ],
-                              )
+                              ? PlayerWidget(
+                                  name_song:
+                                      controller.songModel.value.name_song,
+                                  name_singer:
+                                      controller.songModel.value.name_singer,
+                                  audio: controller.songModel.value.path_music,
+                                  asset: false)
                               : TitleContent(song: controller.songModel.value),
                           LyricsRenderer(
                             // horizontalAlignment: CrossAxisAlignment.stretch,

@@ -453,8 +453,8 @@ class _Edit_songState extends State<Edit_song> {
                       widget.songModel.group == null || groupID == 0
                           ? Row(
                               children: [
-                                const Text(
-                                  "Выберите группу:",
+                                Text(
+                                  "${tr(LocaleKeys.confirmation_group_title_select)}:",
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -483,9 +483,10 @@ class _Edit_songState extends State<Edit_song> {
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      const Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
                                                                 horizontal:
                                                                     20.0),
                                                         child: Align(
@@ -493,8 +494,8 @@ class _Edit_songState extends State<Edit_song> {
                                                                 AlignmentDirectional
                                                                     .topStart,
                                                             child: Text(
-                                                              "Выберите группу: ",
-                                                              style: TextStyle(
+                                                              "${tr(LocaleKeys.confirmation_group_title_select)}: ",
+                                                              style: const TextStyle(
                                                                   fontSize: 18,
                                                                   fontWeight:
                                                                       FontWeight
@@ -513,8 +514,8 @@ class _Edit_songState extends State<Edit_song> {
                                                                         .text =
                                                                     value;
                                                               }),
-                                                          title:
-                                                              "Название группы"),
+                                                          title: tr(LocaleKeys
+                                                              .title_new_group)),
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
@@ -546,8 +547,8 @@ class _Edit_songState extends State<Edit_song> {
                                                         },
                                                         child:
                                                             CustomButtonSheet(
-                                                                title:
-                                                                    "Добавить",
+                                                                title: tr(LocaleKeys
+                                                                    .confirmation_create),
                                                                 onPressed: () {
                                                                   context
                                                                       .read<
@@ -651,7 +652,8 @@ class _Edit_songState extends State<Edit_song> {
                                 }
                                 return Row(
                                   children: [
-                                    const Text("Группа: "),
+                                    Text(
+                                        "${tr(LocaleKeys.confirmation_delete_group_content1)}: "),
                                     const SizedBox(
                                       width: 5,
                                     ),

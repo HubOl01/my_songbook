@@ -68,6 +68,7 @@
     "data_export_import_title": "Импорт и экспорт",
     "confirmation_group_title_select": "Выберите группу",
     "title_new_group": "Название группы",
+    "title_add_group": "Добавление группы (необязательно)",
     "confirmation_create": "Создать",
     "confirmation_changing": "Изменить",
     "confirmation_delete": "Удалить",

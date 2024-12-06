@@ -152,8 +152,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                 child: Align(
                                   alignment: AlignmentDirectional.topStart,
                                   child: Text(
-                                    tr(LocaleKeys
-                                        .confirmation_group_title_select),
+                                    "${tr(LocaleKeys.confirmation_group_title_select)}:",
                                     style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,

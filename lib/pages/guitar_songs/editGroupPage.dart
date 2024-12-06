@@ -25,7 +25,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Управление группами")),
+        appBar: AppBar(title: Text(tr(LocaleKeys.managing_groups_title))),
         body: Column(
           children: [
             _buildCreateGroupField(context),
@@ -44,8 +44,10 @@ class _EditGroupPageState extends State<EditGroupPage> {
                       itemBuilder: (context, index) {
                         final group = groups[index];
                         return ListTile(
-                          tileColor: context.read<IndexGroupCubit>().state == index
-                                  ? colorFiolet.withOpacity(.1) : null,
+                          tileColor:
+                              context.read<IndexGroupCubit>().state == index
+                                  ? colorFiolet.withOpacity(.1)
+                                  : null,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -81,7 +83,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                   } else if (state is SongsError) {
                     return Center(
                       child: Text(
-                        "Ошибка загрузки групп: ${state.message}",
+                        "Error: ${state.message}",
                         style: const TextStyle(color: Colors.red),
                       ),
                     );
@@ -103,7 +105,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
         children: [
           CustomTextField(
             controller: controller,
-            title: "Назовите новую группу",
+            title: tr(LocaleKeys.title_new_group),
             onChanged: (value) {
               setState(() {
                 controller.text = value;
@@ -145,7 +147,9 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                     controller.clear();
                                   });
                                 },
-                          title: groupModel.id == null ? "Создать" : "Изменить",
+                          title: groupModel.id == null
+                              ? tr(LocaleKeys.confirmation_create)
+                              : tr(LocaleKeys.confirmation_changing),
                         ),
                       ),
                       const SizedBox(width: 15),
@@ -158,7 +162,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                               groupModel = GroupModel(name: "");
                             });
                           },
-                          title: "Отменить",
+                          title: tr(LocaleKeys.confirmation_cancel),
                         ),
                       ),
                     ],
@@ -189,7 +193,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
               const SizedBox(height: 5),
               Text(
                 tr(LocaleKeys.confirmation_delete_group_title),
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -261,7 +266,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                   });
                   Navigator.pop(context);
                 },
-                title:tr(LocaleKeys.confirmation_changing),
+                title: tr(LocaleKeys.confirmation_changing),
                 fontSize: 14,
               ),
               const SizedBox(height: 10),

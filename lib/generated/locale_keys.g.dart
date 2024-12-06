@@ -69,6 +69,7 @@ abstract class  LocaleKeys {
   static const data_export_import_title = 'data_export_import_title';
   static const confirmation_group_title_select = 'confirmation_group_title_select';
   static const title_new_group = 'title_new_group';
+  static const title_add_group = 'title_add_group';
   static const confirmation_create = 'confirmation_create';
   static const confirmation_changing = 'confirmation_changing';
   static const confirmation_delete = 'confirmation_delete';

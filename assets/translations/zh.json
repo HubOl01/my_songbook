@@ -67,6 +67,7 @@
     "data_export_import_title": "进出口",
     "confirmation_group_title_select": "选择一个组",
     "title_new_group": "为新组命名",
+    "title_add_group": "添加组（可选）",
     "confirmation_create": "要创建",
     "confirmation_changing": "改变",
     "confirmation_delete": "删除",
