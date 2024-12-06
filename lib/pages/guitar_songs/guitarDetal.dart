@@ -19,7 +19,7 @@ import '../../core/model/songsModel.dart';
 // import '../components/player_widget.dart';
 class GuitarDetal extends GetView<GuitarDetalController> {
   final id;
-  GuitarDetal({required this.id, super.key}) {}
+  const GuitarDetal({required this.id, super.key});
 
   // final _scrollController = ScrollController();
 
@@ -45,34 +45,41 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                 // backgroundColor: Colors.white,
                 actions: [
                   IconButton(
-                      onPressed: () async{
-                        try{
-                        if (controller.songModel.value.path_music != '') {
-                          try{
-                          await Share.shareXFiles(
-                              [XFile(controller.songModel.value.path_music!)],
-                              text:
+                      onPressed: () async {
+                        try {
+                          if (controller.songModel.value.path_music != '') {
+                            try {
+                              await Share.shareXFiles([
+                                XFile(controller.songModel.value.path_music!)
+                              ],
+                                  text:
+                                      "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
+                                  subject:
+                                      "${controller.songModel.value.name_song} from My Songbook");
+                              AppMetrica.reportEvent(
+                                  'Share successed!!! (audio)');
+                            } catch (e) {
+                              print("file exception: $e");
+                              AppMetrica.reportEvent(
+                                  'Share: file exception $e');
+                              Share.share(
                                   "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
-                              subject: "${controller.songModel.value.name_song} from My Songbook");
-                              AppMetrica.reportEvent('Share successed!!! (audio)');
-                          }catch(e){
-                            print("file exception: $e");
-                            AppMetrica.reportEvent('Share: file exception $e');
-                            Share.share(
-                              "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
-                              subject: "${controller.songModel.value.name_song} from My Songbook");
+                                  subject:
+                                      "${controller.songModel.value.name_song} from My Songbook");
+                            }
+                          } else {
+                            AppMetrica.reportEvent(
+                                'Share successed!!! (not audio)');
+                            await Share.share(
+                                "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
+                                subject:
+                                    "${controller.songModel.value.name_song} from My Songbook");
                           }
-                        } else {
-                          AppMetrica.reportEvent('Share successed!!! (not audio)');
-                          await Share.share(
-                              "${tr(LocaleKeys.edit_song_name_song)}${controller.songModel.value.name_song}\n${tr(LocaleKeys.edit_song_name_singer)}${controller.songModel.value.name_singer}\n\n${controller.songModel.value.song}",
-                              subject: "${controller.songModel.value.name_song} from My Songbook");
-                        }
-                        }catch(e) {
+                        } catch (e) {
                           print("share_plus exception: $e");
                         }
                       },
-                      icon: Icon(Icons.share)),
+                      icon: const Icon(Icons.share)),
                   Tooltip(
                     message: tr(LocaleKeys.tooltip_autoscroll),
                     child: IconButton(
@@ -81,7 +88,7 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                           controller.speedTextCo.value = speed;
                           print("Speed: ");
                         },
-                        icon: Icon(Icons.arrow_circle_down)),
+                        icon: const Icon(Icons.arrow_circle_down)),
                   ),
                   Tooltip(
                     message: tr(LocaleKeys.tooltip_text_down),
@@ -91,7 +98,7 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                           sizeTextPut(controller.sizeTextCo.value);
                           initSizedText();
                         },
-                        icon: Icon(Icons.text_decrease)),
+                        icon: const Icon(Icons.text_decrease)),
                   ),
                   Tooltip(
                     message: tr(LocaleKeys.tooltip_text_up),
@@ -101,7 +108,7 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                           sizeTextPut(controller.sizeTextCo.value);
                           initSizedText();
                         },
-                        icon: Icon(Icons.text_increase)),
+                        icon: const Icon(Icons.text_increase)),
                   ),
                   Tooltip(
                     message: tr(LocaleKeys.tooltip_edit_song),
@@ -112,18 +119,18 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                             asset: false,
                           ));
                         },
-                        icon: Icon(Icons.edit_note)),
+                        icon: const Icon(Icons.edit_note)),
                   ),
                 ],
               ),
             ],
             body: controller.isLoading.value
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : SingleChildScrollView(
                     controller: controller.scrollController.value,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -140,7 +147,8 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                                     speedPut(controller.speedTextCo.value);
                                     initSpeed();
                                   },
-                                  icon: Icon(Icons.keyboard_double_arrow_up)),
+                                  icon: const Icon(
+                                      Icons.keyboard_double_arrow_up)),
                               Text(controller.speedTextCo.value.toString()),
                               IconButton(
                                   onPressed: () {
@@ -150,17 +158,23 @@ class GuitarDetal extends GetView<GuitarDetalController> {
                                       initSpeed();
                                     }
                                   },
-                                  icon: Icon(Icons.keyboard_double_arrow_down)),
+                                  icon: const Icon(
+                                      Icons.keyboard_double_arrow_down)),
                             ],
                           ),
                           controller.songModel.value.path_music != ''
-                              ? PlayerWidget(
-                                  name_song:
-                                      controller.songModel.value.name_song,
-                                  name_singer:
-                                      controller.songModel.value.name_singer,
-                                  audio: controller.songModel.value.path_music,
-                                  asset: false)
+                              ? Column(
+                                children: [
+                                  PlayerWidget(
+                                      name_song:
+                                          controller.songModel.value.name_song,
+                                      name_singer:
+                                          controller.songModel.value.name_singer,
+                                      audio: controller.songModel.value.path_music,
+                                      asset: false),
+                                      Text(controller.songModel.value.path_music!),
+                                ],
+                              )
                               : TitleContent(song: controller.songModel.value),
                           LyricsRenderer(
                             // horizontalAlignment: CrossAxisAlignment.stretch,
@@ -201,11 +215,10 @@ class GuitarDetal extends GetView<GuitarDetalController> {
 //   print("Successed refresh song all!!! ${id} ${controller.song.toJson()}");
 // }
 
-
 // final GuitarDetalController controller = Get.put(GuitarDetalController());
 class TitleContent extends StatelessWidget {
   final Song song;
-  const TitleContent({required this.song});
+  const TitleContent({super.key, required this.song});
 
   @override
   Widget build(BuildContext context) {
@@ -216,17 +229,18 @@ class TitleContent extends StatelessWidget {
         song.name_song != ""
             ? Text(
                 song.name_song,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
-            : SizedBox(),
+            : const SizedBox(),
         song.name_song != ""
-            ? SizedBox(
+            ? const SizedBox(
                 height: 4,
               )
-            : SizedBox(),
+            : const SizedBox(),
         song.name_singer != ""
-            ? Text(song.name_singer, style: TextStyle(fontSize: 20))
-            : SizedBox(),
+            ? Text(song.name_singer, style: const TextStyle(fontSize: 20))
+            : const SizedBox(),
       ],
     );
   }

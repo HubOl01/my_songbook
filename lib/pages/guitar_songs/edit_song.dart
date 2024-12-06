@@ -26,9 +26,9 @@ class Edit_song extends StatefulWidget {
 }
 
 class _Edit_songState extends State<Edit_song> {
-  TextEditingController name_songController = new TextEditingController();
-  TextEditingController name_singerController = new TextEditingController();
-  TextEditingController song_controller = new TextEditingController();
+  TextEditingController name_songController = TextEditingController();
+  TextEditingController name_singerController = TextEditingController();
+  TextEditingController song_controller = TextEditingController();
   bool isAudio = false;
   GroupModel group = GroupModel(name: "name");
   int groupID = 0;
@@ -37,15 +37,15 @@ class _Edit_songState extends State<Edit_song> {
   Future getFile() async {
     // var appDir = (await getTemporaryDirectory()).path;
     // new Directory(appDir).delete(recursive: true);
-    FilePickerResult? _picker = await FilePicker.platform.pickFiles(
+    FilePickerResult? picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
       // allowedExtensions: ['mp3'],
     );
-    if (_picker != null) {
+    if (picker != null) {
       setState(() {
         isAudio = false;
         customFile = null;
-        PlatformFile file = _picker.files.first;
+        PlatformFile file = picker.files.first;
 
         print(file.name);
         print(file.bytes);
@@ -275,7 +275,7 @@ class _Edit_songState extends State<Edit_song> {
                                           Get.back();
                                           Get.back();
                                         } catch (ex) {
-                                          print("delete ex ${ex}");
+                                          print("delete ex $ex");
                                           await showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
@@ -299,7 +299,7 @@ class _Edit_songState extends State<Edit_song> {
                                 ],
                               ));
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       color: Colors.red,
                     )),
@@ -327,7 +327,7 @@ class _Edit_songState extends State<Edit_song> {
                                                 await saveFilePermanently(
                                                     customFile!);
                                             print(
-                                                "SAVEFILE: ${saveFile.path} ${saveFile.path.isEmpty} ${saveFile}");
+                                                "SAVEFILE: ${saveFile.path} ${saveFile.path.isEmpty} $saveFile");
                                             updateSong(
                                                 name_songController.text,
                                                 name_singerController.text,
@@ -353,7 +353,7 @@ class _Edit_songState extends State<Edit_song> {
                                           Get.back();
                                           Get.back();
                                         } catch (ex) {
-                                          print("update ex ${ex}");
+                                          print("update ex $ex");
                                           await showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
@@ -377,7 +377,7 @@ class _Edit_songState extends State<Edit_song> {
                                 ],
                               ));
                     },
-                    icon: Icon(Icons.check)),
+                    icon: const Icon(Icons.check)),
               ],
             )
           ],
@@ -386,7 +386,7 @@ class _Edit_songState extends State<Edit_song> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -399,8 +399,8 @@ class _Edit_songState extends State<Edit_song> {
                               name_singer: widget.songModel.name_singer,
                               audio: widget.songModel.path_music,
                               asset: widget.asset)
-                          : SizedBox(),
-                      SizedBox(
+                          : const SizedBox(),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
@@ -409,13 +409,13 @@ class _Edit_songState extends State<Edit_song> {
                         decoration: InputDecoration(
                             label:
                                 Text(tr(LocaleKeys.add_song_label_name_song)),
-                            contentPadding: EdgeInsets.all(8),
+                            contentPadding: const EdgeInsets.all(8),
                             floatingLabelStyle: TextStyle(color: colorFiolet),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: colorFiolet)),
-                            border: OutlineInputBorder()),
+                            border: const OutlineInputBorder()),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
@@ -424,13 +424,13 @@ class _Edit_songState extends State<Edit_song> {
                         decoration: InputDecoration(
                             label:
                                 Text(tr(LocaleKeys.add_song_label_name_singer)),
-                            contentPadding: EdgeInsets.all(8),
+                            contentPadding: const EdgeInsets.all(8),
                             floatingLabelStyle: TextStyle(color: colorFiolet),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: colorFiolet)),
-                            border: OutlineInputBorder()),
+                            border: const OutlineInputBorder()),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
@@ -441,19 +441,19 @@ class _Edit_songState extends State<Edit_song> {
                         decoration: InputDecoration(
                             label:
                                 Text(tr(LocaleKeys.edit_song_label_text_song)),
-                            contentPadding: EdgeInsets.all(8),
+                            contentPadding: const EdgeInsets.all(8),
                             floatingLabelStyle: TextStyle(color: colorFiolet),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: colorFiolet)),
-                            border: OutlineInputBorder()),
+                            border: const OutlineInputBorder()),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       widget.songModel.group == null || groupID == 0
                           ? Row(
                               children: [
-                                Text(
+                                const Text(
                                   "Выберите группу:",
                                 ),
                                 const SizedBox(
@@ -466,7 +466,7 @@ class _Edit_songState extends State<Edit_song> {
                                     showModalBottomSheet(
                                         useSafeArea: true,
                                         isScrollControlled: true,
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(15),
                                                 topRight: Radius.circular(15))),
@@ -483,10 +483,9 @@ class _Edit_songState extends State<Edit_song> {
                                                       const SizedBox(
                                                         height: 20,
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
+                                                      const Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
                                                                 horizontal:
                                                                     20.0),
                                                         child: Align(
@@ -570,7 +569,7 @@ class _Edit_songState extends State<Edit_song> {
                                                                   state) {
                                                         if (state
                                                             is SongsLoading) {
-                                                          return Center(
+                                                          return const Center(
                                                               child:
                                                                   CircularProgressIndicator());
                                                         } else if (state
@@ -580,7 +579,7 @@ class _Edit_songState extends State<Edit_song> {
                                                             controller:
                                                                 scrollController,
                                                             physics:
-                                                                BouncingScrollPhysics(),
+                                                                const BouncingScrollPhysics(),
                                                             itemCount: state
                                                                 .groups.length,
                                                             itemBuilder:
@@ -615,7 +614,8 @@ class _Edit_songState extends State<Edit_song> {
                                                                 Get.back();
                                                               },
                                                               contentPadding:
-                                                                  EdgeInsets.only(
+                                                                  const EdgeInsets
+                                                                      .only(
                                                                       left: 20,
                                                                       right: 20,
                                                                       top: 0,
@@ -637,7 +637,7 @@ class _Edit_songState extends State<Edit_song> {
                                                   );
                                                 }));
                                   },
-                                  child: Icon(EvaIcons.folder_add),
+                                  child: const Icon(EvaIcons.folder_add),
                                 ),
                               ],
                             )
@@ -651,7 +651,7 @@ class _Edit_songState extends State<Edit_song> {
                                 }
                                 return Row(
                                   children: [
-                                    Text("Группа: "),
+                                    const Text("Группа: "),
                                     const SizedBox(
                                       width: 5,
                                     ),
@@ -666,7 +666,7 @@ class _Edit_songState extends State<Edit_song> {
                                         child: Container(
                                           height: 30,
                                           alignment: Alignment.center,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 8),
                                           decoration: BoxDecoration(
                                             color: colorFiolet.withOpacity(.3),
@@ -688,8 +688,14 @@ class _Edit_songState extends State<Edit_song> {
                                                   color: colorFiolet,
                                                 ),
                                               ),
-                                              const SizedBox(width: 5,),
-                                              Icon(Icons.close, size: 15, color: colorFiolet,)
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              Icon(
+                                                Icons.close,
+                                                size: 15,
+                                                color: colorFiolet,
+                                              )
                                             ],
                                           ),
                                         )),
@@ -698,7 +704,7 @@ class _Edit_songState extends State<Edit_song> {
                                 );
                               },
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Align(
@@ -716,7 +722,7 @@ class _Edit_songState extends State<Edit_song> {
 
                                   // await FilePicker.platform.clearTemporaryFiles();
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   Icons.audio_file,
                                   size: 25,
                                 ))),
@@ -729,7 +735,7 @@ class _Edit_songState extends State<Edit_song> {
                                 Text(customFile!.path!),
                               ],
                             )
-                          : SizedBox(),
+                          : const SizedBox(),
                     ],
                   ),
                 ),
@@ -741,13 +747,13 @@ class _Edit_songState extends State<Edit_song> {
     );
   }
 
-  Future updateSong(String name_song, String name_singer, String song,
-      String path_music, int group, int order) async {
+  Future updateSong(String nameSong, String nameSinger, String song,
+      String pathMusic, int group, int order) async {
     final songM = widget.songModel.copy(
-        name_song: name_song,
-        name_singer: name_singer,
+        name_song: nameSong,
+        name_singer: nameSinger,
         song: song,
-        path_music: path_music,
+        path_music: pathMusic,
         group: group,
         order: order);
     await DBSongs.instance.update(songM);

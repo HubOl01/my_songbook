@@ -551,11 +551,8 @@ class _Create_songState extends State<Create_song> {
 
   bool isAudio = false;
   Future getFile() async {
-    // var appDir = (await getTemporaryDirectory()).path;
-    // new Directory(appDir).delete(recursive: true);
     FilePickerResult? picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
-      // allowedExtensions: ['mp3'],
     );
     if (picker != null) {
       setState(() {
@@ -571,13 +568,7 @@ class _Create_songState extends State<Create_song> {
         customFile = file;
         isAudio = true;
         autotext(customFile!.name);
-        // xfile = file;
       });
-
-      // return file;
-      // final saveFile = await saveFilePermanently(file);
-      // print("From path: ${file.path!}");
-      // print("To path: ${saveFile.path}");
     } else {
       return;
     }

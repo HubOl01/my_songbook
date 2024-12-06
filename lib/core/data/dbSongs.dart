@@ -214,6 +214,17 @@ class DBSongs {
     return result.map((json) => Song.fromJson(json)).toList();
   }
 
+  Future<void> updateSongPath(int songId, String newPath) async {
+    final db = await instance.database;
+    await db.update(
+      tableSongs, // Имя таблицы
+      {Songs.path_music: newPath}, // Новое значение пути
+      where: '${Songs.id} = ?', // Условие обновления
+      whereArgs: [songId],
+    );
+    print("!!! Successed update song path = $newPath !!!");
+  }
+
   Future close() async {
     final db = await instance.database;
     db.close();

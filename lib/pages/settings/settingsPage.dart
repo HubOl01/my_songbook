@@ -2,8 +2,11 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:my_songbook/core/bloc/songs_bloc.dart';
+import 'package:my_songbook/main.dart';
 import 'package:my_songbook/pages/settings/Themes/themePage.dart';
 import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/sendToSupport.dart';
 import '../../core/data/dbSongs.dart';
@@ -77,7 +80,8 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.import_export),
           title: Text("Импорт"),
           onTap: () async {
-            await importBackupAndMerge();
+            await importBackup();
+            context.read<SongsBloc>().add(LoadSongs());
           },
         ),
         ListTile(
