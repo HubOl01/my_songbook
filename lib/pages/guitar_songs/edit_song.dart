@@ -473,6 +473,7 @@ class _Edit_songState extends State<Edit_song> {
                                         context: context,
                                         builder: (context) =>
                                             DraggableScrollableSheet(
+                                                initialChildSize: 0.8,
                                                 expand: false,
                                                 builder: (context,
                                                     scrollController) {

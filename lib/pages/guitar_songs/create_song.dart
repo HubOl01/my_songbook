@@ -167,6 +167,7 @@ class _Create_songState extends State<Create_song> {
                                   context: context,
                                   builder: (context) =>
                                       DraggableScrollableSheet(
+                                          initialChildSize: 0.8,
                                           expand: false,
                                           builder: (context, scrollController) {
                                             return Column(
@@ -202,7 +203,8 @@ class _Create_songState extends State<Create_song> {
                                                           controller.text =
                                                               value;
                                                         }),
-                                                    title: tr(LocaleKeys.title_new_group)),
+                                                    title: tr(LocaleKeys
+                                                        .title_new_group)),
                                                 const SizedBox(
                                                   height: 10,
                                                 ),
@@ -228,7 +230,8 @@ class _Create_songState extends State<Create_song> {
                                                     }
                                                   },
                                                   child: CustomButtonSheet(
-                                                      title: tr(LocaleKeys.confirmation_create),
+                                                      title: tr(LocaleKeys
+                                                          .confirmation_create),
                                                       onPressed: () {
                                                         context
                                                             .read<SongsBloc>()
@@ -325,7 +328,8 @@ class _Create_songState extends State<Create_song> {
                           }
                           return Row(
                             children: [
-                               Text("${tr(LocaleKeys.confirmation_delete_group_content1)}: "),
+                              Text(
+                                  "${tr(LocaleKeys.confirmation_delete_group_content1)}: "),
                               const SizedBox(
                                 width: 5,
                               ),

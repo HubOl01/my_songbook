@@ -26,7 +26,7 @@ class ImportExportPage extends StatelessWidget {
           FutureBuilder<bool>(
               future: getBetaData(),
               builder: (context, snapshot) {
-                return snapshot.data! != true
+                return snapshot.data != true
                     ? const SizedBox()
                     : Column(
                         children: [
@@ -71,7 +71,7 @@ class ImportExportPage extends StatelessWidget {
             title: Text(tr(LocaleKeys.data_export)),
             onTap: () async {
               AppMetrica.reportEvent('data_export');
-              await createBackup(context);
+              createBackup(context);
 
               // await createBackup();
             },
@@ -81,7 +81,7 @@ class ImportExportPage extends StatelessWidget {
             title: Text("${tr(LocaleKeys.data_import)} (.zip)"),
             onTap: () async {
               AppMetrica.reportEvent('data_import');
-              await importBackup();
+              await importBackup(context);
               context.read<SongsBloc>().add(LoadSongs());
             },
           ),

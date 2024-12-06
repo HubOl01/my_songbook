@@ -75,7 +75,7 @@ class SettingsPage extends GetView<SettingsController> {
                 FutureBuilder<bool>(
                   future: getBetaData(),
                   builder: (context, snapshot) {
-                    return snapshot.data! == true
+                    return snapshot.data == true
                         ? Container(
                             // height: 20,
                             margin: const EdgeInsets.only(left: 10),

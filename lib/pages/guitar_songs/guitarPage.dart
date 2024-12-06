@@ -140,6 +140,7 @@ class _GuitarPageState extends State<GuitarPage> {
                       ),
                       context: context,
                       builder: (context) => DraggableScrollableSheet(
+                        initialChildSize: 0.8,
                         expand: false,
                         builder: (context, scrollController) {
                           return Column(

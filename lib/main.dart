@@ -59,7 +59,7 @@ void main() async {
     FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
   } catch (ex) {
-    print("Firebase ex: ${ex}");
+    print("Firebase ex: $ex");
   }
   // MobileAds.initialize();
   // MobileAds.setUserConsent(true);
@@ -74,12 +74,12 @@ void main() async {
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
   // testDB();
-  // try {
-  //   AppMetrica.activate(
-  //       AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
-  // } catch (ex) {
-  //   print("app_metrica: ${ex}");
-  // }
+  try {
+    AppMetrica.activate(
+        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+  } catch (ex) {
+    print("app_metrica: $ex");
+  }
   runApp(
     MultiBlocProvider(
       providers: [
@@ -92,11 +92,11 @@ void main() async {
         BlocProvider(create: (context) => IndexGroupCubit()),
       ],
       child: EasyLocalization(
-          supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
+          supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
           path: 'assets/translations',
-          fallbackLocale: Locale('en'),
-          assetLoader: CodegenLoader(),
-          child: MyApp()),
+          fallbackLocale: const Locale('en'),
+          assetLoader: const CodegenLoader(),
+          child: const MyApp()),
     ),
   );
 }
@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
-                home: MyHomePage(),
+                home: const MyHomePage(),
               )),
     );
   }
@@ -151,15 +151,15 @@ class MyHomePage extends StatelessWidget {
                     type: BottomNavigationBarType.fixed,
                     items: [
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.file_audio),
+                          icon: const Icon(LineAwesome.file_audio),
                           label: tr(LocaleKeys.bottom_song),
                           tooltip: tr(LocaleKeys.tooltip_song)),
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.guitar_solid),
+                          icon: const Icon(LineAwesome.guitar_solid),
                           label: tr(LocaleKeys.bottom_chords),
                           tooltip: tr(LocaleKeys.tooltip_chords)),
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.cog_solid),
+                          icon: const Icon(LineAwesome.cog_solid),
                           label: tr(LocaleKeys.bottom_settings),
                           tooltip: tr(LocaleKeys.tooltip_settings)),
                     ],
@@ -168,7 +168,11 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-List<Widget> pages = [GuitarPage(), ApplicationsPage(), SettingsPage()];
+List<Widget> pages = [
+  const GuitarPage(),
+  const ApplicationsPage(),
+  const SettingsPage()
+];
 List<String> pagesString = [
   "Песни",
   "Аккорды",
