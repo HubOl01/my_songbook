@@ -20,6 +20,7 @@ abstract class  LocaleKeys {
   static const edit_song_name_song = 'edit_song_name_song';
   static const edit_song_name_singer = 'edit_song_name_singer';
   static const confirmation_title = 'confirmation_title';
+  static const confirmation_content_backup = 'confirmation_content_backup';
   static const edit_song_confirmation_content_delete = 'edit_song_confirmation_content_delete';
   static const edit_song_confirmation_content_update = 'edit_song_confirmation_content_update';
   static const confirmation_yes = 'confirmation_yes';
@@ -63,5 +64,24 @@ abstract class  LocaleKeys {
   static const theme_mode_light = 'theme_mode_light';
   static const theme_mode_dark = 'theme_mode_dark';
   static const search = 'search';
+  static const data_export = 'data_export';
+  static const data_import = 'data_import';
+  static const data_export_import_title = 'data_export_import_title';
+  static const confirmation_group_title_select = 'confirmation_group_title_select';
+  static const title_new_group = 'title_new_group';
+  static const confirmation_create = 'confirmation_create';
+  static const confirmation_changing = 'confirmation_changing';
+  static const confirmation_delete = 'confirmation_delete';
+  static const confirmation_cancel = 'confirmation_cancel';
+  static const managing_groups_title = 'managing_groups_title';
+  static const confirmation_delete_group_title = 'confirmation_delete_group_title';
+  static const confirmation_delete_group_content1 = 'confirmation_delete_group_content1';
+  static const confirmation_delete_group_content2 = 'confirmation_delete_group_content2';
+  static const confirmation_delete_song_title = 'confirmation_delete_song_title';
+  static const confirmation_delete_song_content = 'confirmation_delete_song_content';
+  static const confirmation_delete_songs_title = 'confirmation_delete_songs_title';
+  static const confirmation_delete_songs_content = 'confirmation_delete_songs_content';
+  static const no_data_select_songs = 'no_data_select_songs';
+  static const error_loading_group = 'error_loading_group';
 
 }

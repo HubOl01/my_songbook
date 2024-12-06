@@ -2,19 +2,16 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_songbook/core/bloc/songs_bloc.dart';
-import 'package:my_songbook/main.dart';
 import 'package:my_songbook/pages/settings/Themes/themePage.dart';
 import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/sendToSupport.dart';
-import '../../core/data/dbSongs.dart';
-import '../../core/utils/backup.dart';
-import '../../core/utils/import.dart';
+import '../../core/api/variable_firebase.dart';
+import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
+import 'import_exportPage/ImportExportPage.dart';
 import 'settingsController.dart';
 
 class SettingsPage extends GetView<SettingsController> {
@@ -24,9 +21,9 @@ class SettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       children: [
-        Container(
+        SizedBox(
           height: 200,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -34,62 +31,85 @@ class SettingsPage extends GetView<SettingsController> {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   tr(LocaleKeys.bottom_settings),
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 35),
                 )),
           ),
         ),
         ListTile(
-          leading: Icon(Icons.photo_outlined),
+          leading: const Icon(Icons.photo_outlined),
           title: Text(tr(LocaleKeys.settings_theme_mode)),
           onTap: () {
             AppMetrica.reportEvent('ThemePage');
-            Get.to(ThemePage());
+            Get.to(const ThemePage());
           },
         ),
         ListTile(
-          leading: Icon(Icons.translate),
+          leading: const Icon(Icons.translate),
           title: Text(tr(LocaleKeys.settings_translate)),
           onTap: () {
             AppMetrica.reportEvent('TranslatePage');
-            Get.to(TranslatePage());
+            Get.to(const TranslatePage());
           },
         ),
         ListTile(
-          leading: Icon(Icons.help_outline),
+          leading: const Icon(Icons.help_outline),
           title: Text(tr(LocaleKeys.settings_help)),
           onTap: () {
             AppMetrica.reportEvent('HelperPage');
-            Get.to(HelperPage());
+            Get.to(const HelperPage());
           },
         ),
         ListTile(
-          leading: Icon(Icons.support_agent),
+          leading: const Icon(Icons.support_agent),
           title: Text(tr(LocaleKeys.settings_call_tech)),
           onTap: () async {
             sendToSupport();
           },
         ),
         ListTile(
-          leading: Icon(Icons.import_export),
-          title: Text("Бэкап"),
-          onTap: () async {
-            await createBackup();
-          },
-        ),
+            leading: const Icon(Icons.import_export),
+            title: Row(
+              children: [
+                Text(tr(LocaleKeys.data_export_import_title)),
+                FutureBuilder<bool>(
+                  future: getBetaData(),
+                  builder: (context, snapshot) {
+                    return snapshot.data! == true
+                        ? Container(
+                            // height: 20,
+                            margin: const EdgeInsets.only(left: 10),
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: colorFiolet.withOpacity(.3),
+                              borderRadius: BorderRadius.circular(10),
+                              // border: Border.all(color: colorFiolet),
+                            ),
+                            child: Text(
+                              "beta",
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: colorFiolet,
+                              ),
+                            ),
+                          )
+                        : const SizedBox();
+                  },
+                )
+              ],
+            ),
+            onTap: () async {
+              Get.to(const ImportExportPage());
+            }),
         ListTile(
-          leading: Icon(Icons.import_export),
-          title: Text("Импорт"),
-          onTap: () async {
-            await importBackup();
-            context.read<SongsBloc>().add(LoadSongs());
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.info_outline),
+          leading: const Icon(Icons.info_outline),
           title: Text(tr(LocaleKeys.settings_about)),
           onTap: () {
             AppMetrica.reportEvent('AboutPage');
-            Get.to(AboutPage());
+            Get.to(const AboutPage());
           },
         ),
       ],

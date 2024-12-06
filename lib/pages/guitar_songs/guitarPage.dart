@@ -96,16 +96,23 @@ class _GuitarPageState extends State<GuitarPage> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
-                                    color: colorFiolet.withOpacity(.3),
+                                    color: context.isDarkMode
+                                        ? colorFiolet.withOpacity(.3)
+                                        : Colors.white.withOpacity(.2),
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: colorFiolet),
+                                    border: Border.all(
+                                        color: context.isDarkMode
+                                            ? colorFiolet
+                                            : Colors.white),
                                   ),
                                   child: Text(
                                     groupState.name,
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
-                                      color: colorFiolet,
+                                      color: context.isDarkMode
+                                          ? colorFiolet
+                                          : Colors.white,
                                     ),
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
@@ -139,13 +146,15 @@ class _GuitarPageState extends State<GuitarPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const SizedBox(height: 20),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
                                 child: Align(
                                   alignment: AlignmentDirectional.topStart,
                                   child: Text(
-                                    "Выберите группу:",
-                                    style: TextStyle(
+                                    tr(LocaleKeys
+                                        .confirmation_group_title_select),
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -158,11 +167,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                   controller.text = value;
                                 }),
                                 controller: controller,
-                                title: "Название группы",
+                                title: tr(LocaleKeys.title_new_group),
                               ),
                               const SizedBox(height: 10),
                               CustomButtonSheet(
-                                title: "Добавить",
+                                title: tr(LocaleKeys.confirmation_create),
                                 onPressed: () async {
                                   // Добавление группы
                                   context.read<SongsBloc>().add(AddGroup(
@@ -249,8 +258,9 @@ class _GuitarPageState extends State<GuitarPage> {
                                         ),
                                       );
                                     } else if (state is SongsError) {
-                                      return const Center(
-                                          child: Text("Ошибка загрузки групп"));
+                                      return Center(
+                                          child: Text(tr(
+                                              LocaleKeys.error_loading_group)));
                                     } else {
                                       return const SizedBox();
                                     }
@@ -306,7 +316,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                     height: 5,
                                   ),
                                   Text(
-                                    "Удалить ${selectedSongsId.length == 1 ? "песню" : "песни"}?",
+                                    selectedSongsId.length == 1
+                                        ? tr(LocaleKeys
+                                            .confirmation_delete_song_title)
+                                        : tr(LocaleKeys
+                                            .confirmation_delete_songs_title),
                                     style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
@@ -316,7 +330,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                     height: 20,
                                   ),
                                   Text(
-                                    "${selectedSongsId.length == 1 ? "Песня будет удалена" : "Песни будут удалены"}, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
+                                    selectedSongsId.length == 1
+                                        ? tr(LocaleKeys
+                                            .confirmation_delete_song_content)
+                                        : tr(LocaleKeys
+                                            .confirmation_delete_songs_content),
                                     style: const TextStyle(
                                       fontSize: 14,
                                     ),
@@ -342,7 +360,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                       });
                                       Get.back();
                                     },
-                                    title: "Удалить",
+                                    title: tr(LocaleKeys.confirmation_delete),
                                     fontSize: 14,
                                   ),
                                   const SizedBox(
@@ -355,7 +373,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                     onPressed: () {
                                       Get.back();
                                     },
-                                    title: "Отменить",
+                                    title: tr(LocaleKeys.confirmation_cancel),
                                     fontSize: 14,
                                   ),
                                 ],
@@ -433,11 +451,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                 filteredSongs.isEmpty &&
                                         context.read<IndexGroupCubit>().state !=
                                             -1
-                                    ? const SizedBox(
+                                    ? SizedBox(
                                         height: 100,
                                         child: Center(
-                                          child: Text(
-                                              "Нет песен в выбранной группе"),
+                                          child: Text(tr(
+                                              LocaleKeys.no_data_select_songs)),
                                         ),
                                       )
                                     : Column(

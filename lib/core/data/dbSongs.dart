@@ -67,7 +67,7 @@ class DBSongs {
     await db.execute('''
     CREATE TABLE IF NOT EXISTS $tableGroups (
       ${Groups.id} $idType,
-      ${Groups.name} $textType NOT NULL 
+      ${Groups.name} $textType NOT NULL UNIQUE
     )
   ''');
   }
@@ -92,7 +92,7 @@ class DBSongs {
       await db.execute('''
       CREATE TABLE IF NOT EXISTS $tableGroups (
         ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${Groups.name} TEXT NOT NULL
+        ${Groups.name} TEXT NOT NULL UNIQUE
       )
     ''');
     }
@@ -223,6 +223,24 @@ class DBSongs {
       whereArgs: [songId],
     );
     print("!!! Successed update song path = $newPath !!!");
+  }
+
+  Future<GroupModel?> findGroupByName(String name) async {
+    final db = await instance.database;
+
+    final result = await db.query(
+      tableGroups,
+      columns: [(Groups.id), (Groups.name)],
+      where: '${Groups.name} = ?',
+      whereArgs: [name],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      return GroupModel.fromJson(result.first);
+    } else {
+      return null;
+    }
   }
 
   Future close() async {
