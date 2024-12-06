@@ -4,98 +4,105 @@ import 'package:file_picker/file_picker.dart';
 import 'package:my_songbook/core/data/dbSongs.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/songsModel.dart';
+Future<void> importBackupAndMerge() async {
+  // Запрос разрешений
+  await Permission.storage.request();
+  await Permission.manageExternalStorage.request();
 
-Future<void> importBackup() async {
   try {
-    // Выбор ZIP-архива пользователем
+    // Выбор ZIP-файла
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['zip'],
     );
 
-    if (result == null) {
-      print("Импорт отменен пользователем");
+    if (result == null || result.files.single.path == null) {
+      print('Файл не выбран');
       return;
     }
 
     final zipFilePath = result.files.single.path!;
     final zipFile = File(zipFilePath);
 
-    // Распаковка архива
-    final tempDir = await getTemporaryDirectory();
-    final extractDir = Directory(join(tempDir.path, 'extracted_backup'));
-    if (!extractDir.existsSync()) {
-      extractDir.createSync();
+    if (!zipFile.existsSync()) {
+      print('Выбранный файл не существует');
+      return;
     }
 
-    final bytes = zipFile.readAsBytesSync();
-    final archive = ZipDecoder().decodeBytes(bytes);
+    // Распаковка ZIP-файла
+    final tempDir = await getTemporaryDirectory();
+    final unzipDir = Directory(join(tempDir.path, 'unzip_backup'));
+    if (!unzipDir.existsSync()) {
+      unzipDir.createSync(recursive: true);
+    }
+
+    final archive = ZipDecoder().decodeBytes(zipFile.readAsBytesSync());
     for (final file in archive) {
-      final filePath = join(extractDir.path, file.name);
+      final filePath = join(unzipDir.path, file.name);
       if (file.isFile) {
-        final outputFile = File(filePath);
-        outputFile.createSync(recursive: true);
-        outputFile.writeAsBytesSync(file.content as List<int>);
+        File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(file.content as List<int>);
+      } else {
+        Directory(filePath).createSync(recursive: true);
       }
     }
 
-    // Обработка файлов базы данных и музыки
-    final dbFile = File(join(extractDir.path, 'songs_backup.db'));
-    final musicFiles = extractDir
+    // Найти файл базы данных (.db) в распакованной директории
+    final dbFile = unzipDir
         .listSync(recursive: true)
         .whereType<File>()
-        .where(
-            (file) => file.path.endsWith('.mp3') || file.path.endsWith('.wav'))
-        .toList();
+        .firstWhere(
+          (file) => file.path.endsWith('.db'),
+          orElse: () => throw Exception('Файл базы данных не найден в архиве'),
+        );
+    final dbBackupPath = dbFile.path;
 
-    if (!dbFile.existsSync()) {
-      throw Exception("Файл базы данных отсутствует в архиве");
-    }
+    // Открываем базу данных из бэкапа
+    final backupDb = await openDatabase(dbBackupPath);
+    final currentDb = DBSongs.instance;
 
-    // Открытие файла базы данных резервной копии
-    final backupDb = await openDatabase(dbFile.path);
+    // Чтение песен из бэкапа
+    final List<Map<String, dynamic>> backupSongs =
+        await backupDb.query('songs'); // Таблица с песнями
+    await backupDb.close();
 
-    // Чтение песен из резервной копии
-    final songs = await backupDb.query('songs');
-    for (final song in songs) {
-      final newSong = Song(
-        name_song: song['name_song'] as String? ?? '',
-        name_singer: song['name_singer'] as String? ?? '',
-        song: song['song'] as String? ?? '',
-        path_music: song['path_music'] as String? ?? '',
-        order: 0,
-        group: 0,
-        date_created: DateTime.parse(
-            song['date_created'] as String? ?? '2024-01-01 00:00:00'),
-      );
+    // Добавление песен в текущую базу данных
+    for (final songData in backupSongs) {
+      final songPath = songData['path_music'] as String?;
+      if (songPath != null && songPath.isNotEmpty) {
+        // Проверяем, существует ли файл музыки
+        final originalPath = join(unzipDir.path, basename(songPath));
+        if (File(originalPath).existsSync()) {
+          // Копируем музыкальный файл в нужное место (если нужно)
+          final musicDir = Directory('/storage/emulated/0/Music/MyApp');
+          if (!musicDir.existsSync()) {
+            musicDir.createSync(recursive: true);
+          }
+          final newMusicPath = join(musicDir.path, basename(songPath));
+          await File(originalPath).copy(newMusicPath);
 
-      // Добавляем песню в текущую базу данных
-      await DBSongs.instance.create(newSong);
-
-      // Копируем музыкальные файлы в приложение
-      final musicFilePath = song['path_music'] as String;
-      final musicFile = musicFiles.firstWhere(
-        (file) => basename(file.path) == basename(musicFilePath),
-        orElse: () => File(''),
-      );
-
-      if (musicFile.existsSync()) {
-        final appMusicDir = Directory('/storage/emulated/0/Download/music');
-        if (!appMusicDir.existsSync()) {
-          appMusicDir.createSync(recursive: true);
+          // Обновляем путь в данных песни
+          songData['path_music'] = newMusicPath;
         }
-        final newMusicPath = join(appMusicDir.path, basename(musicFile.path));
-        await musicFile.copy(newMusicPath);
+      }
 
-        print("Файл скопирован в: $newMusicPath");
+      // Проверяем, есть ли уже такая запись в базе данных
+      final existingSongs =
+          await currentDb.findSongByPath(songData['path_music']);
+      if (existingSongs.isEmpty) {
+        // Добавляем только новые записи
+        await currentDb.insertSong(songData);
+      } else {
+        print('Песня уже существует: ${songData['path_music']}');
       }
     }
 
-    print("Импорт завершен успешно");
+    print('Импорт завершен успешно!');
   } catch (e) {
-    print("Ошибка при импорте резервной копии: $e");
+    print('Ошибка при импорте и объединении данных: $e');
   }
 }

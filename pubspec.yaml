@@ -65,7 +65,7 @@ dependencies:
   firebase_remote_config: ^5.1.5
   smooth_page_indicator: ^1.1.0
   flutter_markdown: ^0.7.4+3
-  huawei_in_app_update: ^1.2.1
+  # huawei_in_app_update: ^1.2.1
   carousel_slider_plus: ^7.0.2
   flutter_bloc: ^8.1.6
   equatable: ^2.0.7
@@ -80,14 +80,18 @@ dev_dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.14.1
 
+  flutter_lints: ^2.0.2
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: assets/icon/icon_.png
-  image_path_ios: assets/icon/icon_.png
-  image_path_android: assets/icon/icon_.png
+  image_path: assets/icon/icon_.jpg
+  image_path_ios: assets/icon/icon_.jpg
+  image_path_android: assets/icon/icon_.jpg
   remove_alpha_ios: true
   min_sdk_android: 23
+  adaptive_icon_background: assets/back_icon.png
+  adaptive_icon_foreground: assets/icon/adaptive_icon.png
+  # adaptive_icon_padding: true
 
 flutter_native_splash:
   image: "assets/guitar.png"
@@ -100,27 +104,14 @@ flutter_native_splash:
   # color_dark: "#121212"
 
   android_12:
-    image: "assets/guitar.png"
+    image: "assets/guitar_for_10.png"
     background_image: "assets/background1.png"
     fullscreen: true
     # color: "#C183FF"
     # icon_background_color: "#ffffff"
     # icon_background_color_dark: "#121212"
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^2.0.2
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
 
   assets:

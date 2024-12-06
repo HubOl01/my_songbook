@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
 
-final String tableSongs = 'songs';
+const String tableSongs = 'songs';
 
 class Songs {
   static final List<String> values = [
@@ -14,14 +14,14 @@ class Songs {
     date_created,
   ];
 
-  static final String id = '_id';
-  static final String name_song = 'name_song';
-  static final String name_singer = 'name_singer';
-  static final String song = 'song';
-  static final String path_music = 'path_music';
-  static final String order = 'order';
-  static final String group = 'group';
-  static final String date_created = 'date_created';
+  static const String id = '_id';
+  static const String name_song = 'name_song';
+  static const String name_singer = 'name_singer';
+  static const String song = 'song';
+  static const String path_music = 'path_music';
+  static const String order = 'orderSong';
+  static const String group = 'groupSong';
+  static const String date_created = 'date_created';
 }
 
 class Song {

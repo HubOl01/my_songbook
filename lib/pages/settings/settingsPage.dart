@@ -77,7 +77,7 @@ class SettingsPage extends GetView<SettingsController> {
           leading: Icon(Icons.import_export),
           title: Text("Импорт"),
           onTap: () async {
-            await importBackup();
+            await importBackupAndMerge();
           },
         ),
         ListTile(

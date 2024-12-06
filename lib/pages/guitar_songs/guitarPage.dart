@@ -59,7 +59,7 @@ class _GuitarPageState extends State<GuitarPage> {
                     selectedSongs.clear();
                   });
                 },
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               )
             : null,
         title: isSecondButton
@@ -93,7 +93,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                 child: Container(
                                   height: 30,
                                   alignment: Alignment.center,
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
                                     color: colorFiolet.withOpacity(.3),
                                     borderRadius: BorderRadius.circular(10),
@@ -138,12 +139,11 @@ class _GuitarPageState extends State<GuitarPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const SizedBox(height: 20),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.0),
                                 child: Align(
                                   alignment: AlignmentDirectional.topStart,
-                                  child: const Text(
+                                  child: Text(
                                     "Выберите группу:",
                                     style: TextStyle(
                                       fontSize: 18,
@@ -170,7 +170,7 @@ class _GuitarPageState extends State<GuitarPage> {
 
                                   // Дождитесь обновления состояния
                                   await Future.delayed(
-                                      Duration(milliseconds: 300));
+                                      const Duration(milliseconds: 300));
 
                                   // Получение группы и обновление песен
                                   final state = context.read<SongsBloc>().state;
@@ -263,7 +263,7 @@ class _GuitarPageState extends State<GuitarPage> {
                       ),
                     );
                   },
-                  icon: Icon(EvaIcons.folder_add),
+                  icon: const Icon(EvaIcons.folder_add),
                 ),
                 BlocBuilder<Songs1Cubit, Songs1State>(
                   builder: (context, state) {
@@ -280,7 +280,7 @@ class _GuitarPageState extends State<GuitarPage> {
                             _toggleAllSelections(state.songs, true);
                           }
                         },
-                        icon: Icon(Icons.select_all),
+                        icon: const Icon(Icons.select_all),
                       );
                     } else if (state is Songs1Error) {
                       return const SizedBox();
@@ -292,7 +292,7 @@ class _GuitarPageState extends State<GuitarPage> {
                 IconButton(
                   onPressed: () {
                     showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
+                        shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15))),
@@ -307,7 +307,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                   ),
                                   Text(
                                     "Удалить ${selectedSongsId.length == 1 ? "песню" : "песни"}?",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                     textAlign: TextAlign.center,
@@ -317,7 +317,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                   ),
                                   Text(
                                     "${selectedSongsId.length == 1 ? "Песня будет удалена" : "Песни будут удалены"}, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 14,
                                     ),
                                     textAlign: TextAlign.center,
@@ -371,14 +371,14 @@ class _GuitarPageState extends State<GuitarPage> {
             : [
                 IconButton(
                     onPressed: () {
-                      Get.to(SearchPage());
+                      Get.to(const SearchPage());
                     },
-                    icon: Icon(Icons.search)),
+                    icon: const Icon(Icons.search)),
                 IconButton(
                     onPressed: () {
-                      Get.to(Create_song());
+                      Get.to(const Create_song());
                     },
-                    icon: Icon(Icons.add)),
+                    icon: const Icon(Icons.add)),
               ],
       ),
       body: RefreshIndicator(
@@ -390,7 +390,7 @@ class _GuitarPageState extends State<GuitarPage> {
           return controller.refreshSongs();
         },
         child: ScrollConfiguration(
-            behavior: ScrollBehavior(),
+            behavior: const ScrollBehavior(),
             child: GlowingOverscrollIndicator(
                 axisDirection: AxisDirection.down,
                 color: colorFiolet.withOpacity(0.3),
@@ -403,7 +403,8 @@ class _GuitarPageState extends State<GuitarPage> {
                       return BlocBuilder<SongsBloc, SongsState>(
                         builder: (context, state) {
                           if (state is SongsLoading) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           } else if (state is SongsLoaded) {
                             // List<Song> filteredSongs = indexGroup == -1
                             //     ? state.songs
@@ -429,8 +430,10 @@ class _GuitarPageState extends State<GuitarPage> {
                               children: [
                                 _buildHorizontalGroupSelector(state.groups),
                                 _buildHeader(context, 2),
-                                filteredSongs.isEmpty
-                                    ? SizedBox(
+                                filteredSongs.isEmpty &&
+                                        context.read<IndexGroupCubit>().state !=
+                                            -1
+                                    ? const SizedBox(
                                         height: 100,
                                         child: Center(
                                           child: Text(
@@ -464,8 +467,10 @@ class _GuitarPageState extends State<GuitarPage> {
                                                             .stretch,
                                                     children: [
                                                       Text(song.name_song,
-                                                          style: TextStyle(
-                                                              fontSize: 16)),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize:
+                                                                      16)),
                                                       Text(
                                                         song.name_singer ?? "",
                                                         style: TextStyle(
@@ -502,7 +507,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                                                     Container(
                                                                       height:
                                                                           20,
-                                                                      margin: EdgeInsets.only(
+                                                                      margin: const EdgeInsets
+                                                                          .only(
                                                                           top:
                                                                               5,
                                                                           bottom:
@@ -510,7 +516,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                                                       alignment:
                                                                           Alignment
                                                                               .center,
-                                                                      padding: EdgeInsets.symmetric(
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
                                                                           horizontal:
                                                                               5),
                                                                       decoration:
@@ -624,9 +631,11 @@ class _GuitarPageState extends State<GuitarPage> {
       // case 1:
       //   return !isSecondButton ? _buildHorizontalGroupSelector() : SizedBox();
       case 2:
-        return !isSecondButton ? _buildTestDeleteWidget(context) : SizedBox();
+        return !isSecondButton
+            ? _buildTestDeleteWidget(context)
+            : const SizedBox();
       default:
-        return SizedBox();
+        return const SizedBox();
     }
   }
 
@@ -651,20 +660,20 @@ class _GuitarPageState extends State<GuitarPage> {
     return isSecondButton
         ? const SizedBox()
         : Container(
-            margin: EdgeInsets.only(top: 15, bottom: 8),
+            margin: const EdgeInsets.only(top: 15, bottom: 8),
             alignment: Alignment.centerLeft,
             height: 30,
             child: ListView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(EditGroupPage());
+                    Get.to(const EditGroupPage());
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: 15),
+                    margin: const EdgeInsets.only(left: 15),
                     width: 50,
                     // padding: EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
@@ -672,7 +681,7 @@ class _GuitarPageState extends State<GuitarPage> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: colorFiolet),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       EvaIcons.folder_outline,
                       color: Colors.white,
                     ),
@@ -708,8 +717,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                       left: i == 0 ? 10 : 10,
                                       right: i == groups.length - 1 ? 15 : 0,
                                     ),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: indexGroup == i
                                           ? colorFiolet.withOpacity(.3)
@@ -775,19 +784,19 @@ class _GuitarPageState extends State<GuitarPage> {
                   Row(
                     children: [
                       Text(tr(LocaleKeys.ex_name_song),
-                          style: TextStyle(fontSize: 16)),
-                      SizedBox(
+                          style: const TextStyle(fontSize: 16)),
+                      const SizedBox(
                         width: 5,
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Container(
                           color: colorFiolet,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 3),
                           child: Text(tr(LocaleKeys.example),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10)),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 10)),
                         ),
                       )
                     ],
@@ -801,8 +810,8 @@ class _GuitarPageState extends State<GuitarPage> {
                             : Colors.grey[600]),
                   ),
                 ]),
-            onTap: () => Get.to(TestPage()))
-        : SizedBox();
+            onTap: () => Get.to(const TestPage()))
+        : const SizedBox();
   }
 }
 

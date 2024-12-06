@@ -73,7 +73,7 @@ void main() async {
   isClosedWarring = box.get("isClosedWarring") ?? false;
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
-  // testDB();
+  testDB();
   // try {
   //   AppMetrica.activate(
   //       AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));

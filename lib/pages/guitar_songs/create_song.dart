@@ -26,9 +26,9 @@ class Create_song extends StatefulWidget {
 }
 
 class _Create_songState extends State<Create_song> {
-  TextEditingController name_songController = new TextEditingController();
-  TextEditingController name_singerController = new TextEditingController();
-  TextEditingController songController = new TextEditingController();
+  TextEditingController name_songController = TextEditingController();
+  TextEditingController name_singerController = TextEditingController();
+  TextEditingController songController = TextEditingController();
   String name_song = "";
   String name_singer = "";
   // late String number;
@@ -77,7 +77,7 @@ class _Create_songState extends State<Create_song> {
           )
         ],
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -93,7 +93,7 @@ class _Create_songState extends State<Create_song> {
                   cursorColor: colorFiolet,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_name_song)),
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: const EdgeInsets.all(8),
                       // labelStyle: ,
                       floatingLabelStyle: TextStyle(color: colorFiolet),
                       focusedBorder: OutlineInputBorder(
@@ -101,7 +101,7 @@ class _Create_songState extends State<Create_song> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: colorFiolet))),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
@@ -110,14 +110,14 @@ class _Create_songState extends State<Create_song> {
                   // maxLines: 30,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_name_singer)),
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: const EdgeInsets.all(8),
                       floatingLabelStyle: TextStyle(color: colorFiolet),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: colorFiolet)),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: colorFiolet))),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextField(
@@ -127,27 +127,27 @@ class _Create_songState extends State<Create_song> {
                   maxLines: null,
                   decoration: InputDecoration(
                       label: Text(tr(LocaleKeys.add_song_label_text_song)),
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: const EdgeInsets.all(8),
                       floatingLabelStyle: TextStyle(color: colorFiolet),
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: colorFiolet)),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(color: colorFiolet))),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
                   tr("Добавление группы (необязательно)"),
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 groupID == 0
                     ? Row(
                         children: [
-                          Text(
+                          const Text(
                             "Выберите группу:",
                           ),
                           const SizedBox(
@@ -160,7 +160,7 @@ class _Create_songState extends State<Create_song> {
                               showModalBottomSheet(
                                   useSafeArea: true,
                                   isScrollControlled: true,
-                                  shape: RoundedRectangleBorder(
+                                  shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(15),
                                           topRight: Radius.circular(15))),
@@ -175,9 +175,8 @@ class _Create_songState extends State<Create_song> {
                                                 const SizedBox(
                                                   height: 20,
                                                 ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
                                                       horizontal: 20.0),
                                                   child: Align(
                                                       alignment:
@@ -246,7 +245,7 @@ class _Create_songState extends State<Create_song> {
                                                         SongsBloc, SongsState>(
                                                     builder: (context, state) {
                                                   if (state is SongsLoading) {
-                                                    return Center(
+                                                    return const Center(
                                                         child:
                                                             CircularProgressIndicator());
                                                   } else if (state
@@ -255,7 +254,7 @@ class _Create_songState extends State<Create_song> {
                                                       controller:
                                                           scrollController,
                                                       physics:
-                                                          BouncingScrollPhysics(),
+                                                          const BouncingScrollPhysics(),
                                                       itemCount:
                                                           state.groups.length,
                                                       itemBuilder:
@@ -289,7 +288,8 @@ class _Create_songState extends State<Create_song> {
                                                           Get.back();
                                                         },
                                                         contentPadding:
-                                                            EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                .only(
                                                                 left: 20,
                                                                 right: 20,
                                                                 top: 0,
@@ -310,7 +310,7 @@ class _Create_songState extends State<Create_song> {
                                             );
                                           }));
                             },
-                            child: Icon(EvaIcons.folder_add),
+                            child: const Icon(EvaIcons.folder_add),
                           ),
                         ],
                       )
@@ -324,7 +324,7 @@ class _Create_songState extends State<Create_song> {
                           }
                           return Row(
                             children: [
-                              Text("Группа: "),
+                              const Text("Группа: "),
                               const SizedBox(
                                 width: 5,
                               ),
@@ -339,8 +339,8 @@ class _Create_songState extends State<Create_song> {
                                   child: Container(
                                     height: 30,
                                     alignment: Alignment.center,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: colorFiolet.withOpacity(.3),
                                       borderRadius: BorderRadius.circular(10),
@@ -375,14 +375,14 @@ class _Create_songState extends State<Create_song> {
                           );
                         },
                       ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Text(
                   tr(LocaleKeys.add_song_add_audiofile),
-                  style: TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Align(
@@ -400,7 +400,7 @@ class _Create_songState extends State<Create_song> {
 
                             // await FilePicker.platform.clearTemporaryFiles();
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.audio_file,
                             size: 25,
                           ))),
@@ -412,8 +412,8 @@ class _Create_songState extends State<Create_song> {
                           Text(customFile!.path!),
                         ],
                       )
-                    : SizedBox(),
-                SizedBox(
+                    : const SizedBox(),
+                const SizedBox(
                   height: 20,
                 ),
                 SizedBox(
@@ -429,35 +429,51 @@ class _Create_songState extends State<Create_song> {
                                   final saveFile =
                                       await saveFilePermanently(customFile!);
                                   print(
-                                      "SAVEFILE: ${saveFile.path} ${saveFile.path.isEmpty} ${saveFile}");
-                                  addSongAudio(
-                                      name_songController.text,
-                                      name_singerController.text,
-                                      songController.text,
-                                      saveFile.path,
-                                      groupID,
-                                      orderID);
+                                      "SAVEFILE: ${saveFile.path} ${saveFile.path.isEmpty} $saveFile");
+                                  // addSongAudio(
+                                  //     name_songController.text,
+                                  //     name_singerController.text,
+                                  //     songController.text,
+                                  //     saveFile.path,
+                                  //     groupID,
+                                  //     orderID);
+                                  context.read<SongsBloc>().add(AddSong(Song(
+                                      name_song: name_songController.text,
+                                      name_singer: name_singerController.text,
+                                      song: songController.text,
+                                      path_music: saveFile.path,
+                                      group: groupID,
+                                      order: orderID,
+                                      date_created: DateTime.now())));
                                 } else {
-                                  addSongAudio(
-                                      name_songController.text,
-                                      name_singerController.text,
-                                      songController.text,
-                                      "",
-                                      groupID,
-                                      orderID);
+                                  // addSongAudio(
+                                  //     name_songController.text,
+                                  //     name_singerController.text,
+                                  //     songController.text,
+                                  //     "",
+                                  //     groupID,
+                                  //     orderID);
+                                  context.read<SongsBloc>().add(AddSong(Song(
+                                      name_song: name_songController.text,
+                                      name_singer: name_singerController.text,
+                                      song: songController.text,
+                                      path_music: "",
+                                      group: groupID,
+                                      order: orderID,
+                                      date_created: DateTime.now())));
                                 }
 
                                 // final GuitarController guitar =
                                 //     Get.put(GuitarController());
                                 // guitar.refreshSongs();
                                 AppMetrica.reportEvent(
-                                    'create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = ${isAudio}))');
+                                    'create_song: successed!!! (${name_songController.text} - ${name_singerController.text} (audio = $isAudio))');
                                 // if (isSuccess) {
                                 Get.back();
                                 // } else {
                               } catch (ex) {
-                                print("exxe => ${ex}");
-                                AppMetrica.reportEvent('create_song: ${ex}');
+                                print("exxe => $ex");
+                                AppMetrica.reportEvent('create_song: $ex');
                                 await showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
@@ -492,12 +508,12 @@ class _Create_songState extends State<Create_song> {
                                           ]));
                             }
                           } catch (ex) {
-                            print("EXEPTION ===> ${ex}");
+                            print("EXEPTION ===> $ex");
                           }
                         },
                         child: Text(
                           tr(LocaleKeys.add_song_save),
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                         ))),
               ],
             ),
@@ -507,26 +523,25 @@ class _Create_songState extends State<Create_song> {
     );
   }
 
-  Future addSongAudio(String name_song, String name_singer, String song,
-      String path_music, int group, int order) async {
+  Future addSongAudio(String nameSong, String nameSinger, String song,
+      String pathMusic, int group, int order) async {
     final songM = Song(
-        name_song: name_song,
-        name_singer: name_singer,
+        name_song: nameSong,
+        name_singer: nameSinger,
         song: song,
-        path_music: path_music,
+        path_music: pathMusic,
         group: group,
         order: order,
         date_created: DateTime.now());
     // DBSongs.instance.create(songM);
     context.read<SongsBloc>().add(AddSong(songM));
-    
   }
 
-  Future addSong(String name_song, String name_singer, String song, int group,
+  Future addSong(String nameSong, String nameSinger, String song, int group,
       int order) async {
     final songM = Song(
-        name_song: name_song,
-        name_singer: name_singer,
+        name_song: nameSong,
+        name_singer: nameSinger,
         song: song,
         group: group,
         order: order,
@@ -538,15 +553,15 @@ class _Create_songState extends State<Create_song> {
   Future getFile() async {
     // var appDir = (await getTemporaryDirectory()).path;
     // new Directory(appDir).delete(recursive: true);
-    FilePickerResult? _picker = await FilePicker.platform.pickFiles(
+    FilePickerResult? picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
       // allowedExtensions: ['mp3'],
     );
-    if (_picker != null) {
+    if (picker != null) {
       setState(() {
         isAudio = false;
         customFile = null;
-        PlatformFile file = _picker.files.first;
+        PlatformFile file = picker.files.first;
 
         print(file.name);
         print(file.bytes);
