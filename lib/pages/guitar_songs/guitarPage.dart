@@ -176,7 +176,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                   // Добавление группы
                                   context.read<SongsBloc>().add(AddGroup(
                                       GroupModel(name: controller.text)));
-
+                                  // context.read<SongsBloc>().add(LoadSongs());
                                   // Дождитесь обновления состояния
                                   await Future.delayed(
                                       const Duration(milliseconds: 300));
@@ -185,7 +185,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                   final state = context.read<SongsBloc>().state;
                                   if (state is SongsLoaded &&
                                       state.groups.isNotEmpty) {
-                                    final lastGroupId = state.groups.last.id;
+                                    final lastGroupId = state.groups.first.id;
                                     for (int i = 0;
                                         i < selectedSongs.length;
                                         i++) {
