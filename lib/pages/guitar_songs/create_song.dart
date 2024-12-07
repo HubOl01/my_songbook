@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:my_songbook/core/bloc/songs_bloc.dart';
-import 'package:my_songbook/core/styles/colors.dart';
 
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../components/player_widget.dart';
+import '../../core/bloc/songs_bloc.dart';
 import '../../core/model/groupModel.dart';
+import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
 import '../../core/utils/currentNumber.dart';
 import '../../core/model/songsModel.dart';
@@ -157,6 +157,153 @@ class _Create_songState extends State<Create_song> {
                             onTap: () {
                               TextEditingController controller =
                                   TextEditingController();
+                              Widget buildCreateGroupField(
+                                  BuildContext context) {
+                                return StatefulBuilder(
+                                    builder: (context, setState1) {
+                                  return BlocBuilder<SongsBloc, SongsState>(
+                                    builder: (context, state) {
+                                      if (state is SongsLoading) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (state is SongsLoaded) {
+                                        final groups = state.groups;
+
+                                        // Если групп 5 или больше, не показывать поле создания
+                                        if (groups.length >= 5) {
+                                          return Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              tr(LocaleKeys.info_max_group),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: context.isDarkMode
+                                                    ? Colors.white70
+                                                    : Colors.black54,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        }
+
+                                        return Container(
+                                          height: 140,
+                                          alignment: Alignment.bottomCenter,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: Column(
+                                            children: [
+                                              // Поле ввода
+                                              CustomTextField(
+                                                controller: controller,
+                                                title: tr(
+                                                    LocaleKeys.title_new_group),
+                                                onChanged: (value) =>
+                                                    setState1(() {}),
+                                              ),
+                                              // Счетчик символов
+                                              Text(
+                                                "${controller.text.length}/20",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                          .withOpacity(0.7)
+                                                      : Colors.grey[600],
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              // Кнопки подтверждения
+                                              if (controller.text.isNotEmpty)
+                                                SizedBox(
+                                                  height: 30,
+                                                  width: 200,
+                                                  child: Row(
+                                                    children: [
+                                                      // Кнопка "Создать" или "Обновить"
+                                                      Expanded(
+                                                        child: BlocListener<
+                                                            SongsBloc,
+                                                            SongsState>(
+                                                          listener:
+                                                              (context, state) {
+                                                            if (state
+                                                                    is SongsLoaded &&
+                                                                state.groups
+                                                                    .isNotEmpty) {
+                                                              final lastGroupId =
+                                                                  state.groups
+                                                                      .first.id;
+
+                                                              int lastOrderId =
+                                                                  getLastOrderIdForGroup(
+                                                                          lastGroupId!,
+                                                                          state
+                                                                              .songs)! +
+                                                                      1;
+                                                              setState(() {
+                                                                groupID =
+                                                                    lastGroupId;
+                                                                orderID =
+                                                                    lastOrderId;
+                                                              });
+                                                            }
+                                                          },
+                                                          child:
+                                                              CustomButtonSheet(
+                                                                  title: tr(
+                                                                      LocaleKeys
+                                                                          .confirmation_create),
+                                                                  onPressed:
+                                                                      () {
+                                                                    context
+                                                                        .read<
+                                                                            SongsBloc>()
+                                                                        .add(AddGroup(GroupModel(
+                                                                            name:
+                                                                                controller.text)));
+
+                                                                    Get.back();
+                                                                  }),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 15),
+                                                      // Кнопка "Отмена"
+                                                      Expanded(
+                                                        child:
+                                                            CustomButtonSheet(
+                                                          isSecond: true,
+                                                          onPressed: () {
+                                                            setState1(() {
+                                                              controller
+                                                                  .clear();
+                                                            });
+                                                          },
+                                                          title: tr(LocaleKeys
+                                                              .confirmation_cancel),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        );
+                                      } else if (state is SongsError) {
+                                        return Center(
+                                          child: Text(
+                                            "Error: ${state.message}",
+                                            style: const TextStyle(
+                                                color: Colors.red),
+                                          ),
+                                        );
+                                      }
+                                      return const SizedBox();
+                                    },
+                                  );
+                                });
+                              }
+
                               showModalBottomSheet(
                                   useSafeArea: true,
                                   isScrollControlled: true,
@@ -170,8 +317,10 @@ class _Create_songState extends State<Create_song> {
                                           initialChildSize: 0.8,
                                           expand: false,
                                           builder: (context, scrollController) {
-                                            return Column(
-                                              mainAxisSize: MainAxisSize.min,
+                                            return ListView(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              controller: scrollController,
                                               children: [
                                                 const SizedBox(
                                                   height: 20,
@@ -196,55 +345,22 @@ class _Create_songState extends State<Create_song> {
                                                 const SizedBox(
                                                   height: 10,
                                                 ),
-                                                CustomTextField(
-                                                    controller: controller,
-                                                    onChanged: (value) =>
-                                                        setState(() {
-                                                          controller.text =
-                                                              value;
-                                                        }),
-                                                    title: tr(LocaleKeys
-                                                        .title_new_group)),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                BlocListener<SongsBloc,
-                                                    SongsState>(
-                                                  listener: (context, state) {
-                                                    if (state is SongsLoaded &&
-                                                        state.groups
-                                                            .isNotEmpty) {
-                                                      final lastGroupId =
-                                                          state.groups.first.id;
-
-                                                      int lastOrderId =
-                                                          getLastOrderIdForGroup(
-                                                                  lastGroupId!,
-                                                                  state
-                                                                      .songs)! +
-                                                              1;
-                                                      setState(() {
-                                                        groupID = lastGroupId;
-                                                        orderID = lastOrderId;
-                                                      });
-                                                    }
-                                                  },
-                                                  child: CustomButtonSheet(
-                                                      title: tr(LocaleKeys
-                                                          .confirmation_create),
-                                                      onPressed: () {
-                                                        context
-                                                            .read<SongsBloc>()
-                                                            .add(AddGroup(GroupModel(
-                                                                name: controller
-                                                                    .text)));
-
-                                                        Get.back();
-                                                      }),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
+                                                // CustomTextField(
+                                                //     controller: controller,
+                                                //     onChanged: (value) =>
+                                                //         setState(() {
+                                                //           controller.text =
+                                                //               value;
+                                                //         }),
+                                                //     title: tr(LocaleKeys
+                                                //         .title_new_group)),
+                                                // const SizedBox(
+                                                //   height: 10,
+                                                // ),
+                                                buildCreateGroupField(context),
+                                                // const SizedBox(
+                                                //   height: 10,
+                                                // ),
                                                 Expanded(child: BlocBuilder<
                                                         SongsBloc, SongsState>(
                                                     builder: (context, state) {
@@ -254,54 +370,50 @@ class _Create_songState extends State<Create_song> {
                                                             CircularProgressIndicator());
                                                   } else if (state
                                                       is SongsLoaded) {
-                                                    return ListView.builder(
-                                                      controller:
-                                                          scrollController,
-                                                      physics:
-                                                          const BouncingScrollPhysics(),
-                                                      itemCount:
-                                                          state.groups.length,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              ListTile(
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        // horizontalTitleGap: 0,
-                                                        minTileHeight: 45,
-                                                        onTap: () {
-                                                          // изменение на существующую группу
-                                                          int lastOrderId =
-                                                              getLastOrderIdForGroup(
-                                                                      state
-                                                                          .groups[
-                                                                              index]
-                                                                          .id!,
-                                                                      state
-                                                                          .songs)! +
-                                                                  1;
-                                                          setState(() {
-                                                            groupID = state
-                                                                .groups[index]
-                                                                .id!;
-                                                            orderID =
-                                                                lastOrderId;
-                                                          });
-                                                          Get.back();
-                                                        },
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 20,
-                                                                right: 20,
-                                                                top: 0,
-                                                                bottom: 0),
-                                                        title: Text(state
-                                                            .groups[index]
-                                                            .name),
-                                                      ),
+                                                    return Column(
+                                                      children: state.groups
+                                                          .asMap()
+                                                          .map(
+                                                              (index, title) =>
+                                                                  MapEntry(
+                                                                      index,
+                                                                      ListTile(
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10)),
+                                                                        // horizontalTitleGap: 0,
+                                                                        minTileHeight:
+                                                                            45,
+                                                                        onTap:
+                                                                            () {
+                                                                          // изменение на существующую группу
+                                                                          int lastOrderId =
+                                                                              getLastOrderIdForGroup(state.groups[index].id!, state.songs)! + 1;
+                                                                          setState(
+                                                                              () {
+                                                                            groupID =
+                                                                                state.groups[index].id!;
+                                                                            orderID =
+                                                                                lastOrderId;
+                                                                          });
+                                                                          Get.back();
+                                                                        },
+                                                                        contentPadding: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                20,
+                                                                            right:
+                                                                                20,
+                                                                            top:
+                                                                                0,
+                                                                            bottom:
+                                                                                0),
+                                                                        title: Text(state
+                                                                            .groups[index]
+                                                                            .name),
+                                                                      )))
+                                                          .values
+                                                          .toList(),
                                                     );
                                                   } else if (state
                                                       is SongsError) {

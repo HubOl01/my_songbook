@@ -84,5 +84,6 @@ abstract class  LocaleKeys {
   static const confirmation_delete_songs_content = 'confirmation_delete_songs_content';
   static const no_data_select_songs = 'no_data_select_songs';
   static const error_loading_group = 'error_loading_group';
+  static const info_max_group = 'info_max_group';
 
 }

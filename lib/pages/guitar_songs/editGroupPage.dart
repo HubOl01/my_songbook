@@ -2,14 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:my_songbook/components/customButtonSheet.dart';
-import 'package:my_songbook/components/customTextField.dart';
-import 'package:my_songbook/core/cubit/group_id_cubit.dart';
-import 'package:my_songbook/core/cubit/index_group_cubit.dart';
-import 'package:my_songbook/core/styles/colors.dart';
 
+
+import '../../components/customButtonSheet.dart';
+import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
+import '../../core/cubit/group_id_cubit.dart';
+import '../../core/cubit/index_group_cubit.dart';
 import '../../core/model/groupModel.dart';
+import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
 
 class EditGroupPage extends StatefulWidget {
@@ -107,7 +108,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                "Вы набрали максимальное количество — 5 групп.", // Локализация текста
+                tr(LocaleKeys.info_max_group),
                 style: TextStyle(
                   fontSize: 14,
                   color: context.isDarkMode ? Colors.white70 : Colors.black54,
@@ -118,7 +119,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
           }
 
           return Container(
-            height: 150,
+            height: 140,
             alignment: Alignment.bottomCenter,
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(

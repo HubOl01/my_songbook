@@ -82,6 +82,7 @@
     "confirmation_delete_songs_title": "Удалить песни?",
     "confirmation_delete_songs_content": "Песни будут удалены, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
     "no_data_select_songs": "Нет песен в выбранной группе",
-    "error_loading_group": "Ошибка загрузки групп"
+    "error_loading_group": "Ошибка загрузки групп",
+    "info_max_group": "Вы набрали максимальное количество — 5 групп."
     
 }

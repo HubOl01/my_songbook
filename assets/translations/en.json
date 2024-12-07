@@ -81,5 +81,6 @@
     "confirmation_delete_songs_title": "Delete songs?",
     "confirmation_delete_songs_content": "The songs will be deleted and cannot be restored. Are you sure you want to delete them?",
     "no_data_select_songs": "There are no songs in the selected group",
-    "error_loading_group": "Error loading groups"
+    "error_loading_group": "Error loading groups",
+    "info_max_group": "You have scored the maximum number of 5 groups."
 }

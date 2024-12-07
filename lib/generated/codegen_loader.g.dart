@@ -97,7 +97,8 @@ class CodegenLoader extends AssetLoader{
   "confirmation_delete_songs_title": "删除歌曲？",
   "confirmation_delete_songs_content": "歌曲将被删除，无法恢复。 您确定要删除它们吗？",
   "no_data_select_songs": "所选组中没有歌曲",
-  "error_loading_group": "错误加载组"
+  "error_loading_group": "错误加载组",
+  "info_max_group": "你已经取得了5组的最大数量。"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -182,7 +183,8 @@ static const Map<String,dynamic> ru = {
   "confirmation_delete_songs_title": "Удалить песни?",
   "confirmation_delete_songs_content": "Песни будут удалены, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
   "no_data_select_songs": "Нет песен в выбранной группе",
-  "error_loading_group": "Ошибка загрузки групп"
+  "error_loading_group": "Ошибка загрузки групп",
+  "info_max_group": "Вы набрали максимальное количество — 5 групп."
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -267,7 +269,8 @@ static const Map<String,dynamic> en = {
   "confirmation_delete_songs_title": "Delete songs?",
   "confirmation_delete_songs_content": "The songs will be deleted and cannot be restored. Are you sure you want to delete them?",
   "no_data_select_songs": "There are no songs in the selected group",
-  "error_loading_group": "Error loading groups"
+  "error_loading_group": "Error loading groups",
+  "info_max_group": "You have scored the maximum number of 5 groups."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }

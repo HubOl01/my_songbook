@@ -81,5 +81,6 @@
     "confirmation_delete_songs_title": "删除歌曲？",
     "confirmation_delete_songs_content": "歌曲将被删除，无法恢复。 您确定要删除它们吗？",
     "no_data_select_songs": "所选组中没有歌曲",
-    "error_loading_group": "错误加载组"
+    "error_loading_group": "错误加载组",
+    "info_max_group": "你已经取得了5组的最大数量。"
 }
