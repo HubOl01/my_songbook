@@ -385,7 +385,7 @@ class _Create_songState extends State<Create_song> {
                 ),
                 Text(
                   tr(LocaleKeys.add_song_add_audiofile),
-                  style: const TextStyle(fontSize: 20),
+                  style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(
                   height: 10,

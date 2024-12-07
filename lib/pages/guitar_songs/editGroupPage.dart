@@ -29,7 +29,6 @@ class _EditGroupPageState extends State<EditGroupPage> {
         body: Column(
           children: [
             _buildCreateGroupField(context),
-            const SizedBox(height: 15),
             Expanded(
               child: BlocBuilder<SongsBloc, SongsState>(
                 builder: (context, state) {
@@ -37,7 +36,6 @@ class _EditGroupPageState extends State<EditGroupPage> {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is SongsLoaded) {
                     final groups = state.groups;
-
                     return ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: groups.length,
@@ -97,80 +95,119 @@ class _EditGroupPageState extends State<EditGroupPage> {
   }
 
   Widget _buildCreateGroupField(BuildContext context) {
-    return Container(
-      height: 150,
-      alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.only(bottom: 10, top: 10),
-      child: Column(
-        children: [
-          CustomTextField(
-            controller: controller,
-            title: tr(LocaleKeys.title_new_group),
-            onChanged: (value) {
-              setState(() {
-                controller.text = value;
-              });
-            },
-          ),
-          Text(
-            "${controller.text.length}/20",
-            style: TextStyle(
-              fontSize: 12,
-              color: context.isDarkMode
-                  ? Colors.white.withOpacity(.7)
-                  : Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 5),
-          controller.text.isNotEmpty
-              ? SizedBox(
-                  height: 30,
-                  width: 200,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: CustomButtonSheet(
-                          onPressed: groupModel.id == null
-                              ? () {
-                                  context.read<SongsBloc>().add(AddGroup(
-                                      GroupModel(name: controller.text)));
-                                  setState(() {
-                                    groupModel = GroupModel(name: "");
-                                    controller.clear();
-                                  });
-                                }
-                              : () {
-                                  context.read<SongsBloc>().add(UpdateGroup(
-                                      groupModel.copy(name: controller.text)));
-                                  setState(() {
-                                    groupModel = GroupModel(name: "");
-                                    controller.clear();
-                                  });
-                                },
-                          title: groupModel.id == null
-                              ? tr(LocaleKeys.confirmation_create)
-                              : tr(LocaleKeys.confirmation_changing),
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: CustomButtonSheet(
-                          isSecond: true,
-                          onPressed: () {
-                            setState(() {
-                              controller.clear();
-                              groupModel = GroupModel(name: "");
-                            });
-                          },
-                          title: tr(LocaleKeys.confirmation_cancel),
-                        ),
-                      ),
-                    ],
+    return BlocBuilder<SongsBloc, SongsState>(
+      builder: (context, state) {
+        if (state is SongsLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is SongsLoaded) {
+          final groups = state.groups;
+
+          // Если групп 5 или больше, не показывать поле создания
+          if (groups.length >= 5) {
+            return Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Вы набрали максимальное количество — 5 групп.", // Локализация текста
+                style: TextStyle(
+                  fontSize: 14,
+                  color: context.isDarkMode ? Colors.white70 : Colors.black54,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
+          }
+
+          return Container(
+            height: 150,
+            alignment: Alignment.bottomCenter,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Column(
+              children: [
+                // Поле ввода
+                CustomTextField(
+                  controller: controller,
+                  title: tr(LocaleKeys.title_new_group),
+                  onChanged: (value) => setState(() {}),
+                ),
+                // Счетчик символов
+                Text(
+                  "${controller.text.length}/20",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: context.isDarkMode
+                        ? Colors.white.withOpacity(0.7)
+                        : Colors.grey[600],
                   ),
-                )
-              : const SizedBox(),
-        ],
-      ),
+                ),
+                const SizedBox(height: 5),
+                // Кнопки подтверждения
+                if (controller.text.isNotEmpty)
+                  SizedBox(
+                    height: 30,
+                    width: 200,
+                    child: Row(
+                      children: [
+                        // Кнопка "Создать" или "Обновить"
+                        Expanded(
+                          child: CustomButtonSheet(
+                            onPressed: groupModel.id == null
+                                ? () {
+                                    // Добавление группы
+                                    context.read<SongsBloc>().add(
+                                          AddGroup(GroupModel(
+                                              name: controller.text)),
+                                        );
+                                    setState(() {
+                                      groupModel = GroupModel(name: "");
+                                      controller.clear();
+                                    });
+                                  }
+                                : () {
+                                    // Обновление группы
+                                    context.read<SongsBloc>().add(
+                                          UpdateGroup(groupModel.copy(
+                                              name: controller.text)),
+                                        );
+                                    setState(() {
+                                      groupModel = GroupModel(name: "");
+                                      controller.clear();
+                                    });
+                                  },
+                            title: groupModel.id == null
+                                ? tr(LocaleKeys.confirmation_create)
+                                : tr(LocaleKeys.confirmation_changing),
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+                        // Кнопка "Отмена"
+                        Expanded(
+                          child: CustomButtonSheet(
+                            isSecond: true,
+                            onPressed: () {
+                              setState(() {
+                                controller.clear();
+                                groupModel = GroupModel(name: "");
+                              });
+                            },
+                            title: tr(LocaleKeys.confirmation_cancel),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          );
+        } else if (state is SongsError) {
+          return Center(
+            child: Text(
+              "Error: ${state.message}",
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+        return const SizedBox();
+      },
     );
   }
 

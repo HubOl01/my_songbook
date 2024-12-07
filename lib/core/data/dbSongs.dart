@@ -67,7 +67,10 @@ class DBSongs {
     await db.execute('''
     CREATE TABLE IF NOT EXISTS $tableGroups (
       ${Groups.id} $idType,
-      ${Groups.name} $textType NOT NULL UNIQUE
+      ${Groups.name} $textType NOT NULL UNIQUE,
+      ${Groups.colorBackground} $textType,
+      ${Groups.colorForeground} $textType,
+      ${Groups.orderId} $intType
     )
   ''');
   }
@@ -92,7 +95,10 @@ class DBSongs {
       await db.execute('''
       CREATE TABLE IF NOT EXISTS $tableGroups (
         ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${Groups.name} TEXT NOT NULL UNIQUE
+        ${Groups.name} TEXT NOT NULL UNIQUE,
+        ${Groups.colorBackground} TEXT,
+        ${Groups.colorForeground} TEXT,
+        ${Groups.orderId} INTEGER DEFAULT 0
       )
     ''');
     }
