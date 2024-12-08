@@ -32,14 +32,14 @@ class CustomTextField extends StatelessWidget {
           hintText: title,
           hintStyle: TextStyle(color: context.isDarkMode ? Colors.white.withOpacity(.7) : Colors.grey[600]),
           alignLabelWithHint: true,
-          disabledBorder: OutlineInputBorder(
+          disabledBorder: const OutlineInputBorder(
               // borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             // borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             // borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
           )),

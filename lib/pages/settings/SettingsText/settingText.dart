@@ -16,7 +16,7 @@ class _SettingTextState extends State<SettingText> {
       body: ListView(
         children: [
           ListTile(
-            title: Text("Размер текста"),
+            title: const Text("Размер текста"),
             trailing: DropdownButton<String>(
               // Step 3.
               value: dropdownValue,
@@ -27,7 +27,7 @@ class _SettingTextState extends State<SettingText> {
                   value: value,
                   child: Text(
                     value,
-                    style: TextStyle(),
+                    style: const TextStyle(),
                   ),
                 );
               }).toList(),

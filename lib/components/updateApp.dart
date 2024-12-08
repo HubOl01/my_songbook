@@ -18,7 +18,7 @@ String updateError = "";
 String silentError = "";
 String immediateError = "";
 
-void updateApp(GlobalKey<NavigatorState> _navigatorKey, BuildContext context) {
+void updateApp(GlobalKey<NavigatorState> navigatorKey, BuildContext context) {
 //   RustoreUpdateClient.info().then((info) {
 //     AppMetrica.reportEvent('updateApp');
 //     availableVersionCode = info.availableVersionCode;

@@ -10,7 +10,7 @@ import '../../../core/api/news.dart';
 import 'detalNews.dart';
 
 class CardNews extends StatefulWidget {
-  CardNews({super.key});
+  const CardNews({super.key});
 
   @override
   State<CardNews> createState() => _CardNewsState();
@@ -30,9 +30,9 @@ class _CardNewsState extends State<CardNews> {
             builder: (context, snapshot) {
               return Stack(
                 children: [
-                  context.locale == Locale('ru')
-                      ? JSONValueRU().length == 0
-                          ? SizedBox()
+                  context.locale == const Locale('ru')
+                      ? JSONValueRU().isEmpty
+                          ? const SizedBox()
                           : context.isLandscape
                               ? SizedBox(
                                   height: context.width / 3.6,
@@ -90,11 +90,11 @@ class _CardNewsState extends State<CardNews> {
                                                                         color: Color(
                                                                             int.parse(JSONValueRU()[index].textColorClick!))),
                                                                   ))
-                                                              : SizedBox()
+                                                              : const SizedBox()
                                                         ],
                                                       ),
                                                     )
-                                                  : SizedBox()),
+                                                  : const SizedBox()),
                                     ),
                                   ),
                                 )
@@ -109,7 +109,7 @@ class _CardNewsState extends State<CardNews> {
                                       autoPlay: JSONValueRU().length > 1
                                           ? true
                                           : false,
-                                      autoPlayInterval: Duration(seconds: 15),
+                                      autoPlayInterval: const Duration(seconds: 15),
                                       onPageChanged: (index, reason) {
                                         setState(() {
                                           activePage = index;
@@ -167,15 +167,15 @@ class _CardNewsState extends State<CardNews> {
                                                                           int.parse(
                                                                               JSONValueRU()[index].textColorClick!))),
                                                                 ))
-                                                            : SizedBox()
+                                                            : const SizedBox()
                                                       ],
                                                     ),
                                                   )
-                                                : SizedBox()),
+                                                : const SizedBox()),
                                   ),
                                 )
-                      : JSONValueEN().length == 0
-                          ? SizedBox()
+                      : JSONValueEN().isEmpty
+                          ? const SizedBox()
                           : context.isLandscape
                               ? SizedBox(
                                   height: context.width / 3.6,
@@ -233,11 +233,11 @@ class _CardNewsState extends State<CardNews> {
                                                                         color: Color(
                                                                             int.parse(JSONValueEN()[index].textColorClick!))),
                                                                   ))
-                                                              : SizedBox()
+                                                              : const SizedBox()
                                                         ],
                                                       ),
                                                     )
-                                                  : SizedBox()),
+                                                  : const SizedBox()),
                                     ),
                                   ),
                                 )
@@ -251,7 +251,7 @@ class _CardNewsState extends State<CardNews> {
                                       autoPlay: JSONValueEN().length > 1
                                           ? true
                                           : false,
-                                      autoPlayInterval: Duration(seconds: 15),
+                                      autoPlayInterval: const Duration(seconds: 15),
                                       onPageChanged: (index, reason) {
                                         setState(() {
                                           activePage = index;
@@ -309,18 +309,18 @@ class _CardNewsState extends State<CardNews> {
                                                                           int.parse(
                                                                               JSONValueEN()[index].textColorClick!))),
                                                                 ))
-                                                            : SizedBox(),
+                                                            : const SizedBox(),
                                                       ],
                                                     ),
                                                   )
-                                                : SizedBox()),
+                                                : const SizedBox()),
                                   ),
                                 ),
 
                   // ),
                   context.isLandscape
-                      ? SizedBox()
-                      : context.locale == Locale('ru')
+                      ? const SizedBox()
+                      : context.locale == const Locale('ru')
                           ? JSONValueRU().length > 1
                               ? Positioned(
                                   bottom: 8,
@@ -340,7 +340,7 @@ class _CardNewsState extends State<CardNews> {
                                           dotHeight: 6),
                                     ),
                                   ))
-                              : SizedBox()
+                              : const SizedBox()
                           : JSONValueEN().length > 1
                               ? Positioned(
                                   bottom: 8,
@@ -360,7 +360,7 @@ class _CardNewsState extends State<CardNews> {
                                           dotHeight: 6),
                                     ),
                                   ))
-                              : SizedBox(),
+                              : const SizedBox(),
                 ],
               );
             }));

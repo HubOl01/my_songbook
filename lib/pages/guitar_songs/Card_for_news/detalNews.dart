@@ -17,7 +17,7 @@ import '../../../core/model/newsModel.dart';
 
 class DetalNews extends StatelessWidget {
   final News newData;
-  DetalNews({required this.newData});
+  DetalNews({super.key, required this.newData});
   double fontSize = 16;
   final _navigatorKey = GlobalKey<NavigatorState>();
   @override
@@ -27,7 +27,7 @@ class DetalNews extends StatelessWidget {
         title: Text(newData.name!),
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
@@ -59,12 +59,12 @@ class DetalNews extends StatelessWidget {
                               : launchUrl(Uri.parse(href),
                                   mode: LaunchMode.inAppWebView)
                           : null,
-                      padding: EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
                       styleSheet: MarkdownStyleSheet(
                           p: TextStyle(fontSize: fontSize),
-                          blockquotePadding: EdgeInsets.only(left: 12, top: 8, bottom: 8),
+                          blockquotePadding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
                           h3: TextStyle(fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize!),
-                          blockquoteDecoration: BoxDecoration(
+                          blockquoteDecoration: const BoxDecoration(
                             border: Border(
                               left: BorderSide(
                                 color: Colors.grey,
@@ -74,7 +74,7 @@ class DetalNews extends StatelessWidget {
                           )),
                       data: description,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                     )),
               if (newData.audio!.isNotEmpty || newData.audio == [])
                 for (var audio in newData.audio!)
@@ -91,7 +91,7 @@ class DetalNews extends StatelessWidget {
                             width: context.width - 50,
                             child: Text(
                               audio.nameSong ?? '',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -109,12 +109,12 @@ class DetalNews extends StatelessWidget {
                               ),
                             ),
                           ),
-                          trailing: Icon(Icons.play_circle),
+                          trailing: const Icon(Icons.play_circle),
                           paddingBottom:
                               audio.nameUrlweb!.trim() == '' ? true : false,
                         ),
                         audio.nameUrlweb!.trim() == ''
-                            ? SizedBox()
+                            ? const SizedBox()
                             : Column(
                                 children: [
                                   Divider(
@@ -139,7 +139,7 @@ class DetalNews extends StatelessWidget {
                                               : Colors.grey[600],
                                           size: 13,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 2,
                                         ),
                                         Text(
@@ -177,10 +177,10 @@ class DetalNews extends StatelessWidget {
                               'Информация о приложении (обновление)');
                           updateApp(_navigatorKey, context);
                         },
-                        child: Text("Обновиться до последней версии")),
+                        child: const Text("Обновиться до последней версии")),
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
           newData.isSupport!
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -202,12 +202,12 @@ class DetalNews extends StatelessWidget {
                                         .color),
                                 children: [
                               TextSpan(
-                                text: context.locale == Locale('ru')
+                                text: context.locale == const Locale('ru')
                                     ? "Если вы обнаружили проблему или у вас есть пожелания по улучшению нашего сервиса, свяжитесь с разработчиком "
                                     : "If you find a problem or have any suggestions for improving our service, please contact the developer ",
                               ),
                               TextSpan(
-                                text: context.locale == Locale("ru")
+                                text: context.locale == const Locale("ru")
                                     ? "по электронной почте."
                                     : "by email.",
                                 style: TextStyle(
@@ -221,7 +221,7 @@ class DetalNews extends StatelessWidget {
                             ])),
                       )),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         ],
       ),
     );

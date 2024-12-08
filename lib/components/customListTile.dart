@@ -6,7 +6,7 @@ class CustomListTile extends StatelessWidget {
   final Widget trailing;
   final bool paddingBottom;
   const CustomListTile(
-      {required this.title, required this.subtitle, required this.trailing, required this.paddingBottom});
+      {super.key, required this.title, required this.subtitle, required this.trailing, required this.paddingBottom});
 
   @override
   Widget build(BuildContext context) {

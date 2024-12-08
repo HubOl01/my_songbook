@@ -25,7 +25,7 @@ class _TranslatePageState extends State<TranslatePage> {
         title: Text(context.tr(LocaleKeys.settings_translate)),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: ClipRRect(
@@ -153,16 +153,16 @@ class _TranslatePageState extends State<TranslatePage> {
   }
 
   String language(int isLanguage, BuildContext context) {
-    var language = Locale('en').languageCode;
+    var language = const Locale('en').languageCode;
     switch (isLanguage) {
       case 0:
-        language = Locale('ru').languageCode;
+        language = const Locale('ru').languageCode;
         break;
       case 1:
-        language = Locale('en').languageCode;
+        language = const Locale('en').languageCode;
         break;
       default:
-        language = Locale('zh').languageCode;
+        language = const Locale('zh').languageCode;
         break;
     }
     return language;

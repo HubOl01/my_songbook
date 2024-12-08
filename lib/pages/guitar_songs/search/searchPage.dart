@@ -14,18 +14,18 @@ class SearchPage extends GetView<SearchPageController> {
     return Scaffold(
         appBar: AppBar(actions: [
           Container(
-            padding: EdgeInsets.only(right: 4, top: 6, bottom: 6),
+            padding: const EdgeInsets.only(right: 4, top: 6, bottom: 6),
             width: context.width - 65,
             child: TextField(
               onChanged: (value) => controller.searchSong(value.obs),
               autofocus: true,
               controller: searchController,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   decoration: TextDecoration.none),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(6),
+                contentPadding: const EdgeInsets.all(6),
                 filled: true,
                 fillColor: Colors.white.withOpacity(.3),
                 hintText: tr(LocaleKeys.search),
@@ -33,7 +33,7 @@ class SearchPage extends GetView<SearchPageController> {
                     color: Colors.white.withOpacity(.8),
                     fontSize: 18,
                     decoration: TextDecoration.none),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 prefixIconColor: Colors.white,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -58,9 +58,9 @@ class SearchPage extends GetView<SearchPageController> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Text(controller.searchedSong[index].name_song,
-                                style: TextStyle(fontSize: 16)),
+                                style: const TextStyle(fontSize: 16)),
                             Text(
-                              "${controller.searchedSong[index].name_singer}",
+                              controller.searchedSong[index].name_singer,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: context.isDarkMode

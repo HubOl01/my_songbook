@@ -69,7 +69,7 @@ class Themes {
     // bottomAppBarTheme: BottomAppBarTheme(),
     // bottomSheetTheme: BottomSheetThemeData(backgroundColor: appBarColor),
     primaryColor: appBarColorDark,
-    snackBarTheme: SnackBarThemeData(
+    snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.black87,
         actionTextColor: Colors.white,
         contentTextStyle: TextStyle(
@@ -115,8 +115,8 @@ class Themes {
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(colorFiolet),
-            foregroundColor: WidgetStatePropertyAll(Colors.white))),
-    inputDecorationTheme: InputDecorationTheme(),
+            foregroundColor: const WidgetStatePropertyAll(Colors.white))),
+    inputDecorationTheme: const InputDecorationTheme(),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: colorFiolet),
     indicatorColor: colorFiolet,
     appBarTheme: AppBarTheme(
@@ -131,7 +131,7 @@ class Themes {
     textButtonTheme: TextButtonThemeData(
         style:
             ButtonStyle(foregroundColor: WidgetStatePropertyAll(colorFiolet))),
-    dialogTheme: DialogTheme(
+    dialogTheme: const DialogTheme(
       backgroundColor: Colors.white,
       // surfaceTintColor: C
     ),
@@ -181,7 +181,7 @@ class ThemeProvider with ChangeNotifier {
     _themeMode = themeMode;
     int index = reversMode(_themeMode);
     switCH(index);
-    AppMetrica.reportEvent('ThemePage: ${_themeMode}');
+    AppMetrica.reportEvent('ThemePage: $_themeMode');
     notifyListeners();
   }
   // bool isOn = false;

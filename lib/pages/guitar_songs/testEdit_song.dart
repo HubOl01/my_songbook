@@ -34,8 +34,8 @@ class _TestEdit_songState extends State<TestEdit_song> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController song_controller = new TextEditingController();
-    song_controller.text = widget.song;
+    TextEditingController songController = TextEditingController();
+    songController.text = widget.song;
     return Scaffold(
       body: SafeArea(
         child: NestedScrollView(
@@ -76,7 +76,7 @@ class _TestEdit_songState extends State<TestEdit_song> {
                                 ]));
                           
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.delete,
                       color: Colors.red,
                     )),
@@ -88,7 +88,7 @@ class _TestEdit_songState extends State<TestEdit_song> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -100,31 +100,31 @@ class _TestEdit_songState extends State<TestEdit_song> {
                           name_singer: widget.name_singer,
                           audio: widget.audio,
                           asset: widget.asset),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
                         "${tr(LocaleKeys.edit_song_name_song)} ${widget.name_song}",
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
                       Text(
                         "${tr(LocaleKeys.edit_song_name_singer)} ${widget.name_singer}",
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                         // textAlign: TextAlign.center,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
-                        controller: song_controller,
+                        controller: songController,
                         // maxLines: 30,
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
                             label: Text(tr(LocaleKeys.edit_song_label_text_song)),
-                            contentPadding: EdgeInsets.all(8),
-                            border: OutlineInputBorder()),
+                            contentPadding: const EdgeInsets.all(8),
+                            border: const OutlineInputBorder()),
                       )
                     ],
                   ),

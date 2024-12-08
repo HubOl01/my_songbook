@@ -24,7 +24,7 @@ class GuitarDetalController extends GetxController {
 
   @override
   void onInit() {
-    print("ID ---> ${id}");
+    print("ID ---> $id");
     speedTextCo.value = speed;
     sizeTextCo.value = sizeText;
     super.onInit();

@@ -15,8 +15,8 @@ class CustomButtonSheet extends StatelessWidget {
     this.title = '',
     this.isSecond = false,
     this.isDelete = false,
-    this.height = null,
-    this.width = null,
+    this.height,
+    this.width,
     this.fontSize = 12,
   });
 

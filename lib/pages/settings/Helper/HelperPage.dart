@@ -12,9 +12,9 @@ class HelperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questions = context.locale == Locale('ru')
+    final questions = context.locale == const Locale('ru')
         ? questionsRU
-        : context.locale == Locale('zh')
+        : context.locale == const Locale('zh')
             ? questionsZH
             : questionsEN;
     return Scaffold(
@@ -46,7 +46,7 @@ class HelperPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: RichText(
                 text: TextSpan(children: [
-                  new TextSpan(
+                  TextSpan(
                     text: tr(LocaleKeys.settings_help_other_quest),
                     style: TextStyle(
                         color: Theme.of(context)
@@ -54,11 +54,11 @@ class HelperPage extends StatelessWidget {
                             .titleMedium!
                             .color),
                   ),
-                  new TextSpan(
+                  TextSpan(
                     text: tr(LocaleKeys.settings_help_other_quest_email),
-                    style: new TextStyle(
+                    style: TextStyle(
                         color: Colors.blue[700], fontWeight: FontWeight.bold),
-                    recognizer: new TapGestureRecognizer()
+                    recognizer: TapGestureRecognizer()
                       ..onTap = () {
                        sendToSupport();
                       },

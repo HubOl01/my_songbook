@@ -19,7 +19,7 @@ List<News> JSONValueRU() {
   List<News> json = [];
   for (int i = 0; i < myJson.length; i++) {
     if (myJson[i].isShow! && myJson[i].lang == "ru") {
-      print("json[${i}].isShow!: ${myJson[i].isShow}");
+      print("json[$i].isShow!: ${myJson[i].isShow}");
       json.add(myJson[i]);
     }
   }
@@ -29,7 +29,7 @@ List<News> JSONValueEN() {
   List<News> json = [];
   for (int i = 0; i < myJson.length; i++) {
     if (myJson[i].isShow! && myJson[i].lang == "en") {
-      print("json[${i}].isShow!: ${myJson[i].isShow}");
+      print("json[$i].isShow!: ${myJson[i].isShow}");
       json.add(myJson[i]);
     }
   }

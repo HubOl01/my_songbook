@@ -30,7 +30,7 @@ class _TestPageState extends State<TestPage> {
   Widget build(BuildContext context) {
     final textStyle = TextStyle(fontSize: sizeText, color: Theme.of(context).primaryTextTheme.titleMedium!.color);
     final chordStyle = TextStyle(fontSize: sizeText, color: Colors.red);
-    final _lyricsRU = '''
+    const lyricsRU = '''
 Am                  E7
 Расцветали яблони и груши 
  E7                 Am
@@ -83,7 +83,7 @@ Am                  E7
  Dm  Am    E7         Am 
 А любовь Катюша сбережет
 ''';
-    final _lyricsEN = '''
+    const lyricsEN = '''
 Apple trees and pear trees were a flower,
 River mist was rising all around.
 Young Katyusha went strolling by the hour
@@ -132,10 +132,10 @@ O’er the rocky ground.
                       setState(() {
                         autoScroll(_scrollController);
                         speed = speed;
-                        print("Speed: ${speed}");
+                        print("Speed: $speed");
                       });
                     },
-                    icon: Icon(Icons.arrow_circle_down)),
+                    icon: const Icon(Icons.arrow_circle_down)),
               ),
               Tooltip(
                 message: tr(LocaleKeys.tooltip_text_down),
@@ -146,7 +146,7 @@ O’er the rocky ground.
                         sizeTextPut(sizeText);
                       });
                     },
-                    icon: Icon(Icons.text_decrease)),
+                    icon: const Icon(Icons.text_decrease)),
               ),
               Tooltip(
                 message: tr(LocaleKeys.tooltip_text_up),
@@ -157,7 +157,7 @@ O’er the rocky ground.
                         sizeTextPut(sizeText);
                       });
                     },
-                    icon: Icon(Icons.text_increase)),
+                    icon: const Icon(Icons.text_increase)),
               ),
               Tooltip(
                 message: tr(LocaleKeys.tooltip_edit_song),
@@ -166,21 +166,21 @@ O’er the rocky ground.
                       Get.to(TestEdit_song(
                         name_song: tr(LocaleKeys.ex_name_song),
                         name_singer: tr(LocaleKeys.ex_name_singer),
-                        song: context.locale == Locale('ru')
-                            ? _lyricsRU
-                            : _lyricsEN,
+                        song: context.locale == const Locale('ru')
+                            ? lyricsRU
+                            : lyricsEN,
                         audio: "",
                         asset: true,
                         // date_created: DateTime.now(),
                       ));
                     },
-                    icon: Icon(Icons.edit_note)),
+                    icon: const Icon(Icons.edit_note)),
               ),
             ],
           ),
         ],
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -197,7 +197,7 @@ O’er the rocky ground.
                             speedPut(speed);
                           });
                         },
-                        icon: Icon(Icons.keyboard_double_arrow_up)),
+                        icon: const Icon(Icons.keyboard_double_arrow_up)),
                     Text(speed.toString()),
                     IconButton(
                         onPressed: () {
@@ -208,7 +208,7 @@ O’er the rocky ground.
                             }
                           });
                         },
-                        icon: Icon(Icons.keyboard_double_arrow_down)),
+                        icon: const Icon(Icons.keyboard_double_arrow_down)),
                   ],
                 ),
                 PlayerWidget(
@@ -217,19 +217,19 @@ O’er the rocky ground.
                   audio: "",
                   asset: true,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Text(
                   context.tr(LocaleKeys.testWarning),
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 LyricsRenderer(
                     lyrics:
-                        context.locale == Locale('ru') ? _lyricsRU : _lyricsEN,
+                        context.locale == const Locale('ru') ? lyricsRU : lyricsEN,
                     textStyle: textStyle,
                     chordStyle: chordStyle,
                     onTapChord: () {}),
@@ -237,7 +237,7 @@ O’er the rocky ground.
                 //   context.locale == Locale('ru') ? _lyricsRU : _lyricsEN,
                 //   style: textStyle,
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 )
               ],

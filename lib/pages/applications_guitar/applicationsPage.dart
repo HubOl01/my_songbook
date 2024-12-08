@@ -29,25 +29,25 @@ class ApplicationsPage extends GetView<ApplicationsController> {
           body: SafeArea(
       child: !context.isDarkMode
               ? ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: context.locale == Locale('ru')
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: context.locale == const Locale('ru')
                       ? akkordsListRU.length
                       : akkordsListEN.length,
                   itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(children: [
                           Text(
-                            context.locale == Locale('ru')
+                            context.locale == const Locale('ru')
                                 ? akkordsListRU[index].name
                                 : akkordsListEN[index].name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Image.asset(
-                            context.locale == Locale('ru')
+                            context.locale == const Locale('ru')
                                 ? akkordsListRU[index].url_image
                                 : akkordsListEN[index].url_image,
                             height: 300,
@@ -55,25 +55,25 @@ class ApplicationsPage extends GetView<ApplicationsController> {
                         ]),
                       ))
               : ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: context.locale == Locale('ru')
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: context.locale == const Locale('ru')
                       ? akkordsListDarkRU.length
                       : akkordsListDarkEN.length,
                   itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(children: [
                           Text(
-                            context.locale == Locale('ru')
+                            context.locale == const Locale('ru')
                                 ? akkordsListDarkRU[index].name
                                 : akkordsListDarkEN[index].name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 30),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Image.asset(
-                            context.locale == Locale('ru')
+                            context.locale == const Locale('ru')
                                 ? akkordsListDarkRU[index].url_image
                                 : akkordsListDarkEN[index].url_image,
                             height: 300,
