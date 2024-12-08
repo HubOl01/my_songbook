@@ -681,72 +681,71 @@ class _Edit_songState extends State<Edit_song> {
                                                       // const SizedBox(
                                                       //   height: 10,
                                                       // ),
-                                                      Expanded(child:
-                                                          BlocBuilder<SongsBloc,
-                                                                  SongsState>(
-                                                              builder: (context,
-                                                                  state) {
-                                                        if (state
-                                                            is SongsLoading) {
-                                                          return const Center(
-                                                              child:
-                                                                  CircularProgressIndicator());
-                                                        } else if (state
-                                                            is SongsLoaded) {
-                                                          return Column(
-                                        children: state.groups
-                                            .asMap()
-                                            .map((index, title) => MapEntry(
-                                                index, ListTile(
-                                                              shape: RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
-                                                              // horizontalTitleGap: 0,
-                                                              minTileHeight: 45,
-                                                              onTap: () {
-                                                                // изменение на существующую группу
-                                                                int lastOrderId = getLastOrderIdForGroup(
-                                                                        state
-                                                                            .groups[
-                                                                                index]
-                                                                            .id!,
-                                                                        state
-                                                                            .songs)! +
-                                                                    1;
-                                                                setState(() {
-                                                                  groupID = state
-                                                                      .groups[
-                                                                          index]
-                                                                      .id!;
-                                                                  orderID =
-                                                                      lastOrderId;
-                                                                });
-                                                                Get.back();
-                                                              },
-                                                              contentPadding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      left: 20,
-                                                                      right: 20,
-                                                                      top: 0,
-                                                                      bottom:
-                                                                          0),
-                                                              title: Text(state
-                                                                  .groups[index]
-                                                                  .name),
-                                                            )))
-                                            .values
-                                            .toList(),
-                                                          );
-                                                        } else if (state
-                                                            is SongsError) {
-                                                          return const SizedBox();
-                                                        } else {
-                                                          return const SizedBox();
-                                                        }
-                                                      }))
+                                                      BlocBuilder<SongsBloc,
+                                                              SongsState>(
+                                                          builder: (context,
+                                                              state) {
+                                                                                                              if (state
+                                                        is SongsLoading) {
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                                                                              } else if (state
+                                                        is SongsLoaded) {
+                                                      return Column(
+                                                                                              children: state.groups
+                                                                                                  .asMap()
+                                                                                                  .map((index, title) => MapEntry(
+                                                                                                      index, ListTile(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          // horizontalTitleGap: 0,
+                                                          minTileHeight: 45,
+                                                          onTap: () {
+                                                            // изменение на существующую группу
+                                                            int lastOrderId = getLastOrderIdForGroup(
+                                                                    state
+                                                                        .groups[
+                                                                            index]
+                                                                        .id!,
+                                                                    state
+                                                                        .songs)! +
+                                                                1;
+                                                            setState(() {
+                                                              groupID = state
+                                                                  .groups[
+                                                                      index]
+                                                                  .id!;
+                                                              orderID =
+                                                                  lastOrderId;
+                                                            });
+                                                            Get.back();
+                                                          },
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 20,
+                                                                  right: 20,
+                                                                  top: 0,
+                                                                  bottom:
+                                                                      0),
+                                                          title: Text(state
+                                                              .groups[index]
+                                                              .name),
+                                                        )))
+                                                                                                  .values
+                                                                                                  .toList(),
+                                                      );
+                                                                                                              } else if (state
+                                                        is SongsError) {
+                                                      return const SizedBox();
+                                                                                                              } else {
+                                                      return const SizedBox();
+                                                                                                              }
+                                                                                                            })
                                                     ],
                                                   );
                                                 }));

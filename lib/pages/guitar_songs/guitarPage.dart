@@ -319,75 +319,69 @@ class _GuitarPageState extends State<GuitarPage> {
                               // ),
                               buildCreateGroupField(context),
 
-                              Expanded(
-                                child: BlocBuilder<SongsBloc, SongsState>(
-                                  builder: (context, state) {
-                                    if (state is SongsLoading) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    } else if (state is SongsLoaded) {
-                                      return Column(
-                                        children: state.groups
-                                            .asMap()
-                                            .map((index, title) => MapEntry(
-                                                index,
-                                                ListTile(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  minVerticalPadding: 10,
-                                                  onTap: () {
-                                                    final groupId =
-                                                        state.groups[index].id;
-                                                    for (int i = 0;
-                                                        i <
-                                                            selectedSongs
-                                                                .length;
-                                                        i++) {
-                                                      context
-                                                          .read<SongsBloc>()
-                                                          .add(
-                                                            UpdateSong(
-                                                                selectedSongs[i]
-                                                                    .copy(
-                                                              order: i + 1,
-                                                              group: groupId,
-                                                            )),
-                                                          );
-                                                    }
-                                                    setState(() {
-                                                      isSecondButton = false;
-                                                      // indexAdd = 0;
-                                                      selectedSongsId.clear();
-                                                      selectedSongs.clear();
-                                                    });
-                                                    Get.back();
-                                                  },
-                                                  contentPadding:
-                                                      const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 20,
-                                                          vertical: 5),
-                                                  title: Text(
-                                                    state.groups[index].name,
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                )))
-                                            .values
-                                            .toList(),
-                                      );
-                                    } else if (state is SongsError) {
-                                      return Center(
-                                          child: Text(tr(
-                                              LocaleKeys.error_loading_group)));
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  },
-                                ),
+                              BlocBuilder<SongsBloc, SongsState>(
+                                builder: (context, state) {
+                                  if (state is SongsLoading) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (state is SongsLoaded) {
+                                    return Column(
+                                      children: state.groups
+                                          .asMap()
+                                          .map((index, title) => MapEntry(
+                                              index,
+                                              ListTile(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                minVerticalPadding: 10,
+                                                onTap: () {
+                                                  final groupId =
+                                                      state.groups[index].id;
+                                                  for (int i = 0;
+                                                      i < selectedSongs.length;
+                                                      i++) {
+                                                    context
+                                                        .read<SongsBloc>()
+                                                        .add(
+                                                          UpdateSong(
+                                                              selectedSongs[i]
+                                                                  .copy(
+                                                            order: i + 1,
+                                                            group: groupId,
+                                                          )),
+                                                        );
+                                                  }
+                                                  setState(() {
+                                                    isSecondButton = false;
+                                                    // indexAdd = 0;
+                                                    selectedSongsId.clear();
+                                                    selectedSongs.clear();
+                                                  });
+                                                  Get.back();
+                                                },
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20,
+                                                        vertical: 5),
+                                                title: Text(
+                                                  state.groups[index].name,
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                              )))
+                                          .values
+                                          .toList(),
+                                    );
+                                  } else if (state is SongsError) {
+                                    return Center(
+                                        child: Text(tr(
+                                            LocaleKeys.error_loading_group)));
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
                               ),
                             ],
                           );
@@ -767,7 +761,7 @@ class _GuitarPageState extends State<GuitarPage> {
   Widget _buildHeader(BuildContext context, int index) {
     switch (index) {
       case 0:
-        return CardNews();
+        return const CardNews();
       // case 1:
       //   return !isSecondButton ? _buildHorizontalGroupSelector() : SizedBox();
       case 2:

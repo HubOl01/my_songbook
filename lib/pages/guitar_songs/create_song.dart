@@ -361,7 +361,7 @@ class _Create_songState extends State<Create_song> {
                                                 // const SizedBox(
                                                 //   height: 10,
                                                 // ),
-                                                Expanded(child: BlocBuilder<
+                                                BlocBuilder<
                                                         SongsBloc, SongsState>(
                                                     builder: (context, state) {
                                                   if (state is SongsLoading) {
@@ -421,7 +421,7 @@ class _Create_songState extends State<Create_song> {
                                                   } else {
                                                     return const SizedBox();
                                                   }
-                                                }))
+                                                })
                                               ],
                                             );
                                           }));
