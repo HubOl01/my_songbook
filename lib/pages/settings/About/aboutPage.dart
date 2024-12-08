@@ -11,7 +11,7 @@ class AboutPage extends GetView<AboutController> {
 
   @override
   Widget build(BuildContext context) {
-    final _navigatorKey = GlobalKey<NavigatorState>();
+    final navigatorKey = GlobalKey<NavigatorState>();
     final customTextStyle = TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.bold,
@@ -24,14 +24,14 @@ class AboutPage extends GetView<AboutController> {
             elevation: 0,
           ),
           body: controller.isloading.value
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
+                      SizedBox(
                           width: context.width,
                           height: context.height / 2,
                           child: Column(
@@ -39,11 +39,11 @@ class AboutPage extends GetView<AboutController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
                                 child: Image.asset(
                                   "assets/icon/my_songbook.png",
                                   height: 100,
                                 ),
-                                borderRadius: BorderRadius.circular(15),
                               ),
                               Text(
                                 controller.appName.value,
@@ -51,7 +51,7 @@ class AboutPage extends GetView<AboutController> {
                               ),
                               Text(
                                 "${tr(LocaleKeys.settings_about_version)} ${controller.version.value}",
-                                style: TextStyle(fontSize: 15),
+                                style: const TextStyle(fontSize: 15),
                               ),
                             ],
                           )),
@@ -97,7 +97,7 @@ class AboutPage extends GetView<AboutController> {
                           height: 50,
                           child: ElevatedButton(
                               onPressed: () {
-                                updateApp(_navigatorKey, context);
+                                updateApp(navigatorKey, context);
                               },
                               child: Text(
                                   tr(LocaleKeys.settings_about_check_update))),

@@ -11,6 +11,7 @@ import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
+import 'Premium/premiumPage.dart';
 import 'import_exportPage/ImportExportPage.dart';
 import 'settingsController.dart';
 
@@ -104,6 +105,16 @@ class SettingsPage extends GetView<SettingsController> {
             onTap: () async {
               Get.to(const ImportExportPage());
             }),
+        context.locale == const Locale('ru')
+            ? ListTile(
+                leading: const Icon(Icons.workspace_premium),
+                title: const Text("My Songbook Pro"),
+                onTap: () {
+                  AppMetrica.reportEvent('PremiumPage');
+                  Get.to(const PremiumPage());
+                },
+              )
+            : const SizedBox(),
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: Text(tr(LocaleKeys.settings_about)),
