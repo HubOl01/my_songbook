@@ -1,5 +1,14 @@
 # <img class="icon" src="assets/icon/my_songbook.png" alt="My Songbook" width="50"/> My Songbook
 
+<p float="left" align="center">
+<a href="https://vk.com/mysongbook01">
+<img class="badges" src="assets/badges/VK.png" alt="VK Подписаться" width="100"/>
+</a>
+<a href="https://t.me/mysongbook01">
+<img class="badges" src="assets/badges/Telegram.png" alt="Telegram Подписаться" width="100"/>
+</a>
+</p>
+
 
 *Ваш мобильный песенник - все любимые песни всегда под рукой!*
 

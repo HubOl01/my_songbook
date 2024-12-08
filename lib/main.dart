@@ -3,22 +3,31 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/cubit/group_id_cubit.dart';
+import 'package:my_songbook/core/cubit/index_group_cubit.dart';
 import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
-import 'package:my_songbook/settings/Themes/Themes.dart';
-import 'package:my_songbook/settings/currentNumber.dart';
+import 'package:my_songbook/core/styles/Themes.dart';
+import 'package:my_songbook/core/utils/currentNumber.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:yandex_mobileads/mobile_ads.dart';
-import 'applications_guitar/applicationsPage.dart';
+// import 'package:yandex_mobileads/mobile_ads.dart';
+import 'core/bloc/songs_bloc.dart';
+import 'core/cubit/songs1_cubit.dart';
+import 'core/data/songsRepository.dart';
+import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
-import 'guitar_songs/guitarPage.dart';
-import 'settings/settingsPage.dart';
+import 'core/data/dbSongs.dart';
+import 'core/data/testDataSongs.dart';
+import 'pages/guitar_songs/guitarPage.dart';
+import 'pages/settings/settingsPage.dart';
 
 int? indexMode;
 Future getMode() async {
@@ -27,6 +36,14 @@ Future getMode() async {
   var box = await Hive.openBox('my_songbook');
   indexMode = box.get('themeMode') ?? 0;
   print("Mode = ${indexMode!}");
+}
+
+Future testDB() async {
+  final dbSongs = DBSongs.instance;
+  dbSongs.deleteAll();
+  for (var song in testSongs) {
+    await dbSongs.create(song);
+  }
 }
 
 void main() async {
@@ -42,9 +59,9 @@ void main() async {
     FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.fetchAndActivate();
   } catch (ex) {
-    print("Firebase ex: ${ex}");
+    print("Firebase ex: $ex");
   }
-  MobileAds.initialize();
+  // MobileAds.initialize();
   // MobileAds.setUserConsent(true);
   await dotenv.load(fileName: ".env");
   var app = await path_provider.getApplicationDocumentsDirectory();
@@ -56,18 +73,32 @@ void main() async {
   isClosedWarring = box.get("isClosedWarring") ?? false;
   isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
+  // testDB();
   try {
     AppMetrica.activate(
         AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
-    print("app_metrica: ${ex}");
+    print("app_metrica: $ex");
   }
-  runApp(EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ru'), Locale('zh')],
-      path: 'assets/translations',
-      fallbackLocale: Locale('en'),
-      assetLoader: CodegenLoader(),
-      child: MyApp()));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                SongsBloc(SongsRepository())..add(LoadSongs())),
+        BlocProvider(
+            create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
+        BlocProvider(create: (context) => GroupCubit()),
+        BlocProvider(create: (context) => IndexGroupCubit()),
+      ],
+      child: EasyLocalization(
+          supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
+          path: 'assets/translations',
+          fallbackLocale: const Locale('en'),
+          assetLoader: const CodegenLoader(),
+          child: const MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -76,18 +107,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppMetrica.reportEvent('locale: ${context.locale}');
-    return ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-        builder: (context, child) => GetMaterialApp(
-              themeMode: Provider.of<ThemeProvider>(context).themeMode,
-              theme: Themes.light,
-              darkTheme: Themes.dark,
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              home: MyHomePage(),
-            ));
+    return KeyboardDismissOnTap(
+      child: ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+          builder: (context, child) => GetMaterialApp(
+                themeMode: Provider.of<ThemeProvider>(context).themeMode,
+                theme: Themes.light,
+                darkTheme: Themes.dark,
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                home: const MyHomePage(),
+              )),
+    );
   }
 }
 
@@ -118,15 +151,15 @@ class MyHomePage extends StatelessWidget {
                     type: BottomNavigationBarType.fixed,
                     items: [
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.file_audio),
+                          icon: const Icon(LineAwesome.file_audio),
                           label: tr(LocaleKeys.bottom_song),
                           tooltip: tr(LocaleKeys.tooltip_song)),
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.guitar_solid),
+                          icon: const Icon(LineAwesome.guitar_solid),
                           label: tr(LocaleKeys.bottom_chords),
                           tooltip: tr(LocaleKeys.tooltip_chords)),
                       BottomNavigationBarItem(
-                          icon: Icon(LineAwesome.cog_solid),
+                          icon: const Icon(LineAwesome.cog_solid),
                           label: tr(LocaleKeys.bottom_settings),
                           tooltip: tr(LocaleKeys.tooltip_settings)),
                     ],
@@ -135,7 +168,11 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-List<Widget> pages = [GuitarPage(), ApplicationsPage(), SettingsPage()];
+List<Widget> pages = [
+  const GuitarPage(),
+  const ApplicationsPage(),
+  const SettingsPage()
+];
 List<String> pagesString = [
   "Песни",
   "Аккорды",
@@ -144,10 +181,13 @@ List<String> pagesString = [
 
 class MyHomePageController extends GetxController {
   var tabIndex = 0.obs;
-
   void changeTabIndex(int index) {
-    tabIndex.value = index;
     AppMetrica.reportEvent('Раздел ${pagesString[index]}');
+    // print('Раздел ${pagesString[index]}');
+    if (tabIndex == index && tabIndex == 0) {
+      controllerScroll.jumpTo(-1);
+    } else {}
+    tabIndex.value = index;
     update();
   }
 }

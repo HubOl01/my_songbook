@@ -28,6 +28,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "ru.ru_developer.my_songbook"
+    testNamespace "ru.ru_developer.my_songbook"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -75,10 +76,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    // implementation 'androidx.multidex:multidex:2.0.1'
+    // implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.play:core:1.10.3'
+implementation 'com.google.android.play:core-ktx:1.8.1'
+
+}

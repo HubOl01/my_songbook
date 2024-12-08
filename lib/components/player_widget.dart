@@ -3,7 +3,7 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:my_songbook/styles/colors.dart';
+import 'package:my_songbook/core/styles/colors.dart';
 
 class PlayerWidget extends StatefulWidget {
   const PlayerWidget({
@@ -28,7 +28,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-    var stream;
+  var stream;
 
   @override
   void initState() {
@@ -37,23 +37,30 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       AppMetrica.reportEvent('Катюша');
     } else {
       setAudio();
-      AppMetrica.reportEvent('${widget.name_song} - ${widget.name_singer} (${widget.audio})');
+      AppMetrica.reportEvent(
+          '${widget.name_song} - ${widget.name_singer} (${widget.audio})');
     }
 
     stream = audioPlayer.onPlayerStateChanged.listen((event) {
-      setState(() {
-        isPlaying = event == PlayerState.playing;
-      });
+      if (mounted) {
+        setState(() {
+          isPlaying = event == PlayerState.playing;
+        });
+      }
     });
     audioPlayer.onDurationChanged.listen((event) {
-      setState(() {
-        duration = event;
-      });
+      if (mounted) {
+        setState(() {
+          duration = event;
+        });
+      }
     });
     audioPlayer.onPositionChanged.listen((event) {
-      setState(() {
-        position = event;
-      });
+      if (mounted) {
+        setState(() {
+          position = event;
+        });
+      }
     });
     super.initState();
   }
@@ -64,8 +71,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     final urlRU = await player.load("katusha.mp3");
     final urlEN = await player.load("katushaEN.mp3");
     audioPlayer.setSourceUrl(
-      context.locale == Locale('ru') ?
-      urlRU.path : urlEN.path,
+      context.locale == const Locale('ru') ? urlRU.path : urlEN.path,
     );
   }
 
@@ -73,7 +79,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
     // final player = AudioCache(prefix: "assets/audio/");
     // final url = await player.load("kino-kukushka-mp3.mp3");
-  
+
     // File file = File(widget.audio);
     // String content = await file.readAsString(encoding: latin1);
     String encodedUrl = Uri.encodeFull(widget.audio);
@@ -84,9 +90,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   @override
   void dispose() {
     audioPlayer.stop();
-    stream.cancel();
+    stream?.cancel();
     audioPlayer.dispose();
-    stream.cancel();
     super.dispose();
   }
 
@@ -106,17 +111,18 @@ class _PlayerWidgetState extends State<PlayerWidget> {
         widget.name_song != ""
             ? Text(
                 widget.name_song,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               )
-            : SizedBox(),
+            : const SizedBox(),
         widget.name_song != ""
-            ? SizedBox(
+            ? const SizedBox(
                 height: 4,
               )
-            : SizedBox(),
+            : const SizedBox(),
         widget.name_singer != ""
-            ? Text(widget.name_singer, style: TextStyle(fontSize: 20))
-            : SizedBox(),
+            ? Text(widget.name_singer, style: const TextStyle(fontSize: 20))
+            : const SizedBox(),
         Slider(
           min: 0,
           max: duration.inSeconds.toDouble(),
@@ -129,7 +135,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           },
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
