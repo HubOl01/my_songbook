@@ -11,6 +11,8 @@ class Songs {
     path_music,
     order,
     group,
+    speedScroll,
+    fontSizeText,
     date_created,
   ];
 
@@ -21,6 +23,8 @@ class Songs {
   static const String path_music = 'path_music';
   static const String order = 'orderSong';
   static const String group = 'groupSong';
+  static const String speedScroll = 'speedScroll';
+  static const String fontSizeText = 'fontSizeText';
   static const String date_created = 'date_created';
 }
 
@@ -32,6 +36,8 @@ class Song {
   final String? path_music;
   final int? order;
   final int? group;
+  final int? speedScroll;
+  final double? fontSizeText;
   final DateTime date_created;
 
   const Song({
@@ -42,6 +48,8 @@ class Song {
     this.path_music = '',
     this.order = 0,
     this.group = 0,
+    this.speedScroll = 150,
+    this.fontSizeText = 14,
     required this.date_created,
   });
   Song copy({
@@ -52,6 +60,8 @@ class Song {
     String? path_music,
     int? order,
     int? group,
+    int? speedScroll,
+    double? fontSizeText,
     DateTime? date_created,
   }) =>
       Song(
@@ -62,6 +72,8 @@ class Song {
         path_music: path_music ?? this.path_music,
         order: order ?? this.order,
         group: group ?? this.group,
+        speedScroll: speedScroll ?? this.speedScroll,
+        fontSizeText: fontSizeText ?? this.fontSizeText,
         date_created: date_created ?? this.date_created,
       );
   static Song fromJson(Map<String, Object?> json) => Song(
@@ -72,6 +84,8 @@ class Song {
       path_music: json[Songs.path_music] as String,
       order: json[Songs.order] as int,
       group: json[Songs.group] as int,
+      speedScroll: json[Songs.speedScroll] as int,
+      fontSizeText: json[Songs.fontSizeText] as double,
       date_created: DateTime.parse(json[Songs.date_created] as String));
 
   Map<String, Object?> toJson() => {
@@ -82,6 +96,8 @@ class Song {
         Songs.path_music: path_music,
         Songs.order: order,
         Songs.group: group,
+        Songs.speedScroll: speedScroll,
+        Songs.fontSizeText: fontSizeText,
         Songs.date_created: date_created.toIso8601String(),
       };
 }

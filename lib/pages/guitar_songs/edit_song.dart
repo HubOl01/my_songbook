@@ -7,13 +7,13 @@ import 'package:icons_plus/icons_plus.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../components/player_widget.dart';
+import '../../core/bloc/song_bloc.dart';
 import '../../core/bloc/songs_bloc.dart';
 import '../../core/data/dbSongs.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/model/songsModel.dart';
 import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
-import 'guitarDetalController.dart';
 import 'works_file.dart';
 
 class Edit_song extends StatefulWidget {
@@ -231,6 +231,12 @@ class _Edit_songState extends State<Edit_song> {
     name_singerController.text = widget.songModel.name_singer;
     song_controller.text = widget.songModel.song;
     groupID = widget.songModel.group!;
+    context.read<SongsBloc>().add(LoadSongs());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -344,12 +350,6 @@ class _Edit_songState extends State<Edit_song> {
                                                 groupID,
                                                 orderID);
                                           }
-
-                                          final GuitarDetalController
-                                              guitarDetal = Get.put(
-                                                  GuitarDetalController(
-                                                      id: widget.songModel.id));
-                                          guitarDetal.refreshSong();
                                           Get.back();
                                           Get.back();
                                         } catch (ex) {
@@ -627,128 +627,112 @@ class _Edit_songState extends State<Edit_song> {
                                                 topLeft: Radius.circular(15),
                                                 topRight: Radius.circular(15))),
                                         context: context,
-                                        builder: (context) =>
-                                            DraggableScrollableSheet(
-                                                initialChildSize: 0.8,
-                                                expand: false,
-                                                builder: (context,
-                                                    scrollController) {
-                                                  return ListView(
-                                                    physics: const BouncingScrollPhysics(),
-                                                    controller: scrollController,
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal:
-                                                                    20.0),
-                                                        child: Align(
-                                                            alignment:
-                                                                AlignmentDirectional
-                                                                    .topStart,
-                                                            child: Text(
-                                                              "${tr(LocaleKeys.confirmation_group_title_select)}: ",
-                                                              style: const TextStyle(
-                                                                  fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            )),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      // CustomTextField(
-                                                      //     controller:
-                                                      //         controller,
-                                                      //     onChanged: (value) =>
-                                                      //         setState(() {
-                                                      //           controller
-                                                      //                   .text =
-                                                      //               value;
-                                                      //         }),
-                                                      //     title: tr(LocaleKeys
-                                                      //         .title_new_group)),
-                                                      // const SizedBox(
-                                                      //   height: 10,
-                                                      // ),
-                                                      buildCreateGroupField(
-                                                          context),
-                                                      // const SizedBox(
-                                                      //   height: 10,
-                                                      // ),
-                                                      BlocBuilder<SongsBloc,
-                                                              SongsState>(
-                                                          builder: (context,
-                                                              state) {
-                                                                                                              if (state
-                                                        is SongsLoading) {
-                                                      return const Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                                                                              } else if (state
-                                                        is SongsLoaded) {
-                                                      return Column(
-                                                                                              children: state.groups
-                                                                                                  .asMap()
-                                                                                                  .map((index, title) => MapEntry(
-                                                                                                      index, ListTile(
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
-                                                          // horizontalTitleGap: 0,
-                                                          minTileHeight: 45,
-                                                          onTap: () {
-                                                            // изменение на существующую группу
-                                                            int lastOrderId = getLastOrderIdForGroup(
-                                                                    state
-                                                                        .groups[
-                                                                            index]
-                                                                        .id!,
-                                                                    state
-                                                                        .songs)! +
-                                                                1;
-                                                            setState(() {
-                                                              groupID = state
-                                                                  .groups[
-                                                                      index]
-                                                                  .id!;
-                                                              orderID =
-                                                                  lastOrderId;
-                                                            });
-                                                            Get.back();
-                                                          },
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 20,
-                                                                  right: 20,
-                                                                  top: 0,
-                                                                  bottom:
-                                                                      0),
-                                                          title: Text(state
-                                                              .groups[index]
-                                                              .name),
-                                                        )))
-                                                                                                  .values
-                                                                                                  .toList(),
+                                        builder:
+                                            (context) =>
+                                                DraggableScrollableSheet(
+                                                    initialChildSize: 0.8,
+                                                    expand: false,
+                                                    builder: (context,
+                                                        scrollController) {
+                                                      return ListView(
+                                                        physics:
+                                                            const BouncingScrollPhysics(),
+                                                        controller:
+                                                            scrollController,
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        20.0),
+                                                            child: Align(
+                                                                alignment:
+                                                                    AlignmentDirectional
+                                                                        .topStart,
+                                                                child: Text(
+                                                                  "${tr(LocaleKeys.confirmation_group_title_select)}: ",
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          18,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                )),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          // CustomTextField(
+                                                          //     controller:
+                                                          //         controller,
+                                                          //     onChanged: (value) =>
+                                                          //         setState(() {
+                                                          //           controller
+                                                          //                   .text =
+                                                          //               value;
+                                                          //         }),
+                                                          //     title: tr(LocaleKeys
+                                                          //         .title_new_group)),
+                                                          // const SizedBox(
+                                                          //   height: 10,
+                                                          // ),
+                                                          buildCreateGroupField(
+                                                              context),
+                                                          // const SizedBox(
+                                                          //   height: 10,
+                                                          // ),
+                                                          BlocBuilder<SongsBloc,
+                                                                  SongsState>(
+                                                              builder: (context,
+                                                                  state) {
+                                                            if (state
+                                                                is SongsLoading) {
+                                                              return const Center(
+                                                                  child:
+                                                                      CircularProgressIndicator());
+                                                            } else if (state
+                                                                is SongsLoaded) {
+                                                              return Column(
+                                                                children: state
+                                                                    .groups
+                                                                    .asMap()
+                                                                    .map((index,
+                                                                            title) =>
+                                                                        MapEntry(
+                                                                            index,
+                                                                            ListTile(
+                                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                                              // horizontalTitleGap: 0,
+                                                                              minTileHeight: 45,
+                                                                              onTap: () {
+                                                                                // изменение на существующую группу
+                                                                                int lastOrderId = getLastOrderIdForGroup(state.groups[index].id!, state.songs)! + 1;
+                                                                                setState(() {
+                                                                                  groupID = state.groups[index].id!;
+                                                                                  orderID = lastOrderId;
+                                                                                });
+                                                                                Get.back();
+                                                                              },
+                                                                              contentPadding: const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 0),
+                                                                              title: Text(state.groups[index].name),
+                                                                            )))
+                                                                    .values
+                                                                    .toList(),
+                                                              );
+                                                            } else if (state
+                                                                is SongsError) {
+                                                              return const SizedBox();
+                                                            } else {
+                                                              return const SizedBox();
+                                                            }
+                                                          })
+                                                        ],
                                                       );
-                                                                                                              } else if (state
-                                                        is SongsError) {
-                                                      return const SizedBox();
-                                                                                                              } else {
-                                                      return const SizedBox();
-                                                                                                              }
-                                                                                                            })
-                                                    ],
-                                                  );
-                                                }));
+                                                    }));
                                   },
                                   child: const Icon(EvaIcons.folder_add),
                                 ),
@@ -872,6 +856,7 @@ class _Edit_songState extends State<Edit_song> {
         order: order);
     await DBSongs.instance.update(songM);
     context.read<SongsBloc>().add(LoadSongs());
+    context.read<SongBloc>().add(ReadSong(widget.songModel.id!));
   }
 }
 

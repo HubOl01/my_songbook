@@ -64,6 +64,8 @@
     "search": "曲目，艺术家",
     "data_export": "导出数据",
     "data_import": "导入数据",
+    "data_backup": "创建备份副本",
+    "data_restore": "从备份还原",
     "data_export_import_title": "进出口",
     "confirmation_group_title_select": "选择一个组",
     "title_new_group": "为新组命名",

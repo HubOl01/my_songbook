@@ -72,7 +72,7 @@ class SearchPage extends GetView<SearchPageController> {
                         ),
                         onTap: () {
                           Get.to(GuitarDetal(
-                            id: controller.searchedSong[index].id,
+                            id: controller.searchedSong[index].id!,
                           ));
                         },
                       );

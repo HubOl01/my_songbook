@@ -36,19 +36,23 @@ class DBSongs {
     const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const textType = 'TEXT';
     const intType = 'INTEGER DEFAULT 0';
+    const realType = 'REAL DEFAULT 14.0';
 
     // Создаем таблицу песен
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS $tableSongs (
-      ${Songs.id} $idType,
-      ${Songs.name_song} $textType,
-      ${Songs.name_singer} $textType,
-      ${Songs.song} $textType,
-      ${Songs.path_music} $textType,
-      ${Songs.date_created} $textType
-    )
-  ''');
-
+     CREATE TABLE IF NOT EXISTS $tableSongs (
+        ${Songs.id} $idType,
+        ${Songs.name_song} $textType,
+        ${Songs.name_singer} $textType,
+        ${Songs.song} $textType,
+        ${Songs.path_music} $textType,
+        ${Songs.date_created} $textType,
+        ${Songs.order} $intType,
+        ${Songs.group} $intType,
+        ${Songs.speedScroll} $intType,
+        ${Songs.fontSizeText} $realType
+      )
+    ''');
     // Убедимся, что столбцы order и group существуют
     final columns = await db.rawQuery('PRAGMA table_info($tableSongs)');
     final columnNames = columns.map((column) => column['name']).toList();
@@ -102,6 +106,25 @@ class DBSongs {
       )
     ''');
     }
+    if (oldVersion < 3) {
+      await _addColumnIfNotExists(db, Songs.speedScroll, 'INTEGER DEFAULT 150');
+      await _addColumnIfNotExists(db, Songs.fontSizeText, 'REAL DEFAULT 14.0');
+    }
+  }
+
+  Future<void> _addColumnIfNotExists(
+    Database db,
+    String columnName,
+    String columnType,
+  ) async {
+    final columns = await db.rawQuery('PRAGMA table_info($tableSongs)');
+    final columnNames = columns.map((column) => column['name']).toList();
+
+    if (!columnNames.contains(columnName)) {
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN $columnName $columnType');
+      print('Column $columnName added');
+    }
   }
 
   Future<Song> create(Song song) async {
@@ -151,6 +174,28 @@ class DBSongs {
     print("!!! Successed update id = ${song.id} !!!");
     return await db.update(tableSongs, song.toJson(),
         where: '${Songs.id} = ?', whereArgs: [song.id]);
+  }
+
+  Future<int> updateFontSizeText(int id, double fontSizeText) async {
+    final db = await instance.database;
+    print("!!! Successed update fontSizeText for id = $id !!!");
+    return await db.update(
+      tableSongs,
+      {Songs.fontSizeText: fontSizeText},
+      where: '${Songs.id} = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> updateSpeedScroll(int id, int speedScroll) async {
+    final db = await instance.database;
+    print("!!! Successed update speedScroll for id = $id !!!");
+    return await db.update(
+      tableSongs,
+      {Songs.speedScroll: speedScroll},
+      where: '${Songs.id} = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> delete(int id) async {

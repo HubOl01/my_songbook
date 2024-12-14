@@ -84,7 +84,7 @@ class SettingsPage extends GetView<SettingsController> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 2),
                             decoration: BoxDecoration(
-                              color: colorFiolet.withOpacity(.3),
+                              color: colorFiolet.withValues(alpha: .3),
                               borderRadius: BorderRadius.circular(10),
                               // border: Border.all(color: colorFiolet),
                             ),

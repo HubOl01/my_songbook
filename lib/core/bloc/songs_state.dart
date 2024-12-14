@@ -21,6 +21,25 @@ class SongsLoaded extends SongsState {
   @override
   List<Object?> get props => [songs];
 }
+// class SongLoaded extends SongsState {
+//   final Song song;
+
+//    SongLoaded(this.song);
+
+//   @override
+//   List<Object> get props => [song];
+// }
+
+
+class SongsParameterUpdated extends SongsState {
+  final String parameter;
+  final int id;
+
+  SongsParameterUpdated(this.parameter, this.id);
+
+  @override
+  List<Object> get props => [parameter, id];
+}
 
 class SongsError extends SongsState {
   final String message;
@@ -30,7 +49,6 @@ class SongsError extends SongsState {
   @override
   List<Object?> get props => [message];
 }
-
 
 class GroupsLoading extends SongsState {}
 

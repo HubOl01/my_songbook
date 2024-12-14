@@ -27,6 +27,15 @@ class UpdateSong extends SongsEvent {
   List<Object?> get props => [song];
 }
 
+// class LoadSong extends SongsEvent {
+//   final int id;
+
+//    LoadSong(this.id);
+
+//   @override
+//   List<Object> get props => [id];
+// }
+
 class DeleteSong extends SongsEvent {
   final int id;
 
@@ -46,7 +55,6 @@ class UpdateSongsOrder extends SongsEvent {
   @override
   List<Object?> get props => [updatedSongs];
 }
-
 
 class LoadGroups extends SongsEvent {}
 

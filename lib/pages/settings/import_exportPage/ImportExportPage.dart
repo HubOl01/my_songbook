@@ -68,9 +68,9 @@ class ImportExportPage extends StatelessWidget {
               }),
           ListTile(
             leading: const Icon(MingCute.file_export_line),
-            title: Text(tr(LocaleKeys.data_export)),
+            title: Text(tr(LocaleKeys.data_backup)),
             onTap: () async {
-              AppMetrica.reportEvent('data_export');
+              AppMetrica.reportEvent('data_backup');
               createBackup(context);
 
               // await createBackup();
@@ -78,9 +78,9 @@ class ImportExportPage extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(MingCute.file_import_line),
-            title: Text("${tr(LocaleKeys.data_import)} (.zip)"),
+            title: Text("${tr(LocaleKeys.data_restore)} (.zip)"),
             onTap: () async {
-              AppMetrica.reportEvent('data_import');
+              AppMetrica.reportEvent('data_restore');
               await importBackup(context);
               context.read<SongsBloc>().add(LoadSongs());
             },

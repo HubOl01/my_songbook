@@ -44,7 +44,7 @@ dependencies:
   package_info_plus: any
   intl: any
   hive: any
-  file_picker: ^8.1.4
+  file_picker: 8.1.4
   uuid: ^4.5.1
   path_provider: any
   permission_handler: ^11.3.1

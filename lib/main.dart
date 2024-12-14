@@ -19,6 +19,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
+import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
 import 'core/cubit/songs1_cubit.dart';
 import 'core/data/songsRepository.dart';
@@ -75,8 +76,8 @@ void main() async {
   await Permission.storage.request();
   // testDB();
   try {
-    AppMetrica.activate(
-        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+    // AppMetrica.activate(
+    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
     print("app_metrica: $ex");
   }
@@ -86,6 +87,8 @@ void main() async {
         BlocProvider(
             create: (context) =>
                 SongsBloc(SongsRepository())..add(LoadSongs())),
+        BlocProvider(
+            create: (context) => SongBloc(songsRepository: SongsRepository())),
         BlocProvider(
             create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
         BlocProvider(create: (context) => GroupCubit()),

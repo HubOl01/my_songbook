@@ -44,6 +44,11 @@ class _GuitarPageState extends State<GuitarPage> {
   List<int> selectedSongsId = [];
   List<Song> selectedSongs = [];
   bool isSecondButton = false;
+  @override
+  void initState() {
+    context.read<SongsBloc>().add(LoadSongs());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -618,8 +623,9 @@ class _GuitarPageState extends State<GuitarPage> {
                                                       ),
                                                     ],
                                                   ),
-                                                  subtitle:
-                                                      song.group == null ||
+                                                  subtitle: indexGroup != -1
+                                                      ? null
+                                                      : song.group == null ||
                                                               song.group == 0
                                                           ? null
                                                           : BlocBuilder<
@@ -691,7 +697,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                                               song.id!, song)
                                                       : () {
                                                           Get.to(GuitarDetal(
-                                                            id: song.id,
+                                                            id: song.id!,
                                                           ));
                                                         },
                                                 ))

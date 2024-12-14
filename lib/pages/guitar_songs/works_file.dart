@@ -2,27 +2,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-// Future<File> saveFilePermanently(PlatformFile file) async {
-//   final appStorage = await getApplicationDocumentsDirectory();
-//   final newFile = File('${appStorage.path}/${file.name}');
-//   return File(file.path!).copy(newFile.path);
-// }
-
-
-// Future<File> saveFilePermanently(PlatformFile file) async {
-//   final appStorage = await getApplicationDocumentsDirectory();
-//   final newFile = File('${appStorage.path}/${file.name}');
-//   return File(file.path!).copy(newFile.path);
-// }
 Future<File> saveFilePermanently(PlatformFile file) async {
   final appStorage = await getApplicationDocumentsDirectory();
   String fileNameWithoutExtension = getFileNameWithoutExtension(file.name);
-  String filePath = '${appStorage.path}/$fileNameWithoutExtension.${file.extension}';
+  String filePath =
+      '${appStorage.path}/$fileNameWithoutExtension.${file.extension}';
 
   int index = 1;
   while (await File(filePath).exists()) {
-    // Файл с таким именем уже существует. Увеличиваем индекс.
-    filePath = '${appStorage.path}/$fileNameWithoutExtension$index.${file.extension}';
+    filePath =
+        '${appStorage.path}/$fileNameWithoutExtension$index.${file.extension}';
     index++;
   }
 
@@ -34,49 +23,8 @@ String getFileNameWithoutExtension(String fileName) {
   if (dotIndex != -1) {
     return fileName.substring(0, dotIndex);
   }
-  return fileName; // Если расширение отсутствует или файл не имеет расширения.
+  return fileName;
 }
-// Future<String> _getUniqueFileName(String directoryPath, String originalName) async {
-//   String fileName = originalName;
-//   int index = 1;
-
-//   while (await File('$directoryPath/$fileName').exists()) {
-//     // fileName = '${originalName.replaceAll('.', '_')}_$index.${originalName.split('.').last}';
-//     // fileName = '${directoryPath}/${originalName}($index)';
-//     index++;
-//   }
-//   return fileName;
-// }
-
-
-// Future<File> saveFilePermanently(PlatformFile file) async {
-//   await Permission.storage.request();
-//   final appStorage = await getApplicationDocumentsDirectory();
-
-//   // Проверяем, существует ли каталог app_flutter
-//   // if (!await Directory(directoryPath).exists()) {
-//   //   await Directory(directoryPath).create(recursive: true);
-//   // }
-
-//   final newFileName = await _getUniqueFileName(appStorage.path, file.name);
-//   final newFile = File('$appStorage/$newFileName');
-
-//   return File(file.path!).copy(newFile.path);
-// }
-
-// Future<String> _getUniqueFileName(String directoryPath, String originalName) async {
-//   String fileName = originalName;
-//   int index = 1;
-
-//   // Проверяем, существует ли файл с таким именем
-//   while (await File('$directoryPath/$fileName').exists()) {
-//     // Если существует, добавляем индекс к имени файла
-//     fileName = '${originalName.replaceAll('.', '_')}_$index.${originalName.split('.').last}';
-//     index++;
-//   }
-
-//   return fileName;
-// }
 
 Future<void> deleteFile(String filePath) async {
   try {

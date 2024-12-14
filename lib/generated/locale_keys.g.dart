@@ -66,6 +66,8 @@ abstract class  LocaleKeys {
   static const search = 'search';
   static const data_export = 'data_export';
   static const data_import = 'data_import';
+  static const data_backup = 'data_backup';
+  static const data_restore = 'data_restore';
   static const data_export_import_title = 'data_export_import_title';
   static const confirmation_group_title_select = 'confirmation_group_title_select';
   static const title_new_group = 'title_new_group';

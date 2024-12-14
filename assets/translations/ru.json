@@ -65,6 +65,8 @@
 
     "data_export": "Экспорт данных",
     "data_import": "Импорт данных",
+    "data_backup": "Создание резервной копии",
+    "data_restore": "Восстановление из резервной копии",
     "data_export_import_title": "Импорт и экспорт",
     "confirmation_group_title_select": "Выберите группу",
     "title_new_group": "Название группы",

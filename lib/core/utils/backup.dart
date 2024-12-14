@@ -16,7 +16,9 @@ import '../../generated/locale_keys.g.dart';
 Future<void> createBackup(BuildContext context) async {
   // Запрашиваем разрешения
   await Permission.manageExternalStorage.request();
-  if (await Permission.audio.request().isGranted) {
+  await Permission.audio.request();
+  if (await Permission.manageExternalStorage.request().isGranted ||
+      await Permission.storage.request().isGranted) {
     try {
       final db = DBSongs.instance;
 
