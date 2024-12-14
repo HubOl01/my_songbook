@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/api/variable_firebase.dart';
 import '../../../core/bloc/songs_bloc.dart';
 import '../../../core/utils/backup.dart';
-import '../../../core/utils/import.dart';
+import '../../../core/utils/restore.dart';
 import '../../../generated/locale_keys.g.dart';
 
 class ImportExportPage extends StatelessWidget {
@@ -81,7 +81,7 @@ class ImportExportPage extends StatelessWidget {
             title: Text("${tr(LocaleKeys.data_restore)} (.zip)"),
             onTap: () async {
               AppMetrica.reportEvent('data_restore');
-              await importBackup(context);
+              await restoreBackup(context);
               context.read<SongsBloc>().add(LoadSongs());
             },
           ),

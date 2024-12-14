@@ -100,7 +100,9 @@ class CodegenLoader extends AssetLoader{
   "confirmation_delete_songs_content": "歌曲将被删除，无法恢复。 您确定要删除它们吗？",
   "no_data_select_songs": "所选组中没有歌曲",
   "error_loading_group": "错误加载组",
-  "info_max_group": "你已经取得了5组的最大数量。"
+  "info_max_group": "你已经取得了5组的最大数量。",
+  "confirmation_restore_content1": "你选择了",
+  "confirmation_restore_content2": "。 确认后，应用程序清除数据，从备份中恢复并重新启动。\n\n你确认你的选择吗?"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -188,7 +190,9 @@ static const Map<String,dynamic> ru = {
   "confirmation_delete_songs_content": "Песни будут удалены, и их нельзя будет восстановить. Вы уверены, что хотите удалить их?",
   "no_data_select_songs": "Нет песен в выбранной группе",
   "error_loading_group": "Ошибка загрузки групп",
-  "info_max_group": "Вы набрали максимальное количество — 5 групп."
+  "info_max_group": "Вы набрали максимальное количество — 5 групп.",
+  "confirmation_restore_content1": "Вы выбрали",
+  "confirmation_restore_content2": ". После подтверждения приложение очистит данные, восстановит их из резервной копии и перезапустит.\n\nПодтверждаете ли вы свой выбор?"
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -276,7 +280,8 @@ static const Map<String,dynamic> en = {
   "confirmation_delete_songs_content": "The songs will be deleted and cannot be restored. Are you sure you want to delete them?",
   "no_data_select_songs": "There are no songs in the selected group",
   "error_loading_group": "Error loading groups",
-  "info_max_group": "You have scored the maximum number of 5 groups."
+  "confirmation_restore_content1": "You have chosen",
+  "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }

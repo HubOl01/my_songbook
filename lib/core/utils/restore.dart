@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_songbook/core/data/dbSongs.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../pages/guitar_songs/works_file.dart';
 import '../model/groupModel.dart';
 import '../model/songsModel.dart';
@@ -298,7 +301,7 @@ import '../model/songsModel.dart';
 // }
 //-------------------------------------------
 
-Future<void> importBackup(BuildContext context) async {
+Future<void> restoreBackup(BuildContext context) async {
   try {
     // Выбор ZIP-файла
     final result = await FilePicker.platform.pickFiles(
@@ -306,8 +309,32 @@ Future<void> importBackup(BuildContext context) async {
       allowedExtensions: ['zip'],
     );
 
+    bool isCancel = false;
     if (result == null || result.files.single.path == null) {
       print('Файл не выбран');
+      return;
+    } else {
+      await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                  title: Text(tr(LocaleKeys.confirmation_title)),
+                  content: Text(
+                      "${tr(LocaleKeys.confirmation_restore_content1)} ${result.files.first.name}${tr(LocaleKeys.confirmation_restore_content2)}"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          isCancel = true;
+                          Get.back();
+                        },
+                        child: Text(tr(LocaleKeys.confirmation_no))),
+                    TextButton(
+                        onPressed: () async {
+                          Get.back();
+                        },
+                        child: Text(tr(LocaleKeys.confirmation_yes)))
+                  ]));
+    }
+    if (isCancel) {
       return;
     }
 
@@ -351,6 +378,8 @@ Future<void> importBackup(BuildContext context) async {
     // Открываем базу данных из бэкапа
     final backupDb = await openDatabase(dbBackupPath);
     final currentDb = DBSongs.instance;
+    await currentDb.deleteAll();
+    await currentDb.deleteAllGroup();
 
     // Чтение групп из файла groups.json
     final groupsFile =

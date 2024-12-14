@@ -250,6 +250,12 @@ class DBSongs {
     return await db
         .delete(tableGroups, where: '${Groups.id} = ?', whereArgs: [id]);
   }
+    Future<int> deleteAllGroup() async {
+    final db = await instance.database;
+    print("!!! Deleting all records from $tableGroups !!!");
+
+    return await db.delete(tableGroups);
+  }
 
   Future<List<Song>> readSongsByGroup(int groupId) async {
     final db = await instance.database;

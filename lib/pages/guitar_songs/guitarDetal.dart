@@ -11,6 +11,7 @@ import '../../core/bloc/song_bloc.dart';
 import '../../core/bloc/songs_bloc.dart';
 import '../../components/auto_scroll.dart';
 import '../../components/player_widget.dart';
+import '../../core/storage/storage.dart';
 import '../../core/utils/currentNumber.dart';
 import 'edit_song.dart';
 import '../../core/model/songsModel.dart';
@@ -351,7 +352,9 @@ class _GuitarDetalState extends State<GuitarDetal> {
   @override
   void initState() {
     super.initState();
-    // Инициируем загрузку песни
+    setState(() {
+      sizeTextCo = sizeText;
+    });
     context.read<SongBloc>().add(ReadSong(widget.id));
   }
 
@@ -446,7 +449,9 @@ class _GuitarDetalState extends State<GuitarDetal> {
             setState(() {
               sizeTextCo =
                   (sizeTextCo - 0.5).clamp(10.0, 24.0); // Ограничиваем диапазон
+              initSizedText();
             });
+            sizeTextPut(sizeTextCo);
           },
           icon: const Icon(Icons.text_decrease),
         ),
@@ -458,7 +463,9 @@ class _GuitarDetalState extends State<GuitarDetal> {
             setState(() {
               sizeTextCo =
                   (sizeTextCo + 0.5).clamp(10.0, 24.0); // Ограничиваем диапазон
+              initSizedText();
             });
+            sizeTextPut(sizeTextCo);
           },
           icon: const Icon(Icons.text_increase),
         ),
@@ -530,7 +537,7 @@ class _GuitarDetalState extends State<GuitarDetal> {
 
           // textStyle: TextStyle(fontSize: sizeTextCo),
           textStyle: TextStyle(
-              fontSize: sizeTextCo,
+              fontSize: sizeText,
               color: Theme.of(context).primaryTextTheme.titleMedium!.color),
           chordStyle: TextStyle(fontSize: sizeTextCo, color: Colors.red),
           // chordStyle: const TextStyle(fontSize: 14, color: Colors.red),

@@ -231,7 +231,8 @@ class _Edit_songState extends State<Edit_song> {
     name_singerController.text = widget.songModel.name_singer;
     song_controller.text = widget.songModel.song;
     groupID = widget.songModel.group!;
-    context.read<SongsBloc>().add(LoadSongs());
+    // context.read<SongsBloc>().add(LoadSongs());
+    //  context.read<SongBloc>().add(ReadSong(widget.id));
   }
 
   @override
