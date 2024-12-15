@@ -76,8 +76,8 @@ void main() async {
   await Permission.storage.request();
   // testDB();
   try {
-    // AppMetrica.activate(
-    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+    AppMetrica.activate(
+        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
     print("app_metrica: $ex");
   }

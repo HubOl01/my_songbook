@@ -234,10 +234,46 @@ class _GuitarPageState extends State<GuitarPage> {
                                                     .confirmation_create),
                                                 onPressed: () async {
                                                   // Добавление группы
-                                                  context.read<SongsBloc>().add(
-                                                      AddGroup(GroupModel(
-                                                          name: controller
-                                                              .text)));
+                                                  // context
+                                                  //     .read<
+                                                  //         SongsBloc>()
+                                                  //     .add(AddGroup(GroupModel(
+                                                  //         name:
+                                                  //             controller.text)));
+                                                  if (groups.any((group) =>
+                                                      group.name
+                                                          .toLowerCase() ==
+                                                      controller.text
+                                                          .toLowerCase())) {
+                                                    Get.snackbar(
+                                                      tr(LocaleKeys
+                                                          .error_duplicate_group_title),
+                                                      tr(LocaleKeys
+                                                          .error_duplicate_group_message),
+                                                      backgroundColor:
+                                                          Colors.red.withValues(
+                                                              alpha: 0.8),
+                                                      colorText: Colors.white,
+                                                    );
+                                                    return;
+                                                  }
+
+                                                  // Добавление группы
+                                                  // context
+                                                  //     .read<
+                                                  //         SongsBloc>()
+                                                  //     .add(
+                                                  //       AddGroup(
+                                                  //           GroupModel(name: controller.text)),
+                                                  //     );
+                                                  setState(() {
+                                                    // groupModel =
+                                                    //     GroupModel(
+                                                    //         name: "");
+                                                    controller.clear();
+                                                  });
+
+                                                  // Get.back();
                                                   // context.read<SongsBloc>().add(LoadSongs());
                                                   // Дождитесь обновления состояния
                                                   await Future.delayed(
@@ -561,6 +597,7 @@ class _GuitarPageState extends State<GuitarPage> {
             ? backgroundColorDark.withValues(alpha: .1)
             : Colors.white,
         onRefresh: () {
+          context.read<SongsBloc>().add(LoadSongs());
           return controller.refreshSongs();
         },
         child: ScrollConfiguration(
@@ -698,7 +735,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                                                       decoration:
                                                                           BoxDecoration(
                                                                         color: colorFiolet
-                                                                            .withOpacity(.3),
+                                                                            .withValues(alpha:  .3),
                                                                         borderRadius:
                                                                             BorderRadius.circular(10),
                                                                         border: Border.all(
@@ -896,7 +933,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                         horizontal: 8),
                                     decoration: BoxDecoration(
                                       color: indexGroup == i
-                                          ? colorFiolet.withOpacity(.3)
+                                          ? colorFiolet.withValues(alpha: .3)
                                           : Colors.transparent,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: colorFiolet),
@@ -1039,8 +1076,8 @@ class _GuitarPageState extends State<GuitarPage> {
         await showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: const Text("Экспорт завершён"),
-                  content: const Text("Вы хотите поделиться архивом?"),
+                  title: Text(tr(LocaleKeys.confirmation_title)),
+                  content: Text(tr(LocaleKeys.confirmation_content_export)),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -1052,7 +1089,7 @@ class _GuitarPageState extends State<GuitarPage> {
                           });
                           Navigator.pop(context);
                         },
-                        child: const Text("Нет")),
+                        child: Text(tr(LocaleKeys.confirmation_no))),
                     TextButton(
                         onPressed: () async {
                           setState(() {
@@ -1064,7 +1101,7 @@ class _GuitarPageState extends State<GuitarPage> {
                           Navigator.pop(context);
                           await Share.shareXFiles([XFile(zipFilePath)]);
                         },
-                        child: const Text("Да"))
+                        child: Text(tr(LocaleKeys.confirmation_yes)))
                   ],
                 ));
 

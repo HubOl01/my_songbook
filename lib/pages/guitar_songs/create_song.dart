@@ -208,7 +208,7 @@ class _Create_songState extends State<Create_song> {
                                                   fontSize: 12,
                                                   color: context.isDarkMode
                                                       ? Colors.white
-                                                          .withOpacity(0.7)
+                                                          .withValues(alpha: .7)
                                                       : Colors.grey[600],
                                                 ),
                                               ),
@@ -256,13 +256,40 @@ class _Create_songState extends State<Create_song> {
                                                                           .confirmation_create),
                                                                   onPressed:
                                                                       () {
+                                                                    // context
+                                                                    //     .read<
+                                                                    //         SongsBloc>()
+                                                                    //     .add(AddGroup(GroupModel(
+                                                                    //         name:
+                                                                    //             controller.text)));
+                                                                    if (groups.any((group) =>
+                                                                        group
+                                                                            .name
+                                                                            .toLowerCase() ==
+                                                                        controller
+                                                                            .text
+                                                                            .toLowerCase())) {
+                                                                      Get.snackbar(
+                                                                        tr(LocaleKeys
+                                                                            .error_duplicate_group_title),
+                                                                        tr(LocaleKeys
+                                                                            .error_duplicate_group_message),
+                                                                        backgroundColor: Colors
+                                                                            .red
+                                                                            .withValues(alpha: 0.8),
+                                                                        colorText:
+                                                                            Colors.white,
+                                                                      );
+                                                                      return;
+                                                                    }
+
+                                                                    // Добавление группы
                                                                     context
                                                                         .read<
                                                                             SongsBloc>()
                                                                         .add(AddGroup(GroupModel(
                                                                             name:
                                                                                 controller.text)));
-
                                                                     Get.back();
                                                                   }),
                                                         ),
@@ -361,8 +388,8 @@ class _Create_songState extends State<Create_song> {
                                                 // const SizedBox(
                                                 //   height: 10,
                                                 // ),
-                                                BlocBuilder<
-                                                        SongsBloc, SongsState>(
+                                                BlocBuilder<SongsBloc,
+                                                        SongsState>(
                                                     builder: (context, state) {
                                                   if (state is SongsLoading) {
                                                     return const Center(
@@ -459,7 +486,7 @@ class _Create_songState extends State<Create_song> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
                                     decoration: BoxDecoration(
-                                      color: colorFiolet.withOpacity(.3),
+                                      color: colorFiolet.withValues(alpha: .3),
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(color: colorFiolet),
                                     ),

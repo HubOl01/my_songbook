@@ -92,5 +92,7 @@ abstract class  LocaleKeys {
   static const confirmation_restore_content2 = 'confirmation_restore_content2';
   static const confirmation_import_content1 = 'confirmation_import_content1';
   static const confirmation_import_content2 = 'confirmation_import_content2';
+  static const error_duplicate_group_title = 'error_duplicate_group_title';
+  static const error_duplicate_group_message = 'error_duplicate_group_message';
 
 }

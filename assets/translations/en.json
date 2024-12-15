@@ -88,5 +88,8 @@
     "confirmation_restore_content1": "You have chosen",
     "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?",
     "confirmation_import_content1": "You have chosen",
-    "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?"  
+    "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?",
+    "error_duplicate_group_title": "Duplicate Group",
+    "error_duplicate_group_message": "A group with this name already exists.",
+    "info_max_group": "You have scored the maximum number of 5 groups."
 }

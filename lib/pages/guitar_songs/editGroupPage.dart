@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
@@ -45,7 +44,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         return ListTile(
                           tileColor:
                               context.read<IndexGroupCubit>().state == index
-                                  ? colorFiolet.withOpacity(.1)
+                                  ? colorFiolet.withValues(alpha: .1)
                                   : null,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -136,23 +135,93 @@ class _EditGroupPageState extends State<EditGroupPage> {
                   style: TextStyle(
                     fontSize: 12,
                     color: context.isDarkMode
-                        ? Colors.white.withOpacity(0.7)
+                        ? Colors.white.withValues(alpha: .7)
                         : Colors.grey[600],
                   ),
                 ),
                 const SizedBox(height: 5),
                 // Кнопки подтверждения
+                // if (controller.text.isNotEmpty)
+                //   SizedBox(
+                //     height: 30,
+                //     width: 200,
+                //     child: Row(
+                //       children: [
+                //         // Кнопка "Создать" или "Обновить"
+                //         Expanded(
+                //           child: CustomButtonSheet(
+                //             onPressed: groupModel.id == null
+                //                 ? () {
+                //                     // Добавление группы
+                //                     context.read<SongsBloc>().add(
+                //                           AddGroup(GroupModel(
+                //                               name: controller.text)),
+                //                         );
+                //                     setState(() {
+                //                       groupModel = GroupModel(name: "");
+                //                       controller.clear();
+                //                     });
+                //                   }
+                //                 : () {
+                //                     // Обновление группы
+                //                     context.read<SongsBloc>().add(
+                //                           UpdateGroup(groupModel.copy(
+                //                               name: controller.text)),
+                //                         );
+                //                     setState(() {
+                //                       groupModel = GroupModel(name: "");
+                //                       controller.clear();
+                //                     });
+                //                   },
+                //             title: groupModel.id == null
+                //                 ? tr(LocaleKeys.confirmation_create)
+                //                 : tr(LocaleKeys.confirmation_changing),
+                //           ),
+                //         ),
+                //         const SizedBox(width: 15),
+                //         // Кнопка "Отмена"
+                //         Expanded(
+                //           child: CustomButtonSheet(
+                //             isSecond: true,
+                //             onPressed: () {
+                //               setState(() {
+                //                 controller.clear();
+                //                 groupModel = GroupModel(name: "");
+                //               });
+                //             },
+                //             title: tr(LocaleKeys.confirmation_cancel),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
                 if (controller.text.isNotEmpty)
                   SizedBox(
                     height: 30,
                     width: 200,
                     child: Row(
                       children: [
-                        // Кнопка "Создать" или "Обновить"
                         Expanded(
                           child: CustomButtonSheet(
                             onPressed: groupModel.id == null
                                 ? () {
+                                    // Проверка на дубликат
+                                    if (groups.any((group) =>
+                                        group.name.toLowerCase() ==
+                                        controller.text.toLowerCase())) {
+                                      Get.snackbar(
+                                        tr(LocaleKeys
+                                            .error_duplicate_group_title),
+                                        tr(LocaleKeys
+                                            .error_duplicate_group_message),
+                                        // snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor:
+                                            Colors.red.withValues(alpha: .8),
+                                        colorText: Colors.white,
+                                      );
+                                      return;
+                                    }
+
                                     // Добавление группы
                                     context.read<SongsBloc>().add(
                                           AddGroup(GroupModel(
@@ -164,6 +233,24 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                     });
                                   }
                                 : () {
+                                    // Проверка на дубликат при обновлении
+                                    if (groups.any((group) =>
+                                        group.name.toLowerCase() ==
+                                            controller.text.toLowerCase() &&
+                                        group.id != groupModel.id)) {
+                                      Get.snackbar(
+                                        tr(LocaleKeys
+                                            .error_duplicate_group_title),
+                                        tr(LocaleKeys
+                                            .error_duplicate_group_message),
+                                        // snackPosition: SnackPosition.BOTTOM,
+                                        backgroundColor:
+                                            Colors.red.withValues(alpha: .8),
+                                        colorText: Colors.white,
+                                      );
+                                      return;
+                                    }
+
                                     // Обновление группы
                                     context.read<SongsBloc>().add(
                                           UpdateGroup(groupModel.copy(
@@ -180,7 +267,6 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           ),
                         ),
                         const SizedBox(width: 15),
-                        // Кнопка "Отмена"
                         Expanded(
                           child: CustomButtonSheet(
                             isSecond: true,

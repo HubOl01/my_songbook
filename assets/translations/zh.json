@@ -89,5 +89,7 @@
     "confirmation_restore_content1": "你选择了",
     "confirmation_restore_content2": "。 确认后，应用程序清除数据，从备份中恢复并重新启动。\n\n你确认你的选择吗?",
     "confirmation_import_content1": "你选择了",
-    "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？"
+    "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？",
+    "error_duplicate_group_title": "重复组",
+    "error_duplicate_group_message": "具有该名称的乐队已经存在。"
 }

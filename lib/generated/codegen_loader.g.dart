@@ -105,7 +105,9 @@ class CodegenLoader extends AssetLoader{
   "confirmation_restore_content1": "你选择了",
   "confirmation_restore_content2": "。 确认后，应用程序清除数据，从备份中恢复并重新启动。\n\n你确认你的选择吗?",
   "confirmation_import_content1": "你选择了",
-  "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？"
+  "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？",
+  "error_duplicate_group_title": "重复组",
+  "error_duplicate_group_message": "具有该名称的乐队已经存在。"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -198,7 +200,9 @@ static const Map<String,dynamic> ru = {
   "confirmation_restore_content1": "Вы выбрали",
   "confirmation_restore_content2": ". После подтверждения приложение очистит данные, восстановит их из резервной копии и перезапустит.\n\nПодтверждаете ли вы свой выбор?",
   "confirmation_import_content1": "Вы выбрали",
-  "confirmation_import_content2": ". После подтверждения выбранные песни будут добавлены в базу данных и система будет перезапущена.\n\nЖелаете ли вы выполнить импорт?"
+  "confirmation_import_content2": ". После подтверждения выбранные песни будут добавлены в базу данных и система будет перезапущена.\n\nЖелаете ли вы выполнить импорт?",
+  "error_duplicate_group_title": "Повторяющаяся группа",
+  "error_duplicate_group_message": "Группа с таким названием уже существует."
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -290,7 +294,10 @@ static const Map<String,dynamic> en = {
   "confirmation_restore_content1": "You have chosen",
   "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?",
   "confirmation_import_content1": "You have chosen",
-  "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?"
+  "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?",
+  "error_duplicate_group_title": "Duplicate Group",
+  "error_duplicate_group_message": "A group with this name already exists.",
+  "info_max_group": "You have scored the maximum number of 5 groups."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }

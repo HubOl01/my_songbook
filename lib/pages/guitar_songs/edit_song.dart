@@ -522,8 +522,8 @@ class _Edit_songState extends State<Edit_song> {
                                                         color: context
                                                                 .isDarkMode
                                                             ? Colors.white
-                                                                .withOpacity(
-                                                                    0.7)
+                                                                .withValues(
+                                                                    alpha: 0.7)
                                                             : Colors.grey[600],
                                                       ),
                                                     ),
@@ -574,6 +574,19 @@ class _Edit_songState extends State<Edit_song> {
                                                                             .confirmation_create),
                                                                         onPressed:
                                                                             () {
+                                                                          if (groups.any((group) =>
+                                                                              group.name.toLowerCase() ==
+                                                                              controller.text.toLowerCase())) {
+                                                                            Get.snackbar(
+                                                                              tr(LocaleKeys.error_duplicate_group_title),
+                                                                              tr(LocaleKeys.error_duplicate_group_message),
+                                                                              backgroundColor: Colors.red.withValues(alpha: 0.8),
+                                                                              colorText: Colors.white,
+                                                                            );
+                                                                            return;
+                                                                          }
+
+                                                                          // Добавление группы
                                                                           context
                                                                               .read<SongsBloc>()
                                                                               .add(AddGroup(GroupModel(name: controller.text)));

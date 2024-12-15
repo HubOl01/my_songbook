@@ -24,7 +24,7 @@ class DBSongs {
     final path = join(dbPath, filePath);
 
     final db = await openDatabase(path,
-        version: 2, onCreate: _createDB, onUpgrade: _updateDB);
+        version: 3, onCreate: _createDB, onUpgrade: _updateDB);
 
     final version = await db.getVersion();
     print("Current database version: $version");
@@ -46,11 +46,7 @@ class DBSongs {
         ${Songs.name_singer} $textType,
         ${Songs.song} $textType,
         ${Songs.path_music} $textType,
-        ${Songs.date_created} $textType,
-        ${Songs.order} $intType,
-        ${Songs.group} $intType,
-        ${Songs.speedScroll} $intType,
-        ${Songs.fontSizeText} $realType
+        ${Songs.date_created} $textType
       )
     ''');
     // Убедимся, что столбцы order и group существуют
@@ -107,23 +103,19 @@ class DBSongs {
     ''');
     }
     if (oldVersion < 3) {
-      await _addColumnIfNotExists(db, Songs.speedScroll, 'INTEGER DEFAULT 150');
-      await _addColumnIfNotExists(db, Songs.fontSizeText, 'REAL DEFAULT 14.0');
-    }
-  }
+      // Добавление новых столбцов speedScroll и fontSizeText
+      final columns = await db.rawQuery('PRAGMA table_info($tableSongs)');
+      final columnNames = columns.map((column) => column['name']).toList();
 
-  Future<void> _addColumnIfNotExists(
-    Database db,
-    String columnName,
-    String columnType,
-  ) async {
-    final columns = await db.rawQuery('PRAGMA table_info($tableSongs)');
-    final columnNames = columns.map((column) => column['name']).toList();
+      if (!columnNames.contains(Songs.speedScroll)) {
+        await db.execute(
+            'ALTER TABLE $tableSongs ADD COLUMN ${Songs.speedScroll} INTEGER DEFAULT 150');
+      }
 
-    if (!columnNames.contains(columnName)) {
-      await db.execute(
-          'ALTER TABLE $tableSongs ADD COLUMN $columnName $columnType');
-      print('Column $columnName added');
+      if (!columnNames.contains(Songs.fontSizeText)) {
+        await db.execute(
+            'ALTER TABLE $tableSongs ADD COLUMN ${Songs.fontSizeText} REAL DEFAULT 14.0');
+      }
     }
   }
 
@@ -250,7 +242,8 @@ class DBSongs {
     return await db
         .delete(tableGroups, where: '${Groups.id} = ?', whereArgs: [id]);
   }
-    Future<int> deleteAllGroup() async {
+
+  Future<int> deleteAllGroup() async {
     final db = await instance.database;
     print("!!! Deleting all records from $tableGroups !!!");
 
