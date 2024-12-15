@@ -355,6 +355,7 @@ class _GuitarDetalState extends State<GuitarDetal> {
     setState(() {
       sizeTextCo = sizeText;
     });
+    initSpeed();
     context.read<SongBloc>().add(ReadSong(widget.id));
   }
 
@@ -393,22 +394,43 @@ class _GuitarDetalState extends State<GuitarDetal> {
           physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: BlocBuilder<SongBloc, SongState>(
-              builder: (context, songState) {
-                if (songState is SongLoaded) {
-                  return _buildSongContent(songState.song, context);
-                } else if (songState is SongsLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (songState is SongError) {
-                  return Center(
-                    child: Text(
-                      'Error: ${songState.message}',
-                      style: const TextStyle(color: Colors.black),
-                    ),
-                  );
-                }
-                return const Center(child: Text("No Data"));
-              },
+            child: Column(
+              children: [
+                BlocBuilder<SongBloc, SongState>(
+                  builder: (context, songState) {
+                    if (songState is SongLoaded) {
+                      return _buildSongSpeedScroll(songState.song, context);
+                    } else if (songState is SongsLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (songState is SongError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${songState.message}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+                BlocBuilder<SongBloc, SongState>(
+                  builder: (context, songState) {
+                    if (songState is SongLoaded) {
+                      return _buildSongContent(songState.song, context);
+                    } else if (songState is SongsLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (songState is SongError) {
+                      return Center(
+                        child: Text(
+                          'Error: ${songState.message}',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }
+                    return const Center(child: Text("No Data"));
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -491,38 +513,6 @@ class _GuitarDetalState extends State<GuitarDetal> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(tr(LocaleKeys.text_speed_scroll)),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  speedTextCo += 5;
-                  context
-                      .read<SongBloc>()
-                      .add(UpdateSpeedScroll(song.id!, speedTextCo));
-                });
-                initSpeed();
-              },
-              icon: const Icon(Icons.keyboard_double_arrow_up),
-            ),
-            Text(speedTextCo.toString()),
-            IconButton(
-              onPressed: () {
-                if (speedTextCo > 0) {
-                  setState(() {
-                    speedTextCo -= 5;
-                    context
-                        .read<SongBloc>()
-                        .add(UpdateSpeedScroll(song.id!, speedTextCo));
-                  });
-                  initSpeed();
-                }
-              },
-              icon: const Icon(Icons.keyboard_double_arrow_down),
-            ),
-          ],
-        ),
         if (song.path_music != null && song.path_music!.isNotEmpty)
           PlayerWidget(
             name_song: song.name_song,
@@ -544,6 +534,44 @@ class _GuitarDetalState extends State<GuitarDetal> {
           onTapChord: (String chord) => print('Pressed chord: $chord'),
         ),
         const SizedBox(height: 12),
+      ],
+    );
+  }
+
+  Widget _buildSongSpeedScroll(Song song, BuildContext context) {
+    speedTextCo = song.speedScroll ?? 0;
+    return Row(
+      children: [
+        Text(tr(LocaleKeys.text_speed_scroll)),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              speedTextCo += 5;
+            });
+            context
+                .read<SongBloc>()
+                .add(UpdateSpeedScroll(song.id!, speedTextCo));
+            speedPut(speedTextCo);
+            initSpeed();
+          },
+          icon: const Icon(Icons.keyboard_double_arrow_up),
+        ),
+        Text(speedTextCo.toString()),
+        IconButton(
+          onPressed: () {
+            if (speedTextCo > 0) {
+              setState(() {
+                speedTextCo -= 5;
+              });
+              context
+                  .read<SongBloc>()
+                  .add(UpdateSpeedScroll(song.id!, speedTextCo));
+              speedPut(speedTextCo);
+              initSpeed();
+            }
+          },
+          icon: const Icon(Icons.keyboard_double_arrow_down),
+        ),
       ],
     );
   }

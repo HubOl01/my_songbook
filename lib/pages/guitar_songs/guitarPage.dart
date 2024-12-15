@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:archive/archive_io.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:my_songbook/core/utils/export.dart';
+import 'package:path/path.dart' hide context;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
@@ -149,12 +155,12 @@ class _GuitarPageState extends State<GuitarPage> {
                   onPressed: () async {
                     createExport(context, selectedSongs);
                     AppMetrica.reportEvent('data_export');
-                    setState(() {
-                      isSecondButton = false;
-                      // indexAdd = 0;
-                      selectedSongsId.clear();
-                      selectedSongs.clear();
-                    });
+                    // setState(() {
+                    //   isSecondButton = false;
+                    //   // indexAdd = 0;
+                    //   selectedSongsId.clear();
+                    //   selectedSongs.clear();
+                    // });
 
                     // await createBackup();
                   },
@@ -981,6 +987,95 @@ class _GuitarPageState extends State<GuitarPage> {
                 ]),
             onTap: () => Get.to(const TestPage()))
         : const SizedBox();
+  }
+
+  Future<void> createExport(
+      BuildContext context, List<Song> selectedSongs) async {
+    await Permission.storage.request();
+
+    if (await Permission.storage.request().isGranted) {
+      try {
+        final tempDir = await getTemporaryDirectory();
+        final backupDir = Directory(join(tempDir.path, 'export'));
+        if (!backupDir.existsSync()) backupDir.createSync();
+
+        final songsJson = selectedSongs.map((song) => song.toJson()).toList();
+        final songsFilePath = join(backupDir.path, 'selected_songs.json');
+        final songsFile = File(songsFilePath);
+        songsFile.writeAsStringSync(jsonEncode(songsJson));
+
+        for (final song in selectedSongs) {
+          if (song.path_music != null && song.path_music!.isNotEmpty) {
+            final musicFile = File(song.path_music!);
+            if (musicFile.existsSync()) {
+              final musicBackupPath =
+                  join(backupDir.path, basename(song.path_music!));
+              await musicFile.copy(musicBackupPath);
+            } else {
+              print("Файл аудио не найден: ${song.path_music}");
+            }
+          } else {
+            print("У песни отсутствует путь к аудио: ${song.song}");
+          }
+        }
+
+        final downloadsDir = Directory('/storage/emulated/0/Download');
+        if (!downloadsDir.existsSync()) {
+          throw Exception("Папка загрузок недоступна");
+        }
+
+        String zipFilePath = join(downloadsDir.path, 'songs_export.zip');
+        int counter = 1;
+        while (File(zipFilePath).existsSync()) {
+          zipFilePath = join(downloadsDir.path, 'songs_export_$counter.zip');
+          counter++;
+        }
+
+        final encoder = ZipFileEncoder();
+        encoder.create(zipFilePath);
+        encoder.addDirectory(backupDir);
+        encoder.close();
+
+        await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text("Экспорт завершён"),
+                  content: const Text("Вы хотите поделиться архивом?"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isSecondButton = false;
+                            // indexAdd = 0;
+                            selectedSongsId.clear();
+                            selectedSongs.clear();
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Нет")),
+                    TextButton(
+                        onPressed: () async {
+                          setState(() {
+                            isSecondButton = false;
+                            // indexAdd = 0;
+                            selectedSongsId.clear();
+                            selectedSongs.clear();
+                          });
+                          Navigator.pop(context);
+                          await Share.shareXFiles([XFile(zipFilePath)]);
+                        },
+                        child: const Text("Да"))
+                  ],
+                ));
+
+        print('Export создан: $zipFilePath');
+      } catch (e, stacktrace) {
+        print('Ошибка экспорта: $e');
+        print('Stacktrace: $stacktrace');
+      }
+    } else {
+      print('Разрешения отклонены');
+    }
   }
 }
 

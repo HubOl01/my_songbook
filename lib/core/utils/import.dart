@@ -315,29 +315,32 @@ Future<void> importSongs(BuildContext context) async {
       return;
     } else {
       await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                  title: Text(tr(LocaleKeys.confirmation_title)),
-                  content: Text(
-                      "${tr(LocaleKeys.confirmation_import_content1)} ${result.files.first.name}${tr(LocaleKeys.confirmation_import_content2)}"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          isCancel = true;
-                          Get.back();
-                        },
-                        child: Text(tr(LocaleKeys.confirmation_no))),
-                    TextButton(
-                        onPressed: () async {
-                          Get.back();
-                        },
-                        child: Text(tr(LocaleKeys.confirmation_yes)))
-                  ]));
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(tr(LocaleKeys.confirmation_title)),
+          content: Text(
+              "${tr(LocaleKeys.confirmation_import_content1)} ${result.files.first.name}${tr(LocaleKeys.confirmation_import_content2)}"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                isCancel = true;
+                Get.back();
+              },
+              child: Text(tr(LocaleKeys.confirmation_no)),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(tr(LocaleKeys.confirmation_yes)),
+            ),
+          ],
+        ),
+      );
     }
-    if (isCancel) {
-      return;
-    }
+    if (isCancel) return;
 
+    // Путь к выбранному ZIP-файлу
     final zipFilePath = result.files.single.path!;
     final zipFile = File(zipFilePath);
 
@@ -365,65 +368,27 @@ Future<void> importSongs(BuildContext context) async {
       }
     }
 
-    // Найти файл базы данных (.db) в распакованной директории
-    final dbFile = unzipDir
+    // Чтение songs.json из архива
+    final songsFile = unzipDir
         .listSync(recursive: true)
         .whereType<File>()
         .firstWhere(
-          (file) => file.path.endsWith('.db'),
-          orElse: () => throw Exception('Файл базы данных не найден в архиве'),
+          (file) => file.path.endsWith('songs.json'),
+          orElse: () => throw Exception('Файл songs.json не найден в архиве'),
         );
-    final dbBackupPath = dbFile.path;
 
-    // Открываем базу данных из бэкапа
-    final backupDb = await openDatabase(dbBackupPath);
+    final songsJson = jsonDecode(songsFile.readAsStringSync()) as List;
+
     final currentDb = DBSongs.instance;
 
-    // Чтение групп из файла groups.json
-    final groupsFile =
-        unzipDir.listSync(recursive: true).whereType<File>().firstWhere(
-              (file) => file.path.endsWith('groups.json'),
-              orElse: () => File(''), // Возвращаем пустой объект File
-            );
-
-    final Map<int, int> groupIdMap =
-        {}; // Сопоставление старых ID групп с новыми
-
-    if (groupsFile.path.isNotEmpty) {
-      print('Файл групп найден: ${groupsFile.path}');
-      final groupsJson = jsonDecode(groupsFile.readAsStringSync()) as List;
-      for (var groupData in groupsJson) {
-        final group = GroupModel.fromJson(groupData);
-
-        // Проверяем существование группы
-        final existingGroup = await currentDb.findGroupByName(group.name);
-        if (existingGroup != null) {
-          groupIdMap[group.id!] = existingGroup.id!;
-        } else {
-          // Если группы нет, добавляем её и сохраняем новое ID
-          final newGroup = await currentDb.createGroup(group);
-          groupIdMap[group.id!] = newGroup.id!;
-        }
-      }
-    } else {
-      print('Файл groups.json не найден, группы не будут импортированы.');
-    }
-
-    // Чтение песен из бэкапа
-    final List<Map<String, dynamic>> backupSongs =
-        await backupDb.query(tableSongs); // Таблица с песнями
-    await backupDb.close();
-
-    // Счетчик для orderSong
-    final Map<int, int> orderCounters = {};
-
-    for (var songData in backupSongs) {
-      // Создаем копию данных песни для модификации
+    for (var songData in songsJson) {
+      // Преобразование данных песни
       var songDataNew = Map<String, dynamic>.from(songData);
 
+      // Обработка аудиофайлов
       final songPath = songData[Songs.path_music] as String?;
       if (songPath != null && songPath.isNotEmpty) {
-        final fileName = basename(songPath); // Извлекаем только имя файла
+        final fileName = basename(songPath);
         final matchingFiles = unzipDir.listSync(recursive: true).where((file) {
           return file is File && basename(file.path) == fileName;
         });
@@ -435,9 +400,7 @@ Future<void> importSongs(BuildContext context) async {
 
         final originalFile = matchingFiles.first as File;
 
-        print('Файл найден: ${originalFile.path}');
-
-        // Копируем музыкальный файл в директорию приложения
+        // Копируем аудиофайл в постоянное хранилище
         final newMusicFile = await saveFilePermanently(
           PlatformFile(
             path: originalFile.path,
@@ -446,33 +409,18 @@ Future<void> importSongs(BuildContext context) async {
           ),
         );
 
-        // Обновляем путь в копии данных песни
         songDataNew[Songs.path_music] = newMusicFile.path;
       } else {
         print("Путь к файлу музыки отсутствует");
       }
 
-      // Проверяем наличие группы у песни
-      final oldGroupId = songData[Songs.group] as int?;
-      if (oldGroupId != null &&
-          oldGroupId != 0 &&
-          groupIdMap.containsKey(oldGroupId)) {
-        final newGroupId = groupIdMap[oldGroupId]!;
-        songDataNew[Songs.group] = newGroupId;
+      // Установка groupSong в 0, если группа не указана
+      songDataNew[Songs.group] = 0;
 
-        // Устанавливаем orderSong
-        orderCounters[newGroupId] = (orderCounters[newGroupId] ?? 0) + 1;
-        songDataNew[Songs.order] = orderCounters[newGroupId]!;
-      } else {
-        // Если группы нет, задаем значения по умолчанию
-        songDataNew[Songs.group] = 0;
-        songDataNew[Songs.order] = 0;
-      }
-
-      // Убираем первичный ключ, чтобы избежать конфликта
+      // Удаление ID для предотвращения конфликтов
       songDataNew[Songs.id] = null;
 
-      // Вставляем новую запись в базу данных
+      // Вставка песни в базу данных
       await currentDb.insertSong(songDataNew);
     }
 

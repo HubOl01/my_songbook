@@ -30,6 +30,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     try {
       await songsRepository.deleteSong(event.id);
       emit(SongDeleted());
+      add(ReadSong(event.id));
     } catch (e) {
       emit(SongError(e.toString()));
     }
@@ -39,6 +40,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     try {
       await songsRepository.updateSong(event.updatedSong);
       emit(SongUpdated());
+      add(ReadSong(event.updatedSong.id!));
     } catch (e) {
       emit(SongError(e.toString()));
     }
@@ -49,6 +51,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     try {
       await songsRepository.updateFontSize(event.songId, event.fontSize);
       emit(SongUpdated());
+      add(ReadSong(event.songId));
     } catch (e) {
       emit(SongError(e.toString()));
     }
@@ -59,6 +62,7 @@ class SongBloc extends Bloc<SongEvent, SongState> {
     try {
       await songsRepository.updateSpeedScroll(event.songId, event.speedScroll);
       emit(SongUpdated());
+      add(ReadSong(event.songId));
     } catch (e) {
       emit(SongError(e.toString()));
     }

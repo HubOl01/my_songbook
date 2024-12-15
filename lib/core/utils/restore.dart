@@ -329,6 +329,7 @@ Future<void> restoreBackup(BuildContext context) async {
                         child: Text(tr(LocaleKeys.confirmation_no))),
                     TextButton(
                         onPressed: () async {
+                          await deleteAllMp3Files();
                           Get.back();
                         },
                         child: Text(tr(LocaleKeys.confirmation_yes)))
@@ -482,5 +483,31 @@ Future<void> restoreBackup(BuildContext context) async {
     Restart.restartApp();
   } catch (e) {
     print('Ошибка при импорте данных: $e');
+  }
+}
+
+Future<void> deleteAllMp3Files() async {
+  try {
+    // Получаем путь к директории
+    final appDocsDir = await getApplicationDocumentsDirectory();
+    final directory = Directory(appDocsDir.path);
+
+    // Получаем список всех файлов в директории и её подпапках
+    final files = directory.listSync(recursive: true);
+
+    // Отфильтровываем файлы с расширением .mp3
+    final mp3Files = files.whereType<File>().where((file) {
+      return file.path.endsWith('.mp3');
+    });
+
+    // Удаляем каждый .mp3 файл
+    for (var mp3File in mp3Files) {
+      print('Удаление файла: ${mp3File.path}');
+      await mp3File.delete();
+    }
+
+    print('Все .mp3 файлы удалены');
+  } catch (e) {
+    print('Ошибка при удалении .mp3 файлов: $e');
   }
 }
