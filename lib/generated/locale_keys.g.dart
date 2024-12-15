@@ -20,6 +20,7 @@ abstract class  LocaleKeys {
   static const edit_song_name_song = 'edit_song_name_song';
   static const edit_song_name_singer = 'edit_song_name_singer';
   static const confirmation_title = 'confirmation_title';
+  static const confirmation_content_export = 'confirmation_content_export';
   static const confirmation_content_backup = 'confirmation_content_backup';
   static const edit_song_confirmation_content_delete = 'edit_song_confirmation_content_delete';
   static const edit_song_confirmation_content_update = 'edit_song_confirmation_content_update';
@@ -89,5 +90,7 @@ abstract class  LocaleKeys {
   static const info_max_group = 'info_max_group';
   static const confirmation_restore_content1 = 'confirmation_restore_content1';
   static const confirmation_restore_content2 = 'confirmation_restore_content2';
+  static const confirmation_import_content1 = 'confirmation_import_content1';
+  static const confirmation_import_content2 = 'confirmation_import_content2';
 
 }

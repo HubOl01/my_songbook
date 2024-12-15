@@ -18,7 +18,8 @@
     "edit_song_name_song": "Song title: ",
     "edit_song_name_singer": "Artist: ",
     "confirmation_title": "Confirmation",
-    "confirmation_content_backup": "The export was successfully completed and saved in the downloads folder in the archive songs_backup.zip.\n\nWould you like to share the data?",
+    "confirmation_content_export": "The export was successfully completed and saved in the downloads folder in the songs_export.zip archive.\n\nDo you want to share the data?",
+    "confirmation_content_backup": "The backup was successfully completed and saved in the downloads folder in the songs_backup.zip archive.\n\n Do you want to share the data?",
     "edit_song_confirmation_content_delete": "Do you want to delete?",
     "edit_song_confirmation_content_update": "Do you want to save?",
     "confirmation_yes": "Yes",
@@ -85,5 +86,7 @@
     "no_data_select_songs": "There are no songs in the selected group",
     "error_loading_group": "Error loading groups",
     "confirmation_restore_content1": "You have chosen",
-    "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?"
+    "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?",
+    "confirmation_import_content1": "You have chosen",
+    "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?"  
 }

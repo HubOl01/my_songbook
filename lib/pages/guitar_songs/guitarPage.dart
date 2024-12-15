@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/utils/export.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
@@ -102,8 +107,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                       const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
                                     color: context.isDarkMode
-                                        ? colorFiolet.withOpacity(.3)
-                                        : Colors.white.withOpacity(.2),
+                                        ? colorFiolet.withValues(alpha: .3)
+                                        : Colors.white.withValues(alpha: .2),
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                         color: context.isDarkMode
@@ -131,6 +136,29 @@ class _GuitarPageState extends State<GuitarPage> {
               ),
         actions: isSecondButton
             ? [
+                IconButton(
+                  // minLeadingWidth: 25,
+                  tooltip: tr(LocaleKeys.data_export),
+                  icon: SvgPicture.asset("assets/icon/clarity_export-line.svg",
+                      alignment: Alignment.center,
+                      width: 25,
+                      colorFilter: ColorFilter.mode(
+                          Theme.of(context).appBarTheme.foregroundColor!,
+                          BlendMode.srcIn)),
+                  // title: Text(tr(LocaleKeys.data_export)),
+                  onPressed: () async {
+                    createExport(context, selectedSongs);
+                    AppMetrica.reportEvent('data_export');
+                    setState(() {
+                      isSecondButton = false;
+                      // indexAdd = 0;
+                      selectedSongsId.clear();
+                      selectedSongs.clear();
+                    });
+
+                    // await createBackup();
+                  },
+                ),
                 IconButton(
                   onPressed: () {
                     TextEditingController controller = TextEditingController();
@@ -180,7 +208,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: context.isDarkMode
-                                            ? Colors.white.withOpacity(0.7)
+                                            ? Colors.white
+                                                .withValues(alpha: 0.7)
                                             : Colors.grey[600],
                                       ),
                                     ),
@@ -523,7 +552,7 @@ class _GuitarPageState extends State<GuitarPage> {
       body: RefreshIndicator(
         color: colorFiolet,
         backgroundColor: context.isDarkMode
-            ? backgroundColorDark.withOpacity(.1)
+            ? backgroundColorDark.withValues(alpha: .1)
             : Colors.white,
         onRefresh: () {
           return controller.refreshSongs();
@@ -532,7 +561,7 @@ class _GuitarPageState extends State<GuitarPage> {
             behavior: const ScrollBehavior(),
             child: GlowingOverscrollIndicator(
                 axisDirection: AxisDirection.down,
-                color: colorFiolet.withOpacity(0.3),
+                color: colorFiolet.withValues(alpha: 0.3),
                 child: ListView(controller: controllerScroll, children: [
                   _buildHeader(context, 0),
                   // _buildHeader(context, 1),

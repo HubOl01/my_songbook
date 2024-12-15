@@ -81,6 +81,11 @@ class Themes {
         selectedIconTheme: IconThemeData(color: colorFiolet),
         unselectedIconTheme: IconThemeData(color: textColorDark)),
     iconTheme: IconThemeData(color: textColorDark),
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(colorFiolet),
+            overlayColor:
+                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .3)))),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       foregroundColor: textColorDark,
       backgroundColor: backgroundColorDark,
@@ -128,9 +133,12 @@ class Themes {
                 bottomLeft: Radius.circular(10),
                 bottomRight: Radius.circular(10)))),
     primaryColor: Colors.white,
+    // iconTheme: const IconThemeData(color: Colors.),
     textButtonTheme: TextButtonThemeData(
-        style:
-            ButtonStyle(foregroundColor: WidgetStatePropertyAll(colorFiolet))),
+        style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(colorFiolet),
+            overlayColor:
+                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .3)))),
     dialogTheme: const DialogTheme(
       backgroundColor: Colors.white,
       // surfaceTintColor: C

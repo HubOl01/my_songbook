@@ -34,7 +34,8 @@ class CodegenLoader extends AssetLoader{
   "edit_song_name_song": "歌名: ",
   "edit_song_name_singer": "艺术家: ",
   "confirmation_title": "确认",
-  "confirmation_content_backup": "导出已成功完成并保存在存档songs_backup的downloads文件夹中。拉链。\n\n您想分享这些数据吗？",
+  "confirmation_content_export": "导出已成功完成并保存在songs_export的downloads文件夹中。zip存档。\n\n要共享数据吗？",
+  "confirmation_content_backup": "备份已成功完成并保存在songs_backup的downloads文件夹中。zip存档。\n\n要共享数据吗？",
   "edit_song_confirmation_content_delete": "要删除吗？",
   "edit_song_confirmation_content_update": "你想存钱吗？",
   "confirmation_yes": "是的",
@@ -102,7 +103,9 @@ class CodegenLoader extends AssetLoader{
   "error_loading_group": "错误加载组",
   "info_max_group": "你已经取得了5组的最大数量。",
   "confirmation_restore_content1": "你选择了",
-  "confirmation_restore_content2": "。 确认后，应用程序清除数据，从备份中恢复并重新启动。\n\n你确认你的选择吗?"
+  "confirmation_restore_content2": "。 确认后，应用程序清除数据，从备份中恢复并重新启动。\n\n你确认你的选择吗?",
+  "confirmation_import_content1": "你选择了",
+  "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -124,7 +127,8 @@ static const Map<String,dynamic> ru = {
   "edit_song_name_song": "Название песни: ",
   "edit_song_name_singer": "Исполнитель: ",
   "confirmation_title": "Подтверждение",
-  "confirmation_content_backup": "Экспорт успешно выполнен и сохранен в папке downloads в архиве songs_backup.zip.\n\nЖелаете ли вы поделиться данными?",
+  "confirmation_content_export": "Экспорт успешно выполнен и сохранен в папке downloads в архиве songs_export.zip.\n\nЖелаете ли вы поделиться данными?",
+  "confirmation_content_backup": "Бэкап успешно выполнен и сохранен в папке downloads в архиве songs_backup.zip.\n\nЖелаете ли вы поделиться данными?",
   "edit_song_confirmation_content_delete": "Вы хотите удалить?",
   "edit_song_confirmation_content_update": "Вы хотите сохранить?",
   "confirmation_yes": "Да",
@@ -192,7 +196,9 @@ static const Map<String,dynamic> ru = {
   "error_loading_group": "Ошибка загрузки групп",
   "info_max_group": "Вы набрали максимальное количество — 5 групп.",
   "confirmation_restore_content1": "Вы выбрали",
-  "confirmation_restore_content2": ". После подтверждения приложение очистит данные, восстановит их из резервной копии и перезапустит.\n\nПодтверждаете ли вы свой выбор?"
+  "confirmation_restore_content2": ". После подтверждения приложение очистит данные, восстановит их из резервной копии и перезапустит.\n\nПодтверждаете ли вы свой выбор?",
+  "confirmation_import_content1": "Вы выбрали",
+  "confirmation_import_content2": ". После подтверждения выбранные песни будут добавлены в базу данных и система будет перезапущена.\n\nЖелаете ли вы выполнить импорт?"
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -214,7 +220,8 @@ static const Map<String,dynamic> en = {
   "edit_song_name_song": "Song title: ",
   "edit_song_name_singer": "Artist: ",
   "confirmation_title": "Confirmation",
-  "confirmation_content_backup": "The export was successfully completed and saved in the downloads folder in the archive songs_backup.zip.\n\nWould you like to share the data?",
+  "confirmation_content_export": "The export was successfully completed and saved in the downloads folder in the songs_export.zip archive.\n\nDo you want to share the data?",
+  "confirmation_content_backup": "The backup was successfully completed and saved in the downloads folder in the songs_backup.zip archive.\n\n Do you want to share the data?",
   "edit_song_confirmation_content_delete": "Do you want to delete?",
   "edit_song_confirmation_content_update": "Do you want to save?",
   "confirmation_yes": "Yes",
@@ -281,7 +288,9 @@ static const Map<String,dynamic> en = {
   "no_data_select_songs": "There are no songs in the selected group",
   "error_loading_group": "Error loading groups",
   "confirmation_restore_content1": "You have chosen",
-  "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?"
+  "confirmation_restore_content2": ". After confirmation, the application will clear the data, restore it from the backup and restart.\n\nDo you confirm your choice?",
+  "confirmation_import_content1": "You have chosen",
+  "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }
