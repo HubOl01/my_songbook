@@ -231,21 +231,24 @@ class _Create_songState extends State<Create_song> {
                                                                     is SongsLoaded &&
                                                                 state.groups
                                                                     .isNotEmpty) {
-                                                              final lastGroupId =
-                                                                  state.groups
-                                                                      .first.id;
-
-                                                              int lastOrderId =
-                                                                  getLastOrderIdForGroup(
-                                                                          lastGroupId!,
-                                                                          state
-                                                                              .songs)! +
-                                                                      1;
                                                               setState(() {
-                                                                groupID =
-                                                                    lastGroupId;
-                                                                orderID =
-                                                                    lastOrderId;
+                                                                setState1(() {
+                                                                  final lastGroupId =
+                                                                      state
+                                                                          .groups
+                                                                          .first
+                                                                          .id;
+
+                                                                  int lastOrderId =
+                                                                      getLastOrderIdForGroup(
+                                                                              lastGroupId!,
+                                                                              state.songs)! +
+                                                                          1;
+                                                                  groupID =
+                                                                      lastGroupId;
+                                                                  orderID =
+                                                                      lastOrderId;
+                                                                });
                                                               });
                                                             }
                                                           },

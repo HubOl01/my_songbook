@@ -549,22 +549,23 @@ class _Edit_songState extends State<Edit_song> {
                                                                       state
                                                                           .groups
                                                                           .isNotEmpty) {
-                                                                    final lastGroupId =
-                                                                        state
+                                                                    setState(
+                                                                        () {
+                                                                      setState1(
+                                                                          () {
+                                                                        final lastGroupId = state
                                                                             .groups
                                                                             .first
                                                                             .id;
 
-                                                                    int lastOrderId =
-                                                                        getLastOrderIdForGroup(lastGroupId!,
-                                                                                state.songs)! +
-                                                                            1;
-                                                                    setState(
-                                                                        () {
-                                                                      groupID =
-                                                                          lastGroupId;
-                                                                      orderID =
-                                                                          lastOrderId;
+                                                                        int lastOrderId =
+                                                                            getLastOrderIdForGroup(lastGroupId!, state.songs)! +
+                                                                                1;
+                                                                        groupID =
+                                                                            lastGroupId;
+                                                                        orderID =
+                                                                            lastOrderId;
+                                                                      });
                                                                     });
                                                                   }
                                                                 },

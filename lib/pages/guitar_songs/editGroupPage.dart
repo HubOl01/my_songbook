@@ -309,47 +309,49 @@ class _EditGroupPageState extends State<EditGroupPage> {
       ),
       context: context,
       builder: (contextModal) {
-        return Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 5),
-              Text(
-                tr(LocaleKeys.confirmation_delete_group_title),
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                "${tr(LocaleKeys.confirmation_delete_group_content1)} \"${group.name}\" ${tr(LocaleKeys.confirmation_delete_group_content2)}",
-                style: const TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomButtonSheet(
-                width: context.width,
-                height: 40,
-                onPressed: () {
-                  context.read<SongsBloc>().add(DeleteGroup(group.id!));
-                  Navigator.pop(context);
-                },
-                title: tr(LocaleKeys.confirmation_delete),
-                fontSize: 14,
-              ),
-              const SizedBox(height: 10),
-              CustomButtonSheet(
-                width: context.width,
-                height: 40,
-                isSecond: true,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                title: tr(LocaleKeys.confirmation_cancel),
-                fontSize: 14,
-              ),
-            ],
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 5),
+                Text(
+                  tr(LocaleKeys.confirmation_delete_group_title),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "${tr(LocaleKeys.confirmation_delete_group_content1)} \"${group.name}\" ${tr(LocaleKeys.confirmation_delete_group_content2)}",
+                  style: const TextStyle(fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                CustomButtonSheet(
+                  width: context.width,
+                  height: 40,
+                  onPressed: () {
+                    context.read<SongsBloc>().add(DeleteGroup(group.id!));
+                    Navigator.pop(context);
+                  },
+                  title: tr(LocaleKeys.confirmation_delete),
+                  fontSize: 14,
+                ),
+                const SizedBox(height: 10),
+                CustomButtonSheet(
+                  width: context.width,
+                  height: 40,
+                  isSecond: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  title: tr(LocaleKeys.confirmation_cancel),
+                  fontSize: 14,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -366,47 +368,49 @@ class _EditGroupPageState extends State<EditGroupPage> {
       ),
       context: context,
       builder: (contextModal) {
-        return Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // const SizedBox(height: 10),
-              Text(
-                group.name,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomButtonSheet(
-                width: context.width,
-                height: 40,
-                // isSecond: true,
-                onPressed: () {
-                  setState(() {
-                    controller.text = group.name;
-                    groupModel = group;
-                  });
-                  Navigator.pop(context);
-                },
-                title: tr(LocaleKeys.confirmation_changing),
-                fontSize: 14,
-              ),
-              const SizedBox(height: 10),
-              CustomButtonSheet(
-                width: context.width,
-                height: 40,
-                isDelete: true,
-                onPressed: () {
-                  Navigator.pop(context);
-                  _showDeleteConfirmation(context, group);
-                },
-                title: tr(LocaleKeys.confirmation_delete),
-                fontSize: 14,
-              ),
-              const SizedBox(height: 10),
-            ],
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // const SizedBox(height: 10),
+                Text(
+                  group.name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                CustomButtonSheet(
+                  width: context.width,
+                  height: 40,
+                  // isSecond: true,
+                  onPressed: () {
+                    setState(() {
+                      controller.text = group.name;
+                      groupModel = group;
+                    });
+                    Navigator.pop(context);
+                  },
+                  title: tr(LocaleKeys.confirmation_changing),
+                  fontSize: 14,
+                ),
+                const SizedBox(height: 10),
+                CustomButtonSheet(
+                  width: context.width,
+                  height: 40,
+                  isDelete: true,
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showDeleteConfirmation(context, group);
+                  },
+                  title: tr(LocaleKeys.confirmation_delete),
+                  fontSize: 14,
+                ),
+                // const SizedBox(height: 5),
+              ],
+            ),
           ),
         );
       },

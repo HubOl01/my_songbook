@@ -44,8 +44,13 @@ class GroupModel {
         colorForeground: colorForeground ?? this.colorForeground,
         orderId: orderId ?? this.orderId,
       );
-  static GroupModel fromJson(Map<String, Object?> json) =>
-      GroupModel(id: json[Groups.id] as int, name: json[Groups.name] as String);
+  static GroupModel fromJson(Map<String, Object?> json) => GroupModel(
+        id: json[Groups.id] as int,
+        name: json[Groups.name] as String,
+        colorBackground: json[Groups.colorBackground] as String?,
+        colorForeground: json[Groups.colorForeground] as String?,
+        orderId: json[Groups.orderId] as int?,
+      );
 
   Map<String, Object?> toJson() => {
         Groups.id: id,

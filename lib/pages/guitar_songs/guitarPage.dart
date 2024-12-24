@@ -259,13 +259,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                                   }
 
                                                   // Добавление группы
-                                                  // context
-                                                  //     .read<
-                                                  //         SongsBloc>()
-                                                  //     .add(
-                                                  //       AddGroup(
-                                                  //           GroupModel(name: controller.text)),
-                                                  //     );
+                                                  context.read<SongsBloc>().add(
+                                                        AddGroup(GroupModel(
+                                                            name: controller
+                                                                .text)),
+                                                      );
                                                   setState(() {
                                                     // groupModel =
                                                     //     GroupModel(
@@ -274,7 +272,9 @@ class _GuitarPageState extends State<GuitarPage> {
                                                   });
 
                                                   // Get.back();
-                                                  // context.read<SongsBloc>().add(LoadSongs());
+                                                  // context
+                                                  //     .read<SongsBloc>()
+                                                  //     .add(LoadSongs());
                                                   // Дождитесь обновления состояния
                                                   await Future.delayed(
                                                       const Duration(
@@ -499,76 +499,78 @@ class _GuitarPageState extends State<GuitarPage> {
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15))),
                         context: context,
-                        builder: (modalContext) => Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    selectedSongsId.length == 1
-                                        ? tr(LocaleKeys
-                                            .confirmation_delete_song_title)
-                                        : tr(LocaleKeys
-                                            .confirmation_delete_songs_title),
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    selectedSongsId.length == 1
-                                        ? tr(LocaleKeys
-                                            .confirmation_delete_song_content)
-                                        : tr(LocaleKeys
-                                            .confirmation_delete_songs_content),
-                                    style: const TextStyle(
+                        builder: (modalContext) => SafeArea(
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      selectedSongsId.length == 1
+                                          ? tr(LocaleKeys
+                                              .confirmation_delete_song_title)
+                                          : tr(LocaleKeys
+                                              .confirmation_delete_songs_title),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text(
+                                      selectedSongsId.length == 1
+                                          ? tr(LocaleKeys
+                                              .confirmation_delete_song_content)
+                                          : tr(LocaleKeys
+                                              .confirmation_delete_songs_content),
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    CustomButtonSheet(
+                                      width: context.width,
+                                      height: 40,
+                                      onPressed: () {
+                                        for (int id in selectedSongsId) {
+                                          context
+                                              .read<SongsBloc>()
+                                              .add(DeleteSong(id));
+                                        }
+                                        setState(() {
+                                          isSecondButton = false;
+                                          // indexAdd = 0;
+                                          selectedSongsId.clear();
+                                          selectedSongs.clear();
+                                        });
+                                        Get.back();
+                                      },
+                                      title: tr(LocaleKeys.confirmation_delete),
                                       fontSize: 14,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  CustomButtonSheet(
-                                    width: context.width,
-                                    height: 40,
-                                    onPressed: () {
-                                      for (int id in selectedSongsId) {
-                                        context
-                                            .read<SongsBloc>()
-                                            .add(DeleteSong(id));
-                                      }
-                                      setState(() {
-                                        isSecondButton = false;
-                                        // indexAdd = 0;
-                                        selectedSongsId.clear();
-                                        selectedSongs.clear();
-                                      });
-                                      Get.back();
-                                    },
-                                    title: tr(LocaleKeys.confirmation_delete),
-                                    fontSize: 14,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomButtonSheet(
-                                    width: context.width,
-                                    height: 40,
-                                    isSecond: true,
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    title: tr(LocaleKeys.confirmation_cancel),
-                                    fontSize: 14,
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    CustomButtonSheet(
+                                      width: context.width,
+                                      height: 40,
+                                      isSecond: true,
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      title: tr(LocaleKeys.confirmation_cancel),
+                                      fontSize: 14,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ));
                   },
@@ -734,8 +736,9 @@ class _GuitarPageState extends State<GuitarPage> {
                                                                               5),
                                                                       decoration:
                                                                           BoxDecoration(
-                                                                        color: colorFiolet
-                                                                            .withValues(alpha:  .3),
+                                                                        color: colorFiolet.withValues(
+                                                                            alpha:
+                                                                                .3),
                                                                         borderRadius:
                                                                             BorderRadius.circular(10),
                                                                         border: Border.all(
@@ -1028,9 +1031,10 @@ class _GuitarPageState extends State<GuitarPage> {
 
   Future<void> createExport(
       BuildContext context, List<Song> selectedSongs) async {
-    await Permission.storage.request();
-
-    if (await Permission.storage.request().isGranted) {
+    await Permission.manageExternalStorage.request();
+    await Permission.audio.request();
+    if (await Permission.manageExternalStorage.request().isGranted ||
+        await Permission.storage.request().isGranted) {
       try {
         final tempDir = await getTemporaryDirectory();
         final backupDir = Directory(join(tempDir.path, 'export'));

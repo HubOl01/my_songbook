@@ -46,6 +46,10 @@ class DBSongs {
         ${Songs.name_singer} $textType,
         ${Songs.song} $textType,
         ${Songs.path_music} $textType,
+        ${Songs.speedScroll} INTEGER DEFAULT 150,
+        ${Songs.fontSizeText} $realType,
+        ${Songs.order} $int,
+        ${Songs.group} $int,
         ${Songs.date_created} $textType
       )
     ''');
@@ -65,14 +69,14 @@ class DBSongs {
 
     // Создаем таблицу групп, если она не существует
     await db.execute('''
-    CREATE TABLE IF NOT EXISTS $tableGroups (
-      ${Groups.id} $idType,
-      ${Groups.name} $textType NOT NULL UNIQUE,
-      ${Groups.colorBackground} $textType,
-      ${Groups.colorForeground} $textType,
-      ${Groups.orderId} $intType
-    )
-  ''');
+  CREATE TABLE IF NOT EXISTS $tableGroups (
+    ${Groups.id} $idType,
+    ${Groups.name} $textType NOT NULL UNIQUE,
+    ${Groups.colorBackground} $textType DEFAULT "#8C5AFF",
+    ${Groups.colorForeground} $textType DEFAULT "#8C5AFF",
+    ${Groups.orderId} $intType DEFAULT -1
+  )
+''');
   }
 
   Future _updateDB(Database db, int oldVersion, int newVersion) async {
@@ -90,17 +94,15 @@ class DBSongs {
         await db.execute(
             'ALTER TABLE $tableSongs ADD COLUMN ${Songs.group} INTEGER DEFAULT 0');
       }
-
-      // Создаем таблицу групп, если она не существует
       await db.execute('''
-      CREATE TABLE IF NOT EXISTS $tableGroups (
-        ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-        ${Groups.name} TEXT NOT NULL UNIQUE,
-        ${Groups.colorBackground} TEXT,
-        ${Groups.colorForeground} TEXT,
-        ${Groups.orderId} INTEGER DEFAULT 0
-      )
-    ''');
+    CREATE TABLE IF NOT EXISTS $tableGroups (
+      ${Groups.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+      ${Groups.name} TEXT NOT NULL UNIQUE,
+      ${Groups.colorBackground} TEXT DEFAULT "#8C5AFF",
+      ${Groups.colorForeground} TEXT DEFAULT "#8C5AFF",
+      ${Groups.orderId} INTEGER DEFAULT -1
+    )
+  ''');
     }
     if (oldVersion < 3) {
       // Добавление новых столбцов speedScroll и fontSizeText
@@ -115,6 +117,25 @@ class DBSongs {
       if (!columnNames.contains(Songs.fontSizeText)) {
         await db.execute(
             'ALTER TABLE $tableSongs ADD COLUMN ${Songs.fontSizeText} REAL DEFAULT 14.0');
+      }
+      // Обновление таблицы групп для добавления значений по умолчанию
+      final groupColumns = await db.rawQuery('PRAGMA table_info($tableGroups)');
+      final groupColumnNames =
+          groupColumns.map((column) => column['name']).toList();
+
+      if (!groupColumnNames.contains(Groups.colorBackground)) {
+        await db.execute(
+            'ALTER TABLE $tableGroups ADD COLUMN ${Groups.colorBackground} TEXT DEFAULT "#8C5AFF"');
+      }
+
+      if (!groupColumnNames.contains(Groups.colorForeground)) {
+        await db.execute(
+            'ALTER TABLE $tableGroups ADD COLUMN ${Groups.colorForeground} TEXT DEFAULT "#8C5AFF"');
+      }
+
+      if (!groupColumnNames.contains(Groups.orderId)) {
+        await db.execute(
+            'ALTER TABLE $tableGroups ADD COLUMN ${Groups.orderId} INTEGER DEFAULT -1');
       }
     }
   }
@@ -135,6 +156,26 @@ class DBSongs {
       return Song.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
+    }
+  }
+
+  Future<Map<String, dynamic>?> readSongByName(String name) async {
+    final db = await instance.database; // Получение экземпляра базы данных
+
+    // Выполнение SQL-запроса для поиска песни по имени
+    final results = await db.query(
+      tableSongs, // Таблица с песнями
+      where: '${Songs.name_song} = ?', // Условие поиска
+      whereArgs: [name], // Аргументы для условия
+      limit: 1,
+    );
+
+    if (results.isNotEmpty) {
+      // Если запись найдена, возвращаем её
+      return results.first;
+    } else {
+      // Если запись не найдена, возвращаем null
+      return null;
     }
   }
 
@@ -212,6 +253,31 @@ class DBSongs {
     return group.copy(id: id);
   }
 
+  Future<GroupModel> readGroup(int id) async {
+    final db = await instance.database;
+    final maps = await db.query(tableGroups,
+        columns: Groups.values, where: '${Groups.id} = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      return GroupModel.fromJson(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
+  Future<GroupModel?> readGroupByName(String name) async {
+    final db = await instance.database;
+    final result = await db.query(
+      tableGroups,
+      where: '${Groups.name} = ?',
+      whereArgs: [name],
+    );
+
+    if (result.isNotEmpty) {
+      return GroupModel.fromJson(result.first);
+    }
+    return null;
+  }
+
   Future<List<GroupModel>> readAllGroups() async {
     final db = await instance.database;
 
@@ -226,7 +292,7 @@ class DBSongs {
   Future<int> updateGroup(GroupModel group) async {
     final db = await instance.database;
 
-    print("!!! Successed update group id = ${group.id} !!!");
+    print("!!! Successed update group id = ${group.toJson()} !!!");
     return await db.update(tableGroups, group.toJson(),
         where: '${Groups.id} = ?', whereArgs: [group.id]);
   }
