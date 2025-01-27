@@ -1,0 +1,16 @@
+<svg width="854" height="1024" viewBox="0 0 854 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="356.694" cy="397.653" rx="42.6667" ry="42.6667" fill="black"/>
+<ellipse cx="503.466" cy="397.653" rx="42.6667" ry="42.6667" fill="black"/>
+<ellipse cx="650.24" cy="141.653" rx="42.6667" ry="42.6667" fill="black"/>
+<rect width="853.333" height="30.72" fill="black"/>
+<rect y="768" width="853.333" height="10" fill="#9B9B9B"/>
+<rect y="269.653" width="853.333" height="10" fill="#9B9B9B"/>
+<rect y="518.827" width="853.333" height="10" fill="#9B9B9B"/>
+<rect width="853.333" height="10" transform="matrix(1 0 0 -1 0 1024)" fill="#9B9B9B"/>
+<line x1="654.447" y1="1.01848e-07" x2="654.447" y2="1024" stroke="black" stroke-width="5"/>
+<line x1="53.7002" y1="1.01848e-07" x2="53.7001" y2="1024" stroke="black" stroke-width="5"/>
+<line x1="801.22" y1="1.01848e-07" x2="801.22" y2="1024" stroke="black" stroke-width="5"/>
+<path d="M354.987 0L354.987 1024" stroke="black" stroke-width="5"/>
+<line x1="507.673" y1="1.01848e-07" x2="507.673" y2="1024" stroke="black" stroke-width="5"/>
+<path d="M204.8 0L204.8 1024" stroke="black" stroke-width="5"/>
+</svg>

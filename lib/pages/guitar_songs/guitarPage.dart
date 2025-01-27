@@ -264,6 +264,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                                             name: controller
                                                                 .text)),
                                                       );
+                                                      AppMetrica.reportEvent(
+                                        'Added group name: ${controller.text}');
                                                   setState(() {
                                                     // groupModel =
                                                     //     GroupModel(
@@ -467,118 +469,227 @@ class _GuitarPageState extends State<GuitarPage> {
                   },
                   icon: const Icon(EvaIcons.folder_add),
                 ),
-                BlocBuilder<Songs1Cubit, Songs1State>(
+                BlocBuilder<SongsBloc, SongsState>(
                   builder: (context, state) {
-                    if (state is Songs1Loading) {
+                    if (state is SongsLoading) {
                       return const SizedBox();
-                    } else if (state is Songs1Loaded) {
-                      bool allSelected = state.songs
-                          .every((song) => selectedSongsId.contains(song.id));
+                    } else if (state is SongsLoaded) {
+                      // bool allSelected = state.songs
+                      //     .every((song) => selectedSongsId.contains(song.id));
                       return IconButton(
                         onPressed: () {
-                          if (allSelected) {
-                            _toggleAllSelections(state.songs, false);
+                          if (context.read<IndexGroupCubit>().state == -1) {
+                            bool allSelected = state.songs.every(
+                                (song) => selectedSongsId.contains(song.id));
+                            if (allSelected) {
+                              _toggleAllSelections(state.songs, false);
+                            } else {
+                              _toggleAllSelections(state.songs, true);
+                            }
                           } else {
-                            _toggleAllSelections(state.songs, true);
+                            List<Song> filteredSongs = (state.songs
+                                .where((song) =>
+                                    song.group ==
+                                    state
+                                        .groups[context
+                                            .read<IndexGroupCubit>()
+                                            .state]
+                                        .id)
+                                .toList()
+                              ..sort((a, b) => a.order!.compareTo(b.order!)));
+                            bool allSelected = filteredSongs.every(
+                                (song) => selectedSongsId.contains(song.id));
+                            if (allSelected) {
+                              _toggleAllSelections(filteredSongs, false);
+                            } else {
+                              _toggleAllSelections(filteredSongs, true);
+                            }
                           }
                         },
                         icon: const Icon(Icons.select_all),
                       );
-                    } else if (state is Songs1Error) {
+                    } else if (state is SongsError) {
                       return const SizedBox();
                     } else {
                       return const SizedBox();
                     }
                   },
                 ),
-                IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15))),
-                        context: context,
-                        builder: (modalContext) => SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      selectedSongsId.length == 1
-                                          ? tr(LocaleKeys
-                                              .confirmation_delete_song_title)
-                                          : tr(LocaleKeys
-                                              .confirmation_delete_songs_title),
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                      selectedSongsId.length == 1
-                                          ? tr(LocaleKeys
-                                              .confirmation_delete_song_content)
-                                          : tr(LocaleKeys
-                                              .confirmation_delete_songs_content),
-                                      style: const TextStyle(
-                                        fontSize: 14,
+                context.read<IndexGroupCubit>().state != -1
+                    ? IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15))),
+                              context: context,
+                              builder: (modalContext) => SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            selectedSongsId.length == 1
+                                                ? "Исключить песню из группы?"
+                                                : "Исключить песни из группы?",
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            selectedSongsId.length == 1
+                                                ? "Выбранная песня будет исключена из группы. Вы уверены, что хотите исключить её из группы?"
+                                                : "Выбранные песни будут исключены из группы. Вы уверены, что хотите исключить их из группы?",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          CustomButtonSheet(
+                                            width: context.width,
+                                            height: 40,
+                                            onPressed: () {
+                                              for (Song song in selectedSongs) {
+                                                context.read<SongsBloc>().add(
+                                                    UpdateSong(
+                                                        song.copy(group: 0)));
+                                              }
+                                              setState(() {
+                                                isSecondButton = false;
+                                                // indexAdd = 0;
+                                                selectedSongsId.clear();
+                                                selectedSongs.clear();
+                                              });
+                                              Get.back();
+                                            },
+                                            title: "Исключить из группы",
+                                            fontSize: 14,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          CustomButtonSheet(
+                                            width: context.width,
+                                            height: 40,
+                                            isSecond: true,
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            title: tr(
+                                                LocaleKeys.confirmation_cancel),
+                                            fontSize: 14,
+                                          ),
+                                        ],
                                       ),
-                                      textAlign: TextAlign.center,
                                     ),
-                                    const SizedBox(
-                                      height: 20,
+                                  ));
+                        },
+                        icon: Icon(
+                          MingCute.exit_line,
+                          color: Colors.red[400],
+                        ))
+                    : IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15))),
+                              context: context,
+                              builder: (modalContext) => SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            selectedSongsId.length == 1
+                                                ? tr(LocaleKeys
+                                                    .confirmation_delete_song_title)
+                                                : tr(LocaleKeys
+                                                    .confirmation_delete_songs_title),
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            selectedSongsId.length == 1
+                                                ? tr(LocaleKeys
+                                                    .confirmation_delete_song_content)
+                                                : tr(LocaleKeys
+                                                    .confirmation_delete_songs_content),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          CustomButtonSheet(
+                                            width: context.width,
+                                            height: 40,
+                                            onPressed: () {
+                                              for (int id in selectedSongsId) {
+                                                context
+                                                    .read<SongsBloc>()
+                                                    .add(DeleteSong(id));
+                                              }
+                                              setState(() {
+                                                isSecondButton = false;
+                                                // indexAdd = 0;
+                                                selectedSongsId.clear();
+                                                selectedSongs.clear();
+                                              });
+                                              Get.back();
+                                            },
+                                            title: tr(
+                                                LocaleKeys.confirmation_delete),
+                                            fontSize: 14,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          CustomButtonSheet(
+                                            width: context.width,
+                                            height: 40,
+                                            isSecond: true,
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            title: tr(
+                                                LocaleKeys.confirmation_cancel),
+                                            fontSize: 14,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    CustomButtonSheet(
-                                      width: context.width,
-                                      height: 40,
-                                      onPressed: () {
-                                        for (int id in selectedSongsId) {
-                                          context
-                                              .read<SongsBloc>()
-                                              .add(DeleteSong(id));
-                                        }
-                                        setState(() {
-                                          isSecondButton = false;
-                                          // indexAdd = 0;
-                                          selectedSongsId.clear();
-                                          selectedSongs.clear();
-                                        });
-                                        Get.back();
-                                      },
-                                      title: tr(LocaleKeys.confirmation_delete),
-                                      fontSize: 14,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    CustomButtonSheet(
-                                      width: context.width,
-                                      height: 40,
-                                      isSecond: true,
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      title: tr(LocaleKeys.confirmation_cancel),
-                                      fontSize: 14,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ));
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red[400],
-                  ),
-                )
+                                  ));
+                        },
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red[400],
+                        ),
+                      )
               ]
             : [
                 IconButton(

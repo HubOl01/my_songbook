@@ -1,0 +1,16 @@
+<svg width="854" height="1024" viewBox="0 0 854 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="801.093" cy="397.652" r="42.6665" fill="black"/>
+<circle cx="654.321" cy="650.238" r="42.6665" fill="black"/>
+<circle cx="507.548" cy="397.652" r="42.6665" fill="black"/>
+<rect x="0.669922" width="853.33" height="30.7199" fill="black"/>
+<rect x="0.669922" y="768" width="853.333" height="10" fill="#9B9B9B"/>
+<rect x="0.669922" y="269.653" width="853.333" height="10" fill="#9B9B9B"/>
+<rect x="0.669922" y="518.826" width="853.333" height="10" fill="#9B9B9B"/>
+<rect width="853.333" height="10" transform="matrix(1 0 0 -1 0.669922 1024)" fill="#9B9B9B"/>
+<line x1="655.117" y1="1.01848e-07" x2="655.117" y2="1024" stroke="black" stroke-width="5"/>
+<line x1="54.3699" y1="1.01848e-07" x2="54.3698" y2="1024" stroke="black" stroke-width="5"/>
+<line x1="801.89" y1="1.01848e-07" x2="801.89" y2="1024" stroke="black" stroke-width="5"/>
+<path d="M355.657 0L355.657 1024" stroke="black" stroke-width="5"/>
+<line x1="508.343" y1="1.01848e-07" x2="508.343" y2="1024" stroke="black" stroke-width="5"/>
+<path d="M205.47 0L205.47 1024" stroke="black" stroke-width="5"/>
+</svg>

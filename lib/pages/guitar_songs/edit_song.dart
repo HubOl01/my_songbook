@@ -1,3 +1,4 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -591,7 +592,8 @@ class _Edit_songState extends State<Edit_song> {
                                                                           context
                                                                               .read<SongsBloc>()
                                                                               .add(AddGroup(GroupModel(name: controller.text)));
-
+AppMetrica.reportEvent(
+                                        'Added group name: ${controller.text}');
                                                                           Get.back();
                                                                         }),
                                                               ),

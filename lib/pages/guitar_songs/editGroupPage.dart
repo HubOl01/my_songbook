@@ -1,7 +1,9 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
 
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
@@ -103,16 +105,52 @@ class _EditGroupPageState extends State<EditGroupPage> {
           final groups = state.groups;
 
           // Если групп 5 или больше, не показывать поле создания
-          if (groups.length >= 5) {
+          if (groups.length >= 5 && controller.text.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
-                tr(LocaleKeys.info_max_group),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: context.isDarkMode ? Colors.white70 : Colors.black54,
-                ),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    tr(LocaleKeys.info_max_group),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color:
+                          context.isDarkMode ? Colors.white70 : Colors.black54,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  context.locale == const Locale('ru')
+                      ? Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "Если вы хотите неограниченное создание групп, то можно приобрести полную версию.",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: context.isDarkMode
+                                    ? Colors.white70
+                                    : Colors.black54,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            CustomButtonSheet(
+                                height: 30,
+                                onPressed: () {
+                                  Get.to(const PremiumPage());
+                                },
+                                title: "PRO-версия"),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
+                ],
               ),
             );
           }
@@ -227,6 +265,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                           AddGroup(GroupModel(
                                               name: controller.text)),
                                         );
+                                    AppMetrica.reportEvent(
+                                        'Added group name: ${controller.text}');
                                     setState(() {
                                       groupModel = GroupModel(name: "");
                                       controller.clear();

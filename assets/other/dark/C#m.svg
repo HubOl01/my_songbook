@@ -1,0 +1,17 @@
+<svg width="854" height="1024" viewBox="0 0 854 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="204" cy="897.667" r="42.6665" fill="white"/>
+<circle cx="653.651" cy="400.667" r="42.6665" fill="white"/>
+<circle cx="504.667" cy="155.667" r="42.6665" fill="white"/>
+<circle cx="354.667" cy="400.667" r="42.6665" fill="white"/>
+<rect width="853.33" height="30.7199" fill="white"/>
+<rect y="768" width="853.333" height="10" fill="#747474"/>
+<rect y="269.652" width="853.333" height="10" fill="#747474"/>
+<rect y="518.826" width="853.333" height="10" fill="#747474"/>
+<rect width="853.333" height="10" transform="matrix(1 0 0 -1 0 1024)" fill="#747474"/>
+<line x1="654.446" y1="1.01848e-07" x2="654.446" y2="1024" stroke="white" stroke-width="5"/>
+<line x1="53.7002" y1="1.01848e-07" x2="53.7001" y2="1024" stroke="white" stroke-width="5"/>
+<line x1="801.22" y1="1.01848e-07" x2="801.22" y2="1024" stroke="white" stroke-width="5"/>
+<path d="M354.987 0L354.987 1024" stroke="white" stroke-width="5"/>
+<line x1="507.673" y1="1.01848e-07" x2="507.673" y2="1024" stroke="white" stroke-width="5"/>
+<path d="M204.8 0L204.8 1024" stroke="white" stroke-width="5"/>
+</svg>

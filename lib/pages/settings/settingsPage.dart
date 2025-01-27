@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/pages/settings/Themes/themePage.dart';
 import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/sendToSupport.dart';
-import '../../core/api/variable_firebase.dart';
-import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
 import 'Premium/premiumPage.dart';
 import 'import_exportPage/ImportExportPage.dart';
-import 'settingsController.dart';
 
-class SettingsPage extends GetView<SettingsController> {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
@@ -70,41 +68,23 @@ class SettingsPage extends GetView<SettingsController> {
         ),
         ListTile(
             leading: const Icon(Icons.import_export),
-            title: Row(
-              children: [
-                Text(tr(LocaleKeys.data_export_import_title)),
-                FutureBuilder<bool>(
-                  future: getBetaData(),
-                  builder: (context, snapshot) {
-                    return snapshot.data == true
-                        ? Container(
-                            // height: 20,
-                            margin: const EdgeInsets.only(left: 10),
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: colorFiolet.withValues(alpha: .3),
-                              borderRadius: BorderRadius.circular(10),
-                              // border: Border.all(color: colorFiolet),
-                            ),
-                            child: Text(
-                              "beta",
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                color: colorFiolet,
-                              ),
-                            ),
-                          )
-                        : const SizedBox();
-                  },
-                )
-              ],
-            ),
+            title: Text(tr(LocaleKeys.data_export_import_title)),
             onTap: () async {
               Get.to(const ImportExportPage());
             }),
+        context.locale == const Locale('ru')
+            ? ListTile(
+                leading: const Icon(Icons.star_rate),
+                title: const Text("Оцените приложение"),
+                onTap: () async {
+                  AppMetrica.reportEvent('star_rate');
+                  launchUrl(
+                      Uri.parse(
+                          'https://www.rustore.ru/catalog/app/ru.ru_developer.my_songbook'),
+                      mode: LaunchMode.externalApplication);
+                },
+              )
+            : const SizedBox(),
         context.locale == const Locale('ru')
             ? ListTile(
                 leading: const Icon(Icons.workspace_premium),

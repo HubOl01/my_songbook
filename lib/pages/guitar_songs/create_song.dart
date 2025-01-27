@@ -293,6 +293,9 @@ class _Create_songState extends State<Create_song> {
                                                                         .add(AddGroup(GroupModel(
                                                                             name:
                                                                                 controller.text)));
+                                                                    AppMetrica
+                                                                        .reportEvent(
+                                                                            'Added group name: ${controller.text}');
                                                                     Get.back();
                                                                   }),
                                                         ),
