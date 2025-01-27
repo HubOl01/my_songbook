@@ -126,7 +126,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                               height: 20,
                             ),
                             Text(
-                              "Если вы хотите неограниченное создание групп, то можно приобрести полную версию.",
+                              tr(LocaleKeys.pro_version_content),
                               style: TextStyle(
                                 fontSize: 14,
                                 color: context.isDarkMode
@@ -143,7 +143,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                 onPressed: () {
                                   Get.to(const PremiumPage());
                                 },
-                                title: "PRO-версия"),
+                                title: tr(LocaleKeys.pro_version_button)),
                             const SizedBox(
                               height: 10,
                             ),

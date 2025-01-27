@@ -107,7 +107,18 @@ class CodegenLoader extends AssetLoader{
   "confirmation_import_content1": "你选择了",
   "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？",
   "error_duplicate_group_title": "重复组",
-  "error_duplicate_group_message": "具有该名称的乐队已经存在。"
+  "error_duplicate_group_message": "具有该名称的乐队已经存在。",
+  "exclude_a_song_title": "从组中排除一首歌？",
+  "exclude_a_songs_title": "从组中排除歌曲？",
+  "exclude_a_song_content": "所选歌曲将从组中排除。 你确定要把她排除在小组之外吗?",
+  "exclude_a_songs_content": "所选歌曲将被排除在该组之外。 您确定要将他们排除在群组之外吗？",
+  "exclude_a_songs_button": "从组中排除",
+  "pro_version_content": "如果你想无限组创建，你可以购买完整版本。",
+  "pro_version_button": "专业版",
+  "change_group_akkord_title": "更改维度",
+  "change_group_akkord_content1": "按键",
+  "change_group_akkord_content2": "通过指法的字母",
+  "group_akkord_additional": "附加和弦"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -202,7 +213,18 @@ static const Map<String,dynamic> ru = {
   "confirmation_import_content1": "Вы выбрали",
   "confirmation_import_content2": ". После подтверждения выбранные песни будут добавлены в базу данных и система будет перезапущена.\n\nЖелаете ли вы выполнить импорт?",
   "error_duplicate_group_title": "Повторяющаяся группа",
-  "error_duplicate_group_message": "Группа с таким названием уже существует."
+  "error_duplicate_group_message": "Группа с таким названием уже существует.",
+  "exclude_a_song_title": "Исключить песню из группы?",
+  "exclude_a_songs_title": "Исключить песни из группы?",
+  "exclude_a_song_content": "Выбранная песня будет исключена из группы. Вы уверены, что хотите исключить её из группы?",
+  "exclude_a_songs_content": "Выбранные песни будут исключены из группы. Вы уверены, что хотите исключить их из группы?",
+  "exclude_a_songs_button": "Исключить из группы",
+  "pro_version_content": "Если вы хотите неограниченное создание групп, то можно приобрести полную версию.",
+  "pro_version_button": "PRO-версия",
+  "change_group_akkord_title": "Изменение группировки",
+  "change_group_akkord_content1": "По тональности",
+  "change_group_akkord_content2": "По буквам аппликатуры",
+  "group_akkord_additional": "Дополнительные аккорды"
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -297,7 +319,18 @@ static const Map<String,dynamic> en = {
   "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?",
   "error_duplicate_group_title": "Duplicate Group",
   "error_duplicate_group_message": "A group with this name already exists.",
-  "info_max_group": "You have scored the maximum number of 5 groups."
+  "info_max_group": "You have scored the maximum number of 5 groups.",
+  "exclude_a_song_title": "Exclude a song from the group?",
+  "exclude_a_songs_title": "Exclude songs from the group?",
+  "exclude_a_song_content": "The selected song will be excluded from the group. Are you sure you want to exclude her from the group?",
+  "exclude_a_songs_content": "The selected songs will be excluded from the group. Are you sure you want to exclude them from the group?",
+  "exclude_a_songs_button": "Exclude from the group",
+  "pro_version_content": "If you want unlimited group creation, you can purchase the full version.",
+  "pro_version_button": "The PRO version",
+  "change_group_akkord_title": "Changing the dimension",
+  "change_group_akkord_content1": "By key",
+  "change_group_akkord_content2": "By the letters of the fingering",
+  "group_akkord_additional": "Additional chords"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }

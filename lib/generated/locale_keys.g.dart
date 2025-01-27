@@ -94,5 +94,16 @@ abstract class  LocaleKeys {
   static const confirmation_import_content2 = 'confirmation_import_content2';
   static const error_duplicate_group_title = 'error_duplicate_group_title';
   static const error_duplicate_group_message = 'error_duplicate_group_message';
+  static const exclude_a_song_title = 'exclude_a_song_title';
+  static const exclude_a_songs_title = 'exclude_a_songs_title';
+  static const exclude_a_song_content = 'exclude_a_song_content';
+  static const exclude_a_songs_content = 'exclude_a_songs_content';
+  static const exclude_a_songs_button = 'exclude_a_songs_button';
+  static const pro_version_content = 'pro_version_content';
+  static const pro_version_button = 'pro_version_button';
+  static const change_group_akkord_title = 'change_group_akkord_title';
+  static const change_group_akkord_content1 = 'change_group_akkord_content1';
+  static const change_group_akkord_content2 = 'change_group_akkord_content2';
+  static const group_akkord_additional = 'group_akkord_additional';
 
 }

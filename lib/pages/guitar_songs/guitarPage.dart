@@ -264,8 +264,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                                             name: controller
                                                                 .text)),
                                                       );
-                                                      AppMetrica.reportEvent(
-                                        'Added group name: ${controller.text}');
+                                                  AppMetrica.reportEvent(
+                                                      'Added group name: ${controller.text}');
                                                   setState(() {
                                                     // groupModel =
                                                     //     GroupModel(
@@ -535,8 +535,10 @@ class _GuitarPageState extends State<GuitarPage> {
                                           ),
                                           Text(
                                             selectedSongsId.length == 1
-                                                ? "Исключить песню из группы?"
-                                                : "Исключить песни из группы?",
+                                                ? tr(LocaleKeys
+                                                    .exclude_a_song_title)
+                                                : tr(LocaleKeys
+                                                    .exclude_a_songs_title),
                                             style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),
@@ -547,8 +549,10 @@ class _GuitarPageState extends State<GuitarPage> {
                                           ),
                                           Text(
                                             selectedSongsId.length == 1
-                                                ? "Выбранная песня будет исключена из группы. Вы уверены, что хотите исключить её из группы?"
-                                                : "Выбранные песни будут исключены из группы. Вы уверены, что хотите исключить их из группы?",
+                                                ? tr(LocaleKeys
+                                                    .exclude_a_song_content)
+                                                : tr(LocaleKeys
+                                                    .exclude_a_songs_content),
                                             style: const TextStyle(
                                               fontSize: 14,
                                             ),
@@ -574,7 +578,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                               });
                                               Get.back();
                                             },
-                                            title: "Исключить из группы",
+                                            title: tr(LocaleKeys
+                                                .exclude_a_songs_button),
                                             fontSize: 14,
                                           ),
                                           const SizedBox(

@@ -592,8 +592,8 @@ class _Edit_songState extends State<Edit_song> {
                                                                           context
                                                                               .read<SongsBloc>()
                                                                               .add(AddGroup(GroupModel(name: controller.text)));
-AppMetrica.reportEvent(
-                                        'Added group name: ${controller.text}');
+                                                                          AppMetrica.reportEvent(
+                                                                              'Added group name: ${controller.text}');
                                                                           Get.back();
                                                                         }),
                                                               ),

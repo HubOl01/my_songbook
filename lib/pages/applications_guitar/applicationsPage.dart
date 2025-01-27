@@ -60,12 +60,13 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.symmetric(
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 16.0, vertical: 16),
                                         child: Text(
-                                          "Изменение группировки",
-                                          style: TextStyle(
+                                          tr(LocaleKeys
+                                              .change_group_akkord_title),
+                                          style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -80,7 +81,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                           trailing: isTonality == true
                                               ? const Icon(Icons.check)
                                               : null,
-                                          title: const Text("По тональности")),
+                                          title: Text(tr(LocaleKeys
+                                              .change_group_akkord_content1))),
                                       ListTile(
                                           onTap: () {
                                             setState(() {
@@ -91,8 +93,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                           trailing: isTonality == false
                                               ? const Icon(Icons.check)
                                               : null,
-                                          title: const Text(
-                                              "По буквам аппликатуры")),
+                                          title: Text(tr(LocaleKeys
+                                              .change_group_akkord_content2))),
                                     ],
                                   ),
                                 ));
@@ -134,11 +136,11 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                   const Divider(
                                     thickness: 2,
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "Дополнительные аккорды",
-                                      style: TextStyle(
+                                      tr(LocaleKeys.group_akkord_additional),
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 30),
                                       textAlign: TextAlign.center,

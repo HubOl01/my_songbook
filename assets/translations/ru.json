@@ -91,5 +91,17 @@
     "confirmation_import_content1": "Вы выбрали",
     "confirmation_import_content2": ". После подтверждения выбранные песни будут добавлены в базу данных и система будет перезапущена.\n\nЖелаете ли вы выполнить импорт?",
     "error_duplicate_group_title": "Повторяющаяся группа",
-    "error_duplicate_group_message": "Группа с таким названием уже существует."
+    "error_duplicate_group_message": "Группа с таким названием уже существует.",
+    
+    "exclude_a_song_title": "Исключить песню из группы?",
+    "exclude_a_songs_title": "Исключить песни из группы?",
+    "exclude_a_song_content": "Выбранная песня будет исключена из группы. Вы уверены, что хотите исключить её из группы?",
+    "exclude_a_songs_content": "Выбранные песни будут исключены из группы. Вы уверены, что хотите исключить их из группы?",
+    "exclude_a_songs_button": "Исключить из группы",
+    "pro_version_content": "Если вы хотите неограниченное создание групп, то можно приобрести полную версию.",
+    "pro_version_button": "PRO-версия",
+    "change_group_akkord_title": "Изменение группировки",
+    "change_group_akkord_content1": "По тональности",
+    "change_group_akkord_content2": "По буквам аппликатуры",
+    "group_akkord_additional": "Дополнительные аккорды"
 }

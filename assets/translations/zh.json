@@ -91,5 +91,17 @@
     "confirmation_import_content1": "你选择了",
     "confirmation_import_content2": ". 确认后，所选歌曲将被添加到数据库中，系统将重新启动。\n\n要导入吗？",
     "error_duplicate_group_title": "重复组",
-    "error_duplicate_group_message": "具有该名称的乐队已经存在。"
+    "error_duplicate_group_message": "具有该名称的乐队已经存在。",
+
+    "exclude_a_song_title": "从组中排除一首歌？",
+    "exclude_a_songs_title": "从组中排除歌曲？",
+    "exclude_a_song_content": "所选歌曲将从组中排除。 你确定要把她排除在小组之外吗?",
+    "exclude_a_songs_content": "所选歌曲将被排除在该组之外。 您确定要将他们排除在群组之外吗？",
+    "exclude_a_songs_button": "从组中排除",
+    "pro_version_content": "如果你想无限组创建，你可以购买完整版本。",
+    "pro_version_button": "专业版",
+    "change_group_akkord_title": "更改维度",
+    "change_group_akkord_content1": "按键",
+    "change_group_akkord_content2": "通过指法的字母",
+    "group_akkord_additional": "附加和弦"
 }

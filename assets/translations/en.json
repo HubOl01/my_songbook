@@ -91,5 +91,17 @@
     "confirmation_import_content2": ". After confirmation, the selected songs will be added to the database and the system will restart.\n\n Do you want to import?",
     "error_duplicate_group_title": "Duplicate Group",
     "error_duplicate_group_message": "A group with this name already exists.",
-    "info_max_group": "You have scored the maximum number of 5 groups."
+    "info_max_group": "You have scored the maximum number of 5 groups.",
+
+    "exclude_a_song_title": "Exclude a song from the group?",
+    "exclude_a_songs_title": "Exclude songs from the group?",
+    "exclude_a_song_content": "The selected song will be excluded from the group. Are you sure you want to exclude her from the group?",
+    "exclude_a_songs_content": "The selected songs will be excluded from the group. Are you sure you want to exclude them from the group?",
+    "exclude_a_songs_button": "Exclude from the group",
+    "pro_version_content": "If you want unlimited group creation, you can purchase the full version.",
+    "pro_version_button": "The PRO version",
+    "change_group_akkord_title": "Changing the dimension",
+    "change_group_akkord_content1": "By key",
+    "change_group_akkord_content2": "By the letters of the fingering",
+    "group_akkord_additional": "Additional chords"
 }
