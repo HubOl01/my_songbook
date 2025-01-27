@@ -6,9 +6,8 @@ List<TonalityModel> tonalityAkkords = [
     AkkordModel(
         index: 2,
         name: "C",
-        barre: true,
-        image: "assets/other/light/C (баррэ).svg",
-        imageDark: "assets/other/dark/C (баррэ).svg"),
+        image: "assets/other/light/C.svg",
+        imageDark: "assets/other/dark/C.svg"),
     AkkordModel(
         index: 5,
         name: "F",

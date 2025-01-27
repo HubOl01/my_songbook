@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/components/customButton.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/data/tonalityAkkords.dart';
 import '../../core/styles/colors.dart';
@@ -44,6 +46,63 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                     Theme.of(context).primaryTextTheme.titleMedium!.color,
                 elevation: 0,
                 actions: [
+                  context.locale == const Locale('ru')
+                      ? IconButton(
+                          splashRadius: 20,
+                          onPressed: () {
+                            showModalBottomSheet(
+                                // useSafeArea: ,
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  ),
+                                ),
+                                builder: (context) => SafeArea(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 16.0, vertical: 16),
+                                            child: Text(
+                                              "Если вы обнаружили ошибку, то можете написать нам через анкету.",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            height: 45,
+                                            width: context.width,
+                                            child: CustomButton(
+                                              onPressed: () {
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        "https://forms.yandex.ru/u/6797fa14068ff06a071e30de/"),
+                                                    mode: LaunchMode
+                                                        .inAppBrowserView);
+                                              },
+                                              child: const Text(
+                                                  "Написать об ошибке"),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          icon: const Icon(Icons.error_outline))
+                      : const SizedBox(),
                   IconButton(
                       splashRadius: 20,
                       onPressed: () {
