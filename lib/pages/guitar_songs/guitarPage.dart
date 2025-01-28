@@ -107,6 +107,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                   // }
                                 },
                                 child: Container(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 200),
                                   height: 30,
                                   alignment: Alignment.center,
                                   padding:
@@ -943,7 +945,7 @@ class _GuitarPageState extends State<GuitarPage> {
     setState(() {
       if (selectedSongsId.contains(songId)) {
         selectedSongsId.remove(songId);
-        selectedSongs.remove(songId);
+        selectedSongs.remove(song);
         if (selectedSongsId.isEmpty) {
           isSecondButton = false;
         }
@@ -973,16 +975,21 @@ class _GuitarPageState extends State<GuitarPage> {
   void _toggleAllSelections(List<Song> songs, bool selectAll) {
     setState(() {
       if (selectAll) {
-        selectedSongsId.addAll(songs
-            .map((song) => song.id!)
-            .where((id) => !selectedSongsId.contains(id)));
+        selectedSongsId.addAll(
+          songs
+              .map((song) => song.id!)
+              .where((id) => !selectedSongsId.contains(id)),
+        );
+        selectedSongs.addAll(
+          songs.where((song) => !selectedSongs.any((s) => s.id == song.id)),
+        );
+
         isSecondButton = true;
       } else {
-        // selectedSongsId.clear();
-        // isSecondButton = false;
-        isSecondButton = false;
         selectedSongsId.clear();
         selectedSongs.clear();
+
+        isSecondButton = false;
       }
     });
   }
