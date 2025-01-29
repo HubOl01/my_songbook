@@ -909,6 +909,50 @@ class _GuitarPageState extends State<GuitarPage> {
                   )
                 ]))),
       ),
+      floatingActionButton: context.read<IndexGroupCubit>().state != -1 &&
+              isSecondButton
+          ? BlocBuilder<SongsBloc, SongsState>(builder: (context, state) {
+              if (state is SongsLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is SongsLoaded) {
+                return FloatingActionButton.extended(
+                    backgroundColor: colorFiolet,
+                    onPressed: () {
+                      List<Song> filteredSongs = state.songs
+                          .where((song) =>
+                              song.group ==
+                              state
+                                  .groups[context.read<IndexGroupCubit>().state]
+                                  .id)
+                          .toList()
+                        ..sort((a, b) => a.order!.compareTo(b.order!));
+
+                      List<Song> sortedSongs = [
+                        ...selectedSongs,
+                        ...filteredSongs
+                            .where((song) => !selectedSongs.contains(song)),
+                      ];
+
+                      for (int i = 0; i < sortedSongs.length; i++) {
+                        context
+                            .read<SongsBloc>()
+                            .add(UpdateSong(sortedSongs[i].copy(order: i + 1)));
+                      }
+
+                      setState(() {
+                        isSecondButton = false;
+                        selectedSongsId.clear();
+                        selectedSongs.clear();
+                      });
+                    },
+                    label: const Text("Изменить порядок"));
+              } else if (state is SongsError) {
+                return const SizedBox();
+              } else {
+                return const SizedBox();
+              }
+            })
+          : null,
     );
   }
 
