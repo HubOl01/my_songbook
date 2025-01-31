@@ -105,5 +105,6 @@ abstract class  LocaleKeys {
   static const change_group_akkord_content1 = 'change_group_akkord_content1';
   static const change_group_akkord_content2 = 'change_group_akkord_content2';
   static const group_akkord_additional = 'group_akkord_additional';
+  static const change_order = 'change_order';
 
 }

@@ -945,7 +945,9 @@ class _GuitarPageState extends State<GuitarPage> {
                         selectedSongs.clear();
                       });
                     },
-                    label: const Text("Изменить порядок"));
+                    label: Text(
+                      tr(LocaleKeys.change_order),
+                    ));
               } else if (state is SongsError) {
                 return const SizedBox();
               } else {

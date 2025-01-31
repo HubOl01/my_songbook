@@ -103,5 +103,6 @@
     "change_group_akkord_title": "Изменение группировки",
     "change_group_akkord_content1": "По тональности",
     "change_group_akkord_content2": "По буквам аппликатуры",
-    "group_akkord_additional": "Дополнительные аккорды"
+    "group_akkord_additional": "Дополнительные аккорды",
+    "change_order": "Изменить порядок"
 }

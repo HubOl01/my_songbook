@@ -118,7 +118,8 @@ class CodegenLoader extends AssetLoader{
   "change_group_akkord_title": "更改维度",
   "change_group_akkord_content1": "按键",
   "change_group_akkord_content2": "通过指法的字母",
-  "group_akkord_additional": "附加和弦"
+  "group_akkord_additional": "附加和弦",
+  "change_order": "更改订单"
 };
 static const Map<String,dynamic> ru = {
   "appbar_list_songs": "Список песен",
@@ -224,7 +225,8 @@ static const Map<String,dynamic> ru = {
   "change_group_akkord_title": "Изменение группировки",
   "change_group_akkord_content1": "По тональности",
   "change_group_akkord_content2": "По буквам аппликатуры",
-  "group_akkord_additional": "Дополнительные аккорды"
+  "group_akkord_additional": "Дополнительные аккорды",
+  "change_order": "Изменить порядок"
 };
 static const Map<String,dynamic> en = {
   "appbar_list_songs": "List of songs",
@@ -330,7 +332,8 @@ static const Map<String,dynamic> en = {
   "change_group_akkord_title": "Changing the dimension",
   "change_group_akkord_content1": "By key",
   "change_group_akkord_content2": "By the letters of the fingering",
-  "group_akkord_additional": "Additional chords"
+  "group_akkord_additional": "Additional chords",
+  "change_order": "Change the order"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
 }

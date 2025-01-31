@@ -103,5 +103,6 @@
     "change_group_akkord_title": "Changing the dimension",
     "change_group_akkord_content1": "By key",
     "change_group_akkord_content2": "By the letters of the fingering",
-    "group_akkord_additional": "Additional chords"
+    "group_akkord_additional": "Additional chords",
+    "change_order": "Change the order"
 }
