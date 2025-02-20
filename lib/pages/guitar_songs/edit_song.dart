@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -5,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../components/player_widget.dart';
 import '../../core/bloc/song_bloc.dart';
-import '../../core/bloc/songs_bloc.dart';
+import '../../core/bloc/songs_bloc.dart' hide UpdateSong;
 import '../../core/data/dbSongs.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/model/songsModel.dart';
@@ -34,32 +37,66 @@ class _Edit_songState extends State<Edit_song> {
   GroupModel group = GroupModel(name: "name");
   int groupID = 0;
   int orderID = 0;
+  String audioFile = "";
   PlatformFile? customFile;
-  Future getFile() async {
-    // var appDir = (await getTemporaryDirectory()).path;
-    // new Directory(appDir).delete(recursive: true);
+  // Future getFile() async {
+  //   // var appDir = (await getTemporaryDirectory()).path;
+  //   // new Directory(appDir).delete(recursive: true);
+  //   FilePickerResult? picker = await FilePicker.platform.pickFiles(
+  //     type: FileType.audio,
+  //     // allowedExtensions: ['mp3'],
+  //   );
+  //   if (picker != null) {
+  //     setState(() {
+  //       isAudio = false;
+  //       customFile = null;
+  //       PlatformFile file = picker.files.first;
+
+  //       print(file.name);
+  //       print(file.bytes);
+  //       print(file.size);
+  //       print(file.extension);
+  //       print(file.path);
+  //       customFile = file;
+  //       isAudio = true;
+  //       autotext(customFile!.name);
+  //     });
+  //   } else {
+  //     return;
+  //   }
+  // }
+  Future<void> getFile() async {
     FilePickerResult? picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
-      // allowedExtensions: ['mp3'],
     );
-    if (picker != null) {
-      setState(() {
-        isAudio = false;
-        customFile = null;
-        PlatformFile file = picker.files.first;
 
-        print(file.name);
-        print(file.bytes);
-        print(file.size);
-        print(file.extension);
-        print(file.path);
-        customFile = file;
+    if (picker != null) {
+      PlatformFile file = picker.files.first;
+      File renamedFile = await saveFileToCache(file);
+
+      setState(() {
+        audioFile = "";
+        customFile = PlatformFile(
+          name: renamedFile.path.split('/').last,
+          path: renamedFile.path,
+          size: file.size,
+          bytes: file.bytes,
+        );
         isAudio = true;
-        autotext(customFile!.name);
+        autotext(file.name);
       });
-    } else {
-      return;
+
+      print("Файл в кеше: ${renamedFile.path}");
     }
+  }
+
+// Функция переименования и сохранения в кеш
+  Future<File> saveFileToCache(PlatformFile file) async {
+    final tempDir = await getTemporaryDirectory();
+    String newFileName = transliterateFileName(file.name);
+    String newPath = '${tempDir.path}/$newFileName.${file.extension}';
+
+    return File(file.path!).copy(newPath);
   }
 
   String getNameGroup(int groupId, List<GroupModel> groups) {
@@ -232,6 +269,7 @@ class _Edit_songState extends State<Edit_song> {
     name_singerController.text = widget.songModel.name_singer;
     song_controller.text = widget.songModel.song;
     groupID = widget.songModel.group!;
+    audioFile = widget.songModel.path_music ?? "";
     // context.read<SongsBloc>().add(LoadSongs());
     //  context.read<SongBloc>().add(ReadSong(widget.id));
   }
@@ -348,7 +386,7 @@ class _Edit_songState extends State<Edit_song> {
                                                 name_songController.text,
                                                 name_singerController.text,
                                                 song_controller.text,
-                                                "",
+                                                audioFile,
                                                 groupID,
                                                 orderID);
                                           }
@@ -395,12 +433,42 @@ class _Edit_songState extends State<Edit_song> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      widget.songModel.path_music != ''
-                          ? PlayerWidget(
-                              name_song: widget.songModel.name_song,
-                              name_singer: widget.songModel.name_singer,
-                              audio: widget.songModel.path_music,
-                              asset: widget.asset)
+                      // widget.songModel.path_music != ''
+                      //     ? PlayerWidget(
+                      //         name_song: widget.songModel.name_song,
+                      //         name_singer: widget.songModel.name_singer,
+                      //         audio: widget.songModel.path_music,
+                      //         asset: widget.asset)
+                      //     : const SizedBox(),
+                      audioFile != ''
+                          ? Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: PlayerWidget(
+                                      name_song: widget.songModel.name_song,
+                                      name_singer: widget.songModel.name_singer,
+                                      audio: audioFile,
+                                      asset: widget.asset),
+                                ),
+                                Positioned(
+                                    top: -10,
+                                    right: 5,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          audioFile = '';
+                                        });
+                                      },
+                                      padding: const EdgeInsets.all(0),
+                                      splashRadius: 20,
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                      ),
+                                    ))
+                              ],
+                            )
                           : const SizedBox(),
                       const SizedBox(
                         height: 10,
@@ -871,7 +939,7 @@ class _Edit_songState extends State<Edit_song> {
         path_music: pathMusic,
         group: group,
         order: order);
-    await DBSongs.instance.update(songM);
+    context.read<SongBloc>().add(UpdateSong(songM));
     context.read<SongsBloc>().add(LoadSongs());
     context.read<SongBloc>().add(ReadSong(widget.songModel.id!));
   }

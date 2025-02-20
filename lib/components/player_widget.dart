@@ -3,7 +3,8 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:my_songbook/core/styles/colors.dart';
+
+import '../core/styles/colors.dart';
 
 class PlayerWidget extends StatefulWidget {
   const PlayerWidget({
@@ -15,7 +16,7 @@ class PlayerWidget extends StatefulWidget {
   });
   final String name_song;
   final String name_singer;
-  final audio;
+  final String audio;
   final bool asset;
   @override
   State<StatefulWidget> createState() {
@@ -37,6 +38,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       AppMetrica.reportEvent('Катюша');
     } else {
       setAudio();
+      print("widget.audio - ${widget.audio}");
       AppMetrica.reportEvent(
           '${widget.name_song} - ${widget.name_singer} (${widget.audio})');
     }
@@ -77,11 +79,6 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   Future setAudio() async {
     audioPlayer.setReleaseMode(ReleaseMode.stop);
-    // final player = AudioCache(prefix: "assets/audio/");
-    // final url = await player.load("kino-kukushka-mp3.mp3");
-
-    // File file = File(widget.audio);
-    // String content = await file.readAsString(encoding: latin1);
     String encodedUrl = Uri.encodeFull(widget.audio);
     audioPlayer.setSourceUrl(widget.audio);
     print("set audio: ${widget.audio} = $encodedUrl");
@@ -113,6 +110,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 widget.name_song,
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               )
             : const SizedBox(),
         widget.name_song != ""
@@ -121,7 +119,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               )
             : const SizedBox(),
         widget.name_singer != ""
-            ? Text(widget.name_singer, style: const TextStyle(fontSize: 20))
+            ? Text(
+                widget.name_singer,
+                style: const TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              )
             : const SizedBox(),
         Slider(
           min: 0,

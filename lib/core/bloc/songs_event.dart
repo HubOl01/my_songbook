@@ -77,3 +77,33 @@ class DeleteGroup extends SongsEvent {
 //   final int groupId;
 //   LoadSongsByGroup(this.groupId);
 // }
+
+class AddSongToGroup extends SongsEvent {
+  final int songId;
+  final int groupId;
+  final int order;
+  AddSongToGroup(this.songId, this.groupId, this.order);
+}
+
+class UpdateSongToGroup extends SongsEvent {
+  final int songId;
+  final int groupId;
+  final int order;
+  UpdateSongToGroup(this.songId, this.groupId, this.order);
+}
+
+// class LoadSongToGroup extends SongsEvent {
+//   final int songId;
+//   LoadSongToGroup(this.songId);
+// }
+class LoadSongToGroup extends SongsEvent {
+  final int groupId;
+
+  LoadSongToGroup({required this.groupId});
+}
+
+class DeleteSongFromGroup extends SongsEvent {
+  final int songId;
+  final int groupId;
+  DeleteSongFromGroup(this.songId, this.groupId);
+}

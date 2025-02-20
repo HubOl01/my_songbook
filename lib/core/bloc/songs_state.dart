@@ -15,8 +15,9 @@ class SongsLoading extends SongsState {}
 class SongsLoaded extends SongsState {
   final List<Song> songs;
   final List<GroupModel> groups;
+  final List<SongToGroupModel> songGroups;
 
-  SongsLoaded(this.songs, this.groups);
+  SongsLoaded(this.songs, this.groups, this.songGroups);
 
   @override
   List<Object?> get props => [songs];
@@ -29,7 +30,6 @@ class SongsLoaded extends SongsState {
 //   @override
 //   List<Object> get props => [song];
 // }
-
 
 class SongsParameterUpdated extends SongsState {
   final String parameter;
@@ -66,4 +66,22 @@ class SongsLoadedForGroup extends SongsState {
 class GroupsError extends SongsState {
   final String message;
   GroupsError(this.message);
+}
+
+class SongToGroupsLoading extends SongsState {}
+
+class SongToGroupsLoaded extends SongsState {
+  final List<SongToGroupModel> songGroups;
+  SongToGroupsLoaded(this.songGroups);
+}
+
+class SongToSongsLoadedForGroup extends SongsState {
+  final int groupId;
+  final List<Song> songs;
+  SongToSongsLoadedForGroup(this.groupId, this.songs);
+}
+
+class SongToGroupsError extends SongsState {
+  final String message;
+  SongToGroupsError(this.message);
 }

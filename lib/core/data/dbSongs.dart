@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/groupModel.dart';
+import '../model/songTogroupModel.dart';
 import '../model/songsModel.dart';
 
 bool isSuccess = false;
@@ -24,7 +25,7 @@ class DBSongs {
     final path = join(dbPath, filePath);
 
     final db = await openDatabase(path,
-        version: 3, onCreate: _createDB, onUpgrade: _updateDB);
+        version: 4, onCreate: _createDB, onUpgrade: _updateDB);
 
     final version = await db.getVersion();
     print("Current database version: $version");
@@ -48,6 +49,9 @@ class DBSongs {
         ${Songs.path_music} $textType,
         ${Songs.speedScroll} INTEGER DEFAULT 150,
         ${Songs.fontSizeText} $realType,
+        ${Songs.tonalitySongText} $textType DEFAULT "",
+        ${Songs.tempoSongText} $textType DEFAULT "",
+        ${Songs.comment} $textType DEFAULT "",
         ${Songs.order} $int,
         ${Songs.group} $int,
         ${Songs.date_created} $textType
@@ -77,6 +81,17 @@ class DBSongs {
     ${Groups.orderId} $intType DEFAULT -1
   )
 ''');
+
+    await db.execute('''
+      CREATE TABLE $tableSongToGroups (
+        group_id INTEGER NOT NULL,
+        song_id INTEGER NOT NULL,
+        song_order INTEGER DEFAULT 0,
+        PRIMARY KEY (group_id, song_id),
+        FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+        FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
+      )
+    ''');
   }
 
   Future _updateDB(Database db, int oldVersion, int newVersion) async {
@@ -138,12 +153,33 @@ class DBSongs {
             'ALTER TABLE $tableGroups ADD COLUMN ${Groups.orderId} INTEGER DEFAULT -1');
       }
     }
+    if (oldVersion < 4) {
+      // изменения в song
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN ${Songs.tonalitySongText} TEXT DEFAULT ""');
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN ${Songs.tempoSongText} TEXT DEFAULT ""');
+      await db.execute(
+          'ALTER TABLE $tableSongs ADD COLUMN ${Songs.comment} TEXT DEFAULT ""');
+      // Удаляем старые связи "один ко многим"
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS $tableSongToGroups (
+          group_id INTEGER NOT NULL,
+          song_id INTEGER NOT NULL,
+          song_order INTEGER DEFAULT 0,
+          PRIMARY KEY (group_id, song_id),
+          FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE,
+          FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
+        )
+      ''');
+    }
   }
 
   Future<Song> create(Song song) async {
     final db = await instance.database;
     final id = await db.insert(tableSongs, song.toJson());
     print("!!! Successed create id = $id !!!");
+    print("!!! Successed create song = ${song.toJson()} !!!");
     isSuccess = true;
     return song.copy(id: id);
   }
@@ -316,19 +352,19 @@ class DBSongs {
     return await db.delete(tableGroups);
   }
 
-  Future<List<Song>> readSongsByGroup(int groupId) async {
-    final db = await instance.database;
+  // Future<List<Song>> readSongsByGroup(int groupId) async {
+  //   final db = await instance.database;
 
-    final result = await db.query(
-      tableSongs,
-      where: '${Songs.group} = ?',
-      whereArgs: [groupId],
-      orderBy: '${Songs.order} ASC',
-    );
+  //   final result = await db.query(
+  //     tableSongs,
+  //     where: '${Songs.group} = ?',
+  //     whereArgs: [groupId],
+  //     orderBy: '${Songs.order} ASC',
+  //   );
 
-    print("Reading songs for group $groupId");
-    return result.map((json) => Song.fromJson(json)).toList();
-  }
+  //   print("Reading songs for group $groupId");
+  //   return result.map((json) => Song.fromJson(json)).toList();
+  // }
 
   Future<void> updateSongPath(int songId, String newPath) async {
     final db = await instance.database;
@@ -356,6 +392,119 @@ class DBSongs {
       return GroupModel.fromJson(result.first);
     } else {
       return null;
+    }
+  }
+
+// Работа со связкой песни-группы
+  Future<void> addSongToGroup(int songId, int groupId, int order) async {
+    final db = await instance.database;
+    await db.insert(tableSongToGroups,
+        {'group_id': groupId, 'song_id': songId, 'song_order': order});
+  }
+
+  Future<void> updateSongOrder(int songId, int groupId, int newOrder) async {
+    final db = await instance.database;
+    await db.update(
+      tableSongToGroups,
+      {'song_order': newOrder},
+      where: 'song_id = ? AND group_id = ?',
+      whereArgs: [songId, groupId],
+    );
+  }
+
+  Future<List<Song>> getSongsByGroup(int groupId) async {
+    final db = await instance.database;
+
+    final result = await db.rawQuery('''
+    SELECT s.* FROM $tableSongs s
+    JOIN $tableSongToGroups stg ON s.${Songs.id} = stg.song_id
+    WHERE stg.group_id = ?
+    ORDER BY stg.song_order ASC
+  ''', [groupId]);
+    print("res: ${result.toList()}");
+    return result.map((json) => Song.fromJson(json)).toList();
+  }
+
+  Future<List<GroupModel>> getGroupsBySong(int songId) async {
+    final db = await instance.database;
+
+    final result = await db.rawQuery('''
+    SELECT g.* FROM $tableGroups g
+    JOIN $tableSongToGroups stg ON g.${Groups.id} = stg.group_id
+    WHERE stg.song_id = ?
+  ''', [songId]);
+
+    return result.map((json) => GroupModel.fromJson(json)).toList();
+  }
+
+  Future<List<SongToGroupModel>> getSongsGroup() async {
+    final db = await instance.database;
+    final result = await db.query(
+      tableSongToGroups,
+      orderBy: '`${SongToGroups.groupId}` asc',
+    );
+    // print("Reading all groups");
+    return result.map((json) => SongToGroupModel.fromJson(json)).toList();
+  }
+
+  Future<void> removeSongFromGroup(int songId, int groupId) async {
+    final db = await instance.database;
+    print(
+        "Песня успешно удалена из группы: songId = $songId, groupId = $groupId");
+    await db.delete(
+      tableSongToGroups,
+      where: 'song_id = ? AND group_id = ?',
+      whereArgs: [songId, groupId],
+    );
+  }
+
+  Future<void> clearGroupSongs(int groupId) async {
+    final db = await instance.database;
+    await db.delete(
+      tableSongToGroups,
+      where: 'group_id = ?',
+      whereArgs: [groupId],
+    );
+  }
+
+  Future<void> migrateSongsToGroups() async {
+    final db = await database;
+
+    // Выбираем все песни, у которых group и order заданы
+    final songs = await db.query(
+      tableSongs,
+      columns: [Songs.id, Songs.group, Songs.order],
+      where: '${Songs.group} IS NOT NULL AND ${Songs.group} != 0',
+    );
+
+    for (final song in songs) {
+      final songId = song[Songs.id] as int;
+      final groupId = song[Songs.group] as int?;
+      final songOrder = song[Songs.order] as int?;
+
+      if (groupId != null) {
+        // Вставляем в songToGroups
+        await db.insert(
+          tableSongToGroups,
+          {
+            'group_id': groupId,
+            'song_id': songId,
+            'song_order': songOrder ?? 0,
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        print("Migrate");
+        // Обнуляем group и order в songs
+        // await db.update(
+        //   tableSongs,
+        //   {
+        //     Songs.group: 0,
+        //     Songs.order: 0,
+        //   },
+        //   where: '${Songs.id} = ?',
+        //   whereArgs: [songId],
+        // );
+      }
     }
   }
 

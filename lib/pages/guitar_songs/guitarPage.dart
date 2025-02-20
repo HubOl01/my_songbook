@@ -891,6 +891,8 @@ class _GuitarPageState extends State<GuitarPage> {
                                                       : () {
                                                           Get.to(GuitarDetal(
                                                             id: song.id!,
+                                                            speedTextSong: song
+                                                                .speedScroll!,
                                                           ));
                                                         },
                                                 ))

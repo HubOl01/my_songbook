@@ -1,4 +1,5 @@
 import '../model/groupModel.dart';
+import '../model/songTogroupModel.dart';
 import '../model/songsModel.dart';
 import 'dbSongs.dart';
 
@@ -37,6 +38,16 @@ class SongsRepository {
 
   Future<void> deleteGroup(int id) async => await _dbSongs.deleteGroup(id);
 
+  Future<void> addSongToGroup(int songId, int groupId, int order) async =>
+      await _dbSongs.addSongToGroup(songId, groupId, order);
+  Future<void> updateSongOrder(int songId, int groupId, int newOrder) async =>
+      await _dbSongs.updateSongOrder(songId, groupId, newOrder);
+  Future<List<Song>> getSongsByGroup1(int groupId) async =>
+      await _dbSongs.getSongsByGroup(groupId);
+  Future<List<SongToGroupModel>> getSongsGroup() async =>
+      await _dbSongs.getSongsGroup();
+  Future<void> removeSongFromGroup(int songId, int groupId) async =>
+      await _dbSongs.removeSongFromGroup(songId, groupId);
   // Future<List<Song>> readSongsByGroup(int groupId) async =>
   //     await _dbSongs.readSongsByGroup(groupId);
 }

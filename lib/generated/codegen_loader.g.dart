@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters
+// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters, constant_identifier_names
 
 import 'dart:ui';
 
@@ -14,7 +14,7 @@ class CodegenLoader extends AssetLoader{
     return Future.value(mapLocales[locale.toString()]);
   }
 
-  static const Map<String,dynamic> zh = {
+  static const Map<String,dynamic> _zh = {
   "appbar_list_songs": "歌曲列表",
   "example": "例子",
   "ex_name_song": "卡图沙",
@@ -119,9 +119,11 @@ class CodegenLoader extends AssetLoader{
   "change_group_akkord_content1": "按键",
   "change_group_akkord_content2": "通过指法的字母",
   "group_akkord_additional": "附加和弦",
-  "change_order": "更改订单"
+  "change_order": "更改订单",
+  "summary_of_the_song": "歌曲摘要",
+  "write_something": "写点什么"
 };
-static const Map<String,dynamic> ru = {
+static const Map<String,dynamic> _ru = {
   "appbar_list_songs": "Список песен",
   "example": "Пример",
   "ex_name_song": "Катюша",
@@ -226,9 +228,11 @@ static const Map<String,dynamic> ru = {
   "change_group_akkord_content1": "По тональности",
   "change_group_akkord_content2": "По буквам аппликатуры",
   "group_akkord_additional": "Дополнительные аккорды",
-  "change_order": "Изменить порядок"
+  "change_order": "Изменить порядок",
+  "summary_of_the_song": "Аннотация к песне",
+  "write_something": "Напишите что-нибудь"
 };
-static const Map<String,dynamic> en = {
+static const Map<String,dynamic> _en = {
   "appbar_list_songs": "List of songs",
   "example": "Example",
   "ex_name_song": "Katusha",
@@ -333,7 +337,9 @@ static const Map<String,dynamic> en = {
   "change_group_akkord_content1": "By key",
   "change_group_akkord_content2": "By the letters of the fingering",
   "group_akkord_additional": "Additional chords",
-  "change_order": "Change the order"
+  "change_order": "Change the order",
+  "summary_of_the_song": "Summary of the song",
+  "write_something": "Write something"
 };
-static const Map<String, Map<String,dynamic>> mapLocales = {"zh": zh, "ru": ru, "en": en};
+static const Map<String, Map<String,dynamic>> mapLocales = {"zh": _zh, "ru": _ru, "en": _en};
 }

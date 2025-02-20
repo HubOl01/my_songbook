@@ -105,7 +105,9 @@ class _EditGroupPageState extends State<EditGroupPage> {
           final groups = state.groups;
 
           // Если групп 5 или больше, не показывать поле создания
-          if (groups.length >= 5 && controller.text.isEmpty) {
+          if (groups.length >= 5 &&
+              controller.text.isEmpty &&
+              groupModel.id == null) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(

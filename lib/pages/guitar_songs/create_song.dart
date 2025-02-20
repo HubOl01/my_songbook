@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
@@ -700,30 +703,61 @@ class _Create_songState extends State<Create_song> {
   }
 
   bool isAudio = false;
-  Future getFile() async {
+  // Future getFile() async {
+  //   FilePickerResult? picker = await FilePicker.platform.pickFiles(
+  //     type: FileType.audio,
+  //   );
+  //   if (picker != null) {
+  //     setState(() {
+  //       isAudio = false;
+  //       customFile = null;
+  //       PlatformFile file = picker.files.first;
+
+  //       print(file.name);
+  //       print(file.bytes);
+  //       print(file.size);
+  //       print(file.extension);
+  //       print(file.path);
+  //       customFile = file;
+  //       isAudio = true;
+  //       autotext(customFile!.name);
+  //     });
+  //   } else {
+  //     return;
+  //   }
+  // }
+ Future<void> getFile() async {
     FilePickerResult? picker = await FilePicker.platform.pickFiles(
       type: FileType.audio,
     );
-    if (picker != null) {
-      setState(() {
-        isAudio = false;
-        customFile = null;
-        PlatformFile file = picker.files.first;
 
-        print(file.name);
-        print(file.bytes);
-        print(file.size);
-        print(file.extension);
-        print(file.path);
-        customFile = file;
+    if (picker != null) {
+      PlatformFile file = picker.files.first;
+      File renamedFile = await saveFileToCache(file);
+
+      setState(() {
+        customFile = PlatformFile(
+          name: renamedFile.path.split('/').last,
+          path: renamedFile.path,
+          size: file.size,
+          bytes: file.bytes,
+        );
         isAudio = true;
-        autotext(customFile!.name);
+        autotext(file.name);
       });
-    } else {
-      return;
+
+      print("Файл в кеше: ${renamedFile.path}");
     }
   }
 
+// Функция переименования и сохранения в кеш
+  Future<File> saveFileToCache(PlatformFile file) async {
+    final tempDir = await getTemporaryDirectory();
+    String newFileName = transliterateFileName(file.name);
+    String newPath = '${tempDir.path}/$newFileName.${file.extension}';
+
+    return File(file.path!).copy(newPath);
+  }
   // Future<File> saveFilePermanently(PlatformFile file) async {
   //   final appStorage = await getApplicationDocumentsDirectory();
   //   final newFile = File('${appStorage.path}/${file.name}');

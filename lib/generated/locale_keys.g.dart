@@ -1,5 +1,7 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
+// ignore_for_file: constant_identifier_names
+
 abstract class  LocaleKeys {
   static const appbar_list_songs = 'appbar_list_songs';
   static const example = 'example';
@@ -106,5 +108,7 @@ abstract class  LocaleKeys {
   static const change_group_akkord_content2 = 'change_group_akkord_content2';
   static const group_akkord_additional = 'group_akkord_additional';
   static const change_order = 'change_order';
+  static const summary_of_the_song = 'summary_of_the_song';
+  static const write_something = 'write_something';
 
 }

@@ -104,5 +104,8 @@
     "change_group_akkord_content1": "按键",
     "change_group_akkord_content2": "通过指法的字母",
     "group_akkord_additional": "附加和弦",
-    "change_order": "更改订单"
+    "change_order": "更改订单",
+
+    "summary_of_the_song": "歌曲摘要",
+    "write_something": "写点什么"
 }

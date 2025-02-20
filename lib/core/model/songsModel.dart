@@ -13,6 +13,9 @@ class Songs {
     group,
     speedScroll,
     fontSizeText,
+    tonalitySongText,
+    tempoSongText,
+    comment,
     date_created,
   ];
 
@@ -25,6 +28,9 @@ class Songs {
   static const String group = 'groupSong';
   static const String speedScroll = 'speedScroll';
   static const String fontSizeText = 'fontSizeText';
+  static const String tonalitySongText = 'tonalitySongText';
+  static const String tempoSongText = 'tempoSongText';
+  static const String comment = 'comment';
   static const String date_created = 'date_created';
 }
 
@@ -38,6 +44,9 @@ class Song {
   final int? group;
   final int? speedScroll;
   final double? fontSizeText;
+  final String? tonalitySongText;
+  final String? tempoSongText;
+  final String? comment;
   final DateTime date_created;
 
   const Song({
@@ -50,6 +59,9 @@ class Song {
     this.group = 0,
     this.speedScroll = 150,
     this.fontSizeText = 14,
+    this.tonalitySongText = '',
+    this.tempoSongText = '',
+    this.comment = '',
     required this.date_created,
   });
   Song copy({
@@ -62,6 +74,9 @@ class Song {
     int? group,
     int? speedScroll,
     double? fontSizeText,
+    String? tonalitySongText,
+    String? tempoSongText,
+    String? comment,
     DateTime? date_created,
   }) =>
       Song(
@@ -74,6 +89,9 @@ class Song {
         group: group ?? this.group,
         speedScroll: speedScroll ?? this.speedScroll,
         fontSizeText: fontSizeText ?? this.fontSizeText,
+        tonalitySongText: tonalitySongText ?? this.tonalitySongText,
+        tempoSongText: tempoSongText ?? this.tempoSongText,
+        comment: comment ?? this.comment,
         date_created: date_created ?? this.date_created,
       );
   static Song fromJson(Map<String, Object?> json) => Song(
@@ -86,6 +104,9 @@ class Song {
       group: json[Songs.group] as int,
       speedScroll: json[Songs.speedScroll] as int,
       fontSizeText: json[Songs.fontSizeText] as double,
+      tonalitySongText: json[Songs.tonalitySongText] as String,
+      tempoSongText: json[Songs.tempoSongText] as String,
+      comment: json[Songs.comment] as String,
       date_created: DateTime.parse(json[Songs.date_created] as String));
 
   Map<String, Object?> toJson() => {
@@ -98,6 +119,9 @@ class Song {
         Songs.group: group,
         Songs.speedScroll: speedScroll,
         Songs.fontSizeText: fontSizeText,
+        Songs.tonalitySongText: tonalitySongText,
+        Songs.tempoSongText: tempoSongText,
+        Songs.comment: comment,
         Songs.date_created: date_created.toIso8601String(),
       };
 }

@@ -1,8 +1,9 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
-import 'package:my_songbook/core/storage/storage.dart';
-import 'package:my_songbook/main.dart';
-import 'package:my_songbook/core/styles/colors.dart';
+
+import '../../main.dart';
+import '../storage/storage.dart';
+import 'colors.dart';
 
 class Themes {
   static final dark = ThemeData(
@@ -11,11 +12,16 @@ class Themes {
     // hintColor: Colors.blue,
     progressIndicatorTheme: ProgressIndicatorThemeData(color: colorFiolet),
     indicatorColor: colorFiolet,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: colorFiolet,
+      selectionColor: colorFiolet.withValues(alpha: .5),
+      selectionHandleColor: colorFiolet,
+    ),
     sliderTheme: SliderThemeData(
         activeTrackColor: colorFiolet,
-        overlayColor: colorFiolet.withOpacity(0.3),
+        overlayColor: colorFiolet.withValues(alpha: 0.3),
         thumbColor: colorFiolet,
-        inactiveTrackColor: colorFiolet.withOpacity(0.3)),
+        inactiveTrackColor: colorFiolet.withValues(alpha: 0.3)),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style:
             ButtonStyle(backgroundColor: WidgetStatePropertyAll(colorFiolet))),
@@ -41,8 +47,6 @@ class Themes {
     textTheme: TextTheme(
         bodyLarge: TextStyle(color: textColorDark),
         bodySmall: TextStyle(color: subColorDark)),
-    // c: backgroundColorDark,
-    dialogBackgroundColor: backgroundColorDark,
     bottomSheetTheme:
         BottomSheetThemeData(backgroundColor: backgroundColorDark),
     primaryTextTheme:
@@ -76,6 +80,7 @@ class Themes {
           color: Colors.white,
         )),
     dividerColor: lineColorDark,
+
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: appBarColorDark,
         selectedIconTheme: IconThemeData(color: colorFiolet),
@@ -85,7 +90,7 @@ class Themes {
         style: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll(colorFiolet),
             overlayColor:
-                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .3)))),
+                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .2)))),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       foregroundColor: textColorDark,
       backgroundColor: backgroundColorDark,
@@ -100,7 +105,7 @@ class Themes {
         }
         return Colors.white;
       }),
-      trackColor: WidgetStateProperty.all(Colors.blue.withOpacity(0.2)),
+      trackColor: WidgetStateProperty.all(Colors.blue.withValues(alpha: 0.2)),
     ),
     dialogTheme: DialogTheme(
         titleTextStyle: TextStyle(
@@ -112,9 +117,9 @@ class Themes {
     brightness: Brightness.light,
     sliderTheme: SliderThemeData(
         activeTrackColor: colorFiolet,
-        overlayColor: colorFiolet.withOpacity(0.3),
+        overlayColor: colorFiolet.withValues(alpha: 0.3),
         thumbColor: colorFiolet,
-        inactiveTrackColor: colorFiolet.withOpacity(0.3)),
+        inactiveTrackColor: colorFiolet.withValues(alpha: 0.3)),
     primaryTextTheme:
         const TextTheme(titleMedium: TextStyle(color: Colors.black)),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -124,6 +129,11 @@ class Themes {
     inputDecorationTheme: const InputDecorationTheme(),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: colorFiolet),
     indicatorColor: colorFiolet,
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: colorFiolet,
+      selectionColor: colorFiolet.withValues(alpha: .5),
+      selectionHandleColor: colorFiolet,
+    ),
     appBarTheme: AppBarTheme(
         backgroundColor: colorFiolet,
         foregroundColor: Colors.white,
@@ -138,7 +148,7 @@ class Themes {
         style: ButtonStyle(
             foregroundColor: WidgetStatePropertyAll(colorFiolet),
             overlayColor:
-                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .3)))),
+                WidgetStatePropertyAll(colorFiolet.withValues(alpha: .2)))),
     dialogTheme: const DialogTheme(
       backgroundColor: Colors.white,
       // surfaceTintColor: C

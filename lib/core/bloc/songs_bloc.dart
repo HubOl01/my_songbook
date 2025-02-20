@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../data/songsRepository.dart';
+import '../model/songTogroupModel.dart';
 import '../model/songsModel.dart';
 import '../model/groupModel.dart';
 
@@ -17,7 +18,8 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
       try {
         final songs = await _repository.getAllSongs();
         final groups = await _repository.readAllGroups();
-        emit(SongsLoaded(songs, groups));
+        final songGroups = await _repository.getSongsGroup();
+        emit(SongsLoaded(songs, groups, songGroups));
       } catch (e) {
         emit(SongsError(e.toString()));
       }
@@ -136,6 +138,60 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
         add(LoadSongs());
       } catch (e) {
         emit(GroupsError(e.toString()));
+      }
+    });
+
+    // Song to Group(
+    // on<LoadSongToGroup>((event, emit) async {
+    //   emit(SongToGroupsLoading());
+    //   try {
+    //     final songGroups = await _repository.getSongsGroup();
+    //     emit(SongToGroupsLoaded(songGroups));
+    //     add(LoadSongToGroup());
+    //   } catch (e) {
+    //     emit(SongToGroupsError(e.toString()));
+    //   }
+    // });
+    on<LoadSongToGroup>((event, emit) async {
+      emit(SongToGroupsLoading());
+      try {
+        final songGroups = await _repository.getSongsByGroup1(event.groupId);
+        emit(SongToSongsLoadedForGroup(event.groupId, songGroups));
+        add(LoadSongToGroup(groupId: event.groupId));
+      } catch (e) {
+        emit(SongToGroupsError(e.toString()));
+      }
+    });
+
+    on<AddSongToGroup>((event, emit) async {
+      try {
+        await _repository.addSongToGroup(
+            event.songId, event.groupId, event.order);
+        add(LoadSongToGroup(groupId: event.groupId));
+        add(LoadSongs());
+      } catch (e) {
+        emit(SongToGroupsError(e.toString()));
+      }
+    });
+
+    on<UpdateSongToGroup>((event, emit) async {
+      try {
+        await _repository.updateSongOrder(
+            event.songId, event.groupId, event.order);
+        add(LoadSongToGroup(groupId: event.groupId));
+        add(LoadSongs());
+      } catch (e) {
+        emit(SongToGroupsError(e.toString()));
+      }
+    });
+
+    on<DeleteSongFromGroup>((event, emit) async {
+      try {
+        await _repository.removeSongFromGroup(event.songId, event.groupId);
+        add(LoadSongToGroup(groupId: event.groupId));
+        add(LoadSongs());
+      } catch (e) {
+        emit(SongToGroupsError(e.toString()));
       }
     });
   }

@@ -92,7 +92,6 @@
     "error_duplicate_group_title": "Duplicate Group",
     "error_duplicate_group_message": "A group with this name already exists.",
     "info_max_group": "You have scored the maximum number of 5 groups.",
-
     "exclude_a_song_title": "Exclude a song from the group?",
     "exclude_a_songs_title": "Exclude songs from the group?",
     "exclude_a_song_content": "The selected song will be excluded from the group. Are you sure you want to exclude her from the group?",
@@ -104,5 +103,7 @@
     "change_group_akkord_content1": "By key",
     "change_group_akkord_content2": "By the letters of the fingering",
     "group_akkord_additional": "Additional chords",
-    "change_order": "Change the order"
+    "change_order": "Change the order",
+    "summary_of_the_song": "Summary of the song",
+    "write_something": "Write something"
 }
