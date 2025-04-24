@@ -121,7 +121,8 @@ class CodegenLoader extends AssetLoader{
   "group_akkord_additional": "附加和弦",
   "change_order": "更改订单",
   "summary_of_the_song": "歌曲摘要",
-  "write_something": "写点什么"
+  "write_something": "写点什么",
+  "title_sort": "分类方法"
 };
 static const Map<String,dynamic> _ru = {
   "appbar_list_songs": "Список песен",
@@ -230,7 +231,8 @@ static const Map<String,dynamic> _ru = {
   "group_akkord_additional": "Дополнительные аккорды",
   "change_order": "Изменить порядок",
   "summary_of_the_song": "Аннотация к песне",
-  "write_something": "Напишите что-нибудь"
+  "write_something": "Напишите что-нибудь",
+  "title_sort": "Сортировка"
 };
 static const Map<String,dynamic> _en = {
   "appbar_list_songs": "List of songs",
@@ -339,7 +341,8 @@ static const Map<String,dynamic> _en = {
   "group_akkord_additional": "Additional chords",
   "change_order": "Change the order",
   "summary_of_the_song": "Summary of the song",
-  "write_something": "Write something"
+  "write_something": "Write something",
+  "title_sort": "Sorting"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": _zh, "ru": _ru, "en": _en};
 }

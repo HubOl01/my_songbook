@@ -110,5 +110,6 @@ abstract class  LocaleKeys {
   static const change_order = 'change_order';
   static const summary_of_the_song = 'summary_of_the_song';
   static const write_something = 'write_something';
+  static const title_sort = 'title_sort';
 
 }

@@ -6,6 +6,7 @@ import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:archive/archive_io.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -55,6 +56,10 @@ class _GuitarPageState extends State<GuitarPage> {
   List<int> selectedSongsId = [];
   List<Song> selectedSongs = [];
   bool isSecondButton = false;
+  bool isReorderMode = false;
+  List<Song> reorderedSongs = [];
+  int? activatedSongId;
+  final ScrollController reorderScrollController = ScrollController();
   @override
   void initState() {
     context.read<SongsBloc>().add(LoadSongs());
@@ -70,6 +75,7 @@ class _GuitarPageState extends State<GuitarPage> {
                 onPressed: () {
                   setState(() {
                     isSecondButton = false;
+                    isReorderMode = false;
                     // indexAdd = 0;
                     selectedSongsId.clear();
                     selectedSongs.clear();
@@ -78,360 +84,529 @@ class _GuitarPageState extends State<GuitarPage> {
                 icon: const Icon(Icons.close),
               )
             : null,
-        title: isSecondButton
-            ? null
-            : Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(tr(LocaleKeys.appbar_list_songs)),
-                  const SizedBox(width: 30),
-                  // const Spacer(),
-                  Flexible(
-                    child: BlocBuilder<GroupCubit, GroupModel>(
-                      builder: (context, groupState) {
-                        return groupState.name == ""
-                            ? const SizedBox()
-                            : GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  // if (indexGroup != i) {
-                                  //   context.read<IndexGroupCubit>().swither(i);
-                                  //   context.read<GroupCubit>().swither(GroupModel(group.id!);
-                                  // }
-                                  // else {
-                                  context.read<IndexGroupCubit>().swither(-1);
-                                  context
-                                      .read<GroupCubit>()
-                                      .swither(GroupModel(name: ""));
-                                  // }
-                                },
-                                child: Container(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 200),
-                                  height: 30,
-                                  alignment: Alignment.center,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    color: context.isDarkMode
-                                        ? colorFiolet.withValues(alpha: .3)
-                                        : Colors.white.withValues(alpha: .2),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
+        title: isReorderMode
+            ? Text(tr(LocaleKeys.title_sort))
+            : isSecondButton
+                ? null
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(tr(LocaleKeys.appbar_list_songs)),
+                      const SizedBox(width: 30),
+                      // const Spacer(),
+                      Flexible(
+                        child: BlocBuilder<GroupCubit, GroupModel>(
+                          builder: (context, groupState) {
+                            return groupState.name == ""
+                                ? const SizedBox()
+                                : GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      // if (indexGroup != i) {
+                                      //   context.read<IndexGroupCubit>().swither(i);
+                                      //   context.read<GroupCubit>().swither(GroupModel(group.id!);
+                                      // }
+                                      // else {
+                                      context
+                                          .read<IndexGroupCubit>()
+                                          .swither(-1);
+                                      context
+                                          .read<GroupCubit>()
+                                          .swither(GroupModel(name: ""));
+                                      // }
+                                    },
+                                    child: Container(
+                                      constraints:
+                                          const BoxConstraints(maxWidth: 200),
+                                      height: 30,
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      decoration: BoxDecoration(
                                         color: context.isDarkMode
-                                            ? colorFiolet
-                                            : Colors.white),
-                                  ),
-                                  child: Text(
-                                    groupState.name,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                      color: context.isDarkMode
-                                          ? colorFiolet
-                                          : Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-        actions: isSecondButton
-            ? [
-                IconButton(
-                  // minLeadingWidth: 25,
-                  tooltip: tr(LocaleKeys.data_export),
-                  icon: SvgPicture.asset("assets/icon/clarity_export-line.svg",
-                      alignment: Alignment.center,
-                      width: 25,
-                      colorFilter: ColorFilter.mode(
-                          Theme.of(context).appBarTheme.foregroundColor!,
-                          BlendMode.srcIn)),
-                  // title: Text(tr(LocaleKeys.data_export)),
-                  onPressed: () async {
-                    createExport(context, selectedSongs);
-                    AppMetrica.reportEvent('data_export');
-                    // setState(() {
-                    //   isSecondButton = false;
-                    //   // indexAdd = 0;
-                    //   selectedSongsId.clear();
-                    //   selectedSongs.clear();
-                    // });
-
-                    // await createBackup();
-                  },
-                ),
-                IconButton(
-                  onPressed: () {
-                    TextEditingController controller = TextEditingController();
-                    Widget buildCreateGroupField(BuildContext context) {
-                      return StatefulBuilder(builder: (context, setState1) {
-                        return BlocBuilder<SongsBloc, SongsState>(
-                          builder: (context, state) {
-                            if (state is SongsLoading) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            } else if (state is SongsLoaded) {
-                              final groups = state.groups;
-
-                              // Если групп 5 или больше, не показывать поле создания
-                              if (groups.length >= 5) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    tr(LocaleKeys.info_max_group),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: context.isDarkMode
-                                          ? Colors.white70
-                                          : Colors.black54,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                );
-                              }
-
-                              return Container(
-                                height: 140,
-                                alignment: Alignment.bottomCenter,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: Column(
-                                  children: [
-                                    // Поле ввода
-                                    CustomTextField(
-                                      controller: controller,
-                                      title: tr(LocaleKeys.title_new_group),
-                                      onChanged: (value) => setState1(() {}),
-                                    ),
-                                    // Счетчик символов
-                                    Text(
-                                      "${controller.text.length}/20",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                                .withValues(alpha: 0.7)
-                                            : Colors.grey[600],
+                                            ? colorFiolet.withValues(alpha: .3)
+                                            : Colors.white
+                                                .withValues(alpha: .2),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: context.isDarkMode
+                                                ? colorFiolet
+                                                : Colors.white),
+                                      ),
+                                      child: Text(
+                                        groupState.name,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: context.isDarkMode
+                                              ? colorFiolet
+                                              : Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    const SizedBox(height: 5),
-                                    // Кнопки подтверждения
-                                    if (controller.text.isNotEmpty)
-                                      SizedBox(
-                                        height: 30,
-                                        width: 200,
-                                        child: Row(
-                                          children: [
-                                            // Кнопка "Создать" или "Обновить"
-                                            Expanded(
-                                              child: CustomButtonSheet(
-                                                title: tr(LocaleKeys
-                                                    .confirmation_create),
-                                                onPressed: () async {
-                                                  // Добавление группы
-                                                  // context
-                                                  //     .read<
-                                                  //         SongsBloc>()
-                                                  //     .add(AddGroup(GroupModel(
-                                                  //         name:
-                                                  //             controller.text)));
-                                                  if (groups.any((group) =>
-                                                      group.name
-                                                          .toLowerCase() ==
-                                                      controller.text
-                                                          .toLowerCase())) {
-                                                    Get.snackbar(
-                                                      tr(LocaleKeys
-                                                          .error_duplicate_group_title),
-                                                      tr(LocaleKeys
-                                                          .error_duplicate_group_message),
-                                                      backgroundColor:
-                                                          Colors.red.withValues(
-                                                              alpha: 0.8),
-                                                      colorText: Colors.white,
-                                                    );
-                                                    return;
-                                                  }
+                                  );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+        actions: isReorderMode
+            ? []
+            : isSecondButton
+                ? [
+                    IconButton(
+                      // minLeadingWidth: 25,
+                      tooltip: tr(LocaleKeys.data_export),
+                      icon: SvgPicture.asset(
+                          "assets/icon/clarity_export-line.svg",
+                          alignment: Alignment.center,
+                          width: 25,
+                          colorFilter: ColorFilter.mode(
+                              Theme.of(context).appBarTheme.foregroundColor!,
+                              BlendMode.srcIn)),
+                      // title: Text(tr(LocaleKeys.data_export)),
+                      onPressed: () async {
+                        createExport(context, selectedSongs);
+                        AppMetrica.reportEvent('data_export');
+                        // setState(() {
+                        //   isSecondButton = false;
+                        //   // indexAdd = 0;
+                        //   selectedSongsId.clear();
+                        //   selectedSongs.clear();
+                        // });
 
-                                                  // Добавление группы
-                                                  context.read<SongsBloc>().add(
-                                                        AddGroup(GroupModel(
-                                                            name: controller
-                                                                .text)),
-                                                      );
-                                                  AppMetrica.reportEvent(
-                                                      'Added group name: ${controller.text}');
-                                                  setState(() {
-                                                    // groupModel =
-                                                    //     GroupModel(
-                                                    //         name: "");
-                                                    controller.clear();
-                                                  });
+                        // await createBackup();
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        TextEditingController controller =
+                            TextEditingController();
+                        Widget buildCreateGroupField(BuildContext context) {
+                          return StatefulBuilder(builder: (context, setState1) {
+                            return BlocBuilder<SongsBloc, SongsState>(
+                              builder: (context, state) {
+                                if (state is SongsLoading) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else if (state is SongsLoaded) {
+                                  final groups = state.groups;
 
-                                                  // Get.back();
-                                                  // context
-                                                  //     .read<SongsBloc>()
-                                                  //     .add(LoadSongs());
-                                                  // Дождитесь обновления состояния
-                                                  await Future.delayed(
-                                                      const Duration(
-                                                          milliseconds: 300));
+                                  // Если групп 5 или больше, не показывать поле создания
+                                  if (groups.length >= 5) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                        tr(LocaleKeys.info_max_group),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: context.isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black54,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    );
+                                  }
 
-                                                  // Получение группы и обновление песен
-                                                  final state = context
-                                                      .read<SongsBloc>()
-                                                      .state;
-                                                  if (state is SongsLoaded &&
-                                                      state.groups.isNotEmpty) {
-                                                    final lastGroupId =
-                                                        state.groups.first.id;
-                                                    for (int i = 0;
-                                                        i <
-                                                            selectedSongs
-                                                                .length;
-                                                        i++) {
+                                  return Container(
+                                    height: 140,
+                                    alignment: Alignment.bottomCenter,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Column(
+                                      children: [
+                                        // Поле ввода
+                                        CustomTextField(
+                                          controller: controller,
+                                          title: tr(LocaleKeys.title_new_group),
+                                          onChanged: (value) =>
+                                              setState1(() {}),
+                                        ),
+                                        // Счетчик символов
+                                        Text(
+                                          "${controller.text.length}/20",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: context.isDarkMode
+                                                ? Colors.white
+                                                    .withValues(alpha: 0.7)
+                                                : Colors.grey[600],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        // Кнопки подтверждения
+                                        if (controller.text.isNotEmpty)
+                                          SizedBox(
+                                            height: 30,
+                                            width: 200,
+                                            child: Row(
+                                              children: [
+                                                // Кнопка "Создать" или "Обновить"
+                                                Expanded(
+                                                  child: CustomButtonSheet(
+                                                    title: tr(LocaleKeys
+                                                        .confirmation_create),
+                                                    onPressed: () async {
+                                                      // Добавление группы
+                                                      // context
+                                                      //     .read<
+                                                      //         SongsBloc>()
+                                                      //     .add(AddGroup(GroupModel(
+                                                      //         name:
+                                                      //             controller.text)));
+                                                      if (groups.any((group) =>
+                                                          group.name
+                                                              .toLowerCase() ==
+                                                          controller.text
+                                                              .toLowerCase())) {
+                                                        Get.snackbar(
+                                                          tr(LocaleKeys
+                                                              .error_duplicate_group_title),
+                                                          tr(LocaleKeys
+                                                              .error_duplicate_group_message),
+                                                          backgroundColor:
+                                                              Colors.red
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.8),
+                                                          colorText:
+                                                              Colors.white,
+                                                        );
+                                                        return;
+                                                      }
+
+                                                      // Добавление группы
                                                       context
                                                           .read<SongsBloc>()
                                                           .add(
-                                                            UpdateSong(
-                                                                selectedSongs[i]
-                                                                    .copy(
-                                                              order: i + 1,
-                                                              group:
-                                                                  lastGroupId,
-                                                            )),
+                                                            AddGroup(GroupModel(
+                                                                name: controller
+                                                                    .text)),
                                                           );
-                                                    }
-                                                  }
-                                                  setState1(() {
-                                                    isSecondButton = false;
-                                                    // indexAdd = 0;
-                                                    selectedSongsId.clear();
-                                                    selectedSongs.clear();
-                                                  });
-                                                  Get.back();
-                                                },
-                                              ),
+                                                      AppMetrica.reportEvent(
+                                                          'Added group name: ${controller.text}');
+                                                      setState(() {
+                                                        // groupModel =
+                                                        //     GroupModel(
+                                                        //         name: "");
+                                                        controller.clear();
+                                                      });
+
+                                                      // Get.back();
+                                                      // context
+                                                      //     .read<SongsBloc>()
+                                                      //     .add(LoadSongs());
+                                                      // Дождитесь обновления состояния
+                                                      await Future.delayed(
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  300));
+
+                                                      // Получение группы и обновление песен
+                                                      final state = context
+                                                          .read<SongsBloc>()
+                                                          .state;
+                                                      if (state
+                                                              is SongsLoaded &&
+                                                          state.groups
+                                                              .isNotEmpty) {
+                                                        final lastGroupId =
+                                                            state.groups.first
+                                                                .id;
+                                                        for (int i = 0;
+                                                            i <
+                                                                selectedSongs
+                                                                    .length;
+                                                            i++) {
+                                                          context
+                                                              .read<SongsBloc>()
+                                                              .add(
+                                                                UpdateSong(
+                                                                    selectedSongs[
+                                                                            i]
+                                                                        .copy(
+                                                                  order: i + 1,
+                                                                  group:
+                                                                      lastGroupId,
+                                                                )),
+                                                              );
+                                                        }
+                                                      }
+                                                      setState1(() {
+                                                        isSecondButton = false;
+                                                        // indexAdd = 0;
+                                                        selectedSongsId.clear();
+                                                        selectedSongs.clear();
+                                                      });
+                                                      Get.back();
+                                                    },
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 15),
+                                                // Кнопка "Отмена"
+                                                Expanded(
+                                                  child: CustomButtonSheet(
+                                                    isSecond: true,
+                                                    onPressed: () {
+                                                      setState1(() {
+                                                        controller.clear();
+                                                      });
+                                                    },
+                                                    title: tr(LocaleKeys
+                                                        .confirmation_cancel),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            const SizedBox(width: 15),
-                                            // Кнопка "Отмена"
-                                            Expanded(
-                                              child: CustomButtonSheet(
-                                                isSecond: true,
-                                                onPressed: () {
-                                                  setState1(() {
-                                                    controller.clear();
-                                                  });
-                                                },
-                                                title: tr(LocaleKeys
-                                                    .confirmation_cancel),
-                                              ),
-                                            ),
-                                          ],
+                                          ),
+                                      ],
+                                    ),
+                                  );
+                                } else if (state is SongsError) {
+                                  return Center(
+                                    child: Text(
+                                      "Error: ${state.message}",
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            );
+                          });
+                        }
+
+                        showModalBottomSheet(
+                          useSafeArea: true,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                          ),
+                          context: context,
+                          builder: (context) => DraggableScrollableSheet(
+                            initialChildSize: 0.8,
+                            expand: false,
+                            builder: (context, scrollController) {
+                              return ListView(
+                                physics: const BouncingScrollPhysics(),
+                                controller: scrollController,
+                                // mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Align(
+                                      alignment: AlignmentDirectional.topStart,
+                                      child: Text(
+                                        "${tr(LocaleKeys.confirmation_group_title_select)}:",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                  ],
-                                ),
-                              );
-                            } else if (state is SongsError) {
-                              return Center(
-                                child: Text(
-                                  "Error: ${state.message}",
-                                  style: const TextStyle(color: Colors.red),
-                                ),
-                              );
-                            }
-                            return const SizedBox();
-                          },
-                        );
-                      });
-                    }
-
-                    showModalBottomSheet(
-                      useSafeArea: true,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                      ),
-                      context: context,
-                      builder: (context) => DraggableScrollableSheet(
-                        initialChildSize: 0.8,
-                        expand: false,
-                        builder: (context, scrollController) {
-                          return ListView(
-                            physics: const BouncingScrollPhysics(),
-                            controller: scrollController,
-                            // mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(height: 20),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                child: Align(
-                                  alignment: AlignmentDirectional.topStart,
-                                  child: Text(
-                                    "${tr(LocaleKeys.confirmation_group_title_select)}:",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
+                                  const SizedBox(height: 10),
 
-                              // CustomTextField(
-                              //   onChanged: (value) => setState(() {
-                              //     controller.text = value;
-                              //   }),
-                              //   controller: controller,
-                              //   title: tr(LocaleKeys.title_new_group),
-                              // ),
-                              buildCreateGroupField(context),
+                                  // CustomTextField(
+                                  //   onChanged: (value) => setState(() {
+                                  //     controller.text = value;
+                                  //   }),
+                                  //   controller: controller,
+                                  //   title: tr(LocaleKeys.title_new_group),
+                                  // ),
+                                  buildCreateGroupField(context),
 
-                              BlocBuilder<SongsBloc, SongsState>(
-                                builder: (context, state) {
-                                  if (state is SongsLoading) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state is SongsLoaded) {
-                                    return Column(
-                                      children: state.groups
-                                          .asMap()
-                                          .map((index, title) => MapEntry(
-                                              index,
-                                              ListTile(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
+                                  BlocBuilder<SongsBloc, SongsState>(
+                                    builder: (context, state) {
+                                      if (state is SongsLoading) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (state is SongsLoaded) {
+                                        return Column(
+                                          children: state.groups
+                                              .asMap()
+                                              .map((index, title) => MapEntry(
+                                                  index,
+                                                  ListTile(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    minVerticalPadding: 10,
+                                                    onTap: () {
+                                                      final groupId = state
+                                                          .groups[index].id;
+                                                      for (int i = 0;
+                                                          i <
+                                                              selectedSongs
+                                                                  .length;
+                                                          i++) {
+                                                        context
+                                                            .read<SongsBloc>()
+                                                            .add(
+                                                              UpdateSong(
+                                                                  selectedSongs[
+                                                                          i]
+                                                                      .copy(
+                                                                order: i + 1,
+                                                                group: groupId,
+                                                              )),
+                                                            );
+                                                      }
+                                                      setState(() {
+                                                        isSecondButton = false;
+                                                        // indexAdd = 0;
+                                                        selectedSongsId.clear();
+                                                        selectedSongs.clear();
+                                                      });
+                                                      Get.back();
+                                                    },
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 5),
+                                                    title: Text(
+                                                      state.groups[index].name,
+                                                      style: const TextStyle(
+                                                          fontSize: 16),
+                                                    ),
+                                                  )))
+                                              .values
+                                              .toList(),
+                                        );
+                                      } else if (state is SongsError) {
+                                        return Center(
+                                            child: Text(tr(LocaleKeys
+                                                .error_loading_group)));
+                                      } else {
+                                        return const SizedBox();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      icon: const Icon(EvaIcons.folder_add),
+                    ),
+                    BlocBuilder<SongsBloc, SongsState>(
+                      builder: (context, state) {
+                        if (state is SongsLoading) {
+                          return const SizedBox();
+                        } else if (state is SongsLoaded) {
+                          // bool allSelected = state.songs
+                          //     .every((song) => selectedSongsId.contains(song.id));
+                          return IconButton(
+                            onPressed: () {
+                              if (context.read<IndexGroupCubit>().state == -1) {
+                                bool allSelected = state.songs.every((song) =>
+                                    selectedSongsId.contains(song.id));
+                                if (allSelected) {
+                                  _toggleAllSelections(state.songs, false);
+                                } else {
+                                  _toggleAllSelections(state.songs, true);
+                                }
+                              } else {
+                                List<Song> filteredSongs = (state.songs
+                                    .where((song) =>
+                                        song.group ==
+                                        state
+                                            .groups[context
+                                                .read<IndexGroupCubit>()
+                                                .state]
+                                            .id)
+                                    .toList()
+                                  ..sort(
+                                      (a, b) => a.order!.compareTo(b.order!)));
+                                bool allSelected = filteredSongs.every((song) =>
+                                    selectedSongsId.contains(song.id));
+                                if (allSelected) {
+                                  _toggleAllSelections(filteredSongs, false);
+                                } else {
+                                  _toggleAllSelections(filteredSongs, true);
+                                }
+                              }
+                            },
+                            icon: const Icon(Icons.select_all),
+                          );
+                        } else if (state is SongsError) {
+                          return const SizedBox();
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
+                    context.read<IndexGroupCubit>().state != -1
+                        ? IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15))),
+                                  context: context,
+                                  builder: (modalContext) => SafeArea(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                selectedSongsId.length == 1
+                                                    ? tr(LocaleKeys
+                                                        .exclude_a_song_title)
+                                                    : tr(LocaleKeys
+                                                        .exclude_a_songs_title),
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                selectedSongsId.length == 1
+                                                    ? tr(LocaleKeys
+                                                        .exclude_a_song_content)
+                                                    : tr(LocaleKeys
+                                                        .exclude_a_songs_content),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
                                                 ),
-                                                minVerticalPadding: 10,
-                                                onTap: () {
-                                                  final groupId =
-                                                      state.groups[index].id;
-                                                  for (int i = 0;
-                                                      i < selectedSongs.length;
-                                                      i++) {
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              CustomButtonSheet(
+                                                width: context.width,
+                                                height: 40,
+                                                onPressed: () {
+                                                  for (Song song
+                                                      in selectedSongs) {
                                                     context
                                                         .read<SongsBloc>()
-                                                        .add(
-                                                          UpdateSong(
-                                                              selectedSongs[i]
-                                                                  .copy(
-                                                            order: i + 1,
-                                                            group: groupId,
-                                                          )),
-                                                        );
+                                                        .add(UpdateSong(song
+                                                            .copy(group: 0)));
                                                   }
                                                   setState(() {
                                                     isSecondButton = false;
@@ -441,275 +616,138 @@ class _GuitarPageState extends State<GuitarPage> {
                                                   });
                                                   Get.back();
                                                 },
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 5),
-                                                title: Text(
-                                                  state.groups[index].name,
-                                                  style: const TextStyle(
-                                                      fontSize: 16),
+                                                title: tr(LocaleKeys
+                                                    .exclude_a_songs_button),
+                                                fontSize: 14,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              CustomButtonSheet(
+                                                width: context.width,
+                                                height: 40,
+                                                isSecond: true,
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                                title: tr(LocaleKeys
+                                                    .confirmation_cancel),
+                                                fontSize: 14,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ));
+                            },
+                            icon: Icon(
+                              MingCute.exit_line,
+                              color: Colors.red[400],
+                            ))
+                        : IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15))),
+                                  context: context,
+                                  builder: (modalContext) => SafeArea(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(
+                                                selectedSongsId.length == 1
+                                                    ? tr(LocaleKeys
+                                                        .confirmation_delete_song_title)
+                                                    : tr(LocaleKeys
+                                                        .confirmation_delete_songs_title),
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                selectedSongsId.length == 1
+                                                    ? tr(LocaleKeys
+                                                        .confirmation_delete_song_content)
+                                                    : tr(LocaleKeys
+                                                        .confirmation_delete_songs_content),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
                                                 ),
-                                              )))
-                                          .values
-                                          .toList(),
-                                    );
-                                  } else if (state is SongsError) {
-                                    return Center(
-                                        child: Text(tr(
-                                            LocaleKeys.error_loading_group)));
-                                  } else {
-                                    return const SizedBox();
-                                  }
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  icon: const Icon(EvaIcons.folder_add),
-                ),
-                BlocBuilder<SongsBloc, SongsState>(
-                  builder: (context, state) {
-                    if (state is SongsLoading) {
-                      return const SizedBox();
-                    } else if (state is SongsLoaded) {
-                      // bool allSelected = state.songs
-                      //     .every((song) => selectedSongsId.contains(song.id));
-                      return IconButton(
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              CustomButtonSheet(
+                                                width: context.width,
+                                                height: 40,
+                                                onPressed: () {
+                                                  for (int id
+                                                      in selectedSongsId) {
+                                                    context
+                                                        .read<SongsBloc>()
+                                                        .add(DeleteSong(id));
+                                                  }
+                                                  setState(() {
+                                                    isSecondButton = false;
+                                                    // indexAdd = 0;
+                                                    selectedSongsId.clear();
+                                                    selectedSongs.clear();
+                                                  });
+                                                  Get.back();
+                                                },
+                                                title: tr(LocaleKeys
+                                                    .confirmation_delete),
+                                                fontSize: 14,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              CustomButtonSheet(
+                                                width: context.width,
+                                                height: 40,
+                                                isSecond: true,
+                                                onPressed: () {
+                                                  Get.back();
+                                                },
+                                                title: tr(LocaleKeys
+                                                    .confirmation_cancel),
+                                                fontSize: 14,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ));
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red[400],
+                            ),
+                          )
+                  ]
+                : [
+                    IconButton(
                         onPressed: () {
-                          if (context.read<IndexGroupCubit>().state == -1) {
-                            bool allSelected = state.songs.every(
-                                (song) => selectedSongsId.contains(song.id));
-                            if (allSelected) {
-                              _toggleAllSelections(state.songs, false);
-                            } else {
-                              _toggleAllSelections(state.songs, true);
-                            }
-                          } else {
-                            List<Song> filteredSongs = (state.songs
-                                .where((song) =>
-                                    song.group ==
-                                    state
-                                        .groups[context
-                                            .read<IndexGroupCubit>()
-                                            .state]
-                                        .id)
-                                .toList()
-                              ..sort((a, b) => a.order!.compareTo(b.order!)));
-                            bool allSelected = filteredSongs.every(
-                                (song) => selectedSongsId.contains(song.id));
-                            if (allSelected) {
-                              _toggleAllSelections(filteredSongs, false);
-                            } else {
-                              _toggleAllSelections(filteredSongs, true);
-                            }
-                          }
+                          Get.to(const SearchPage());
                         },
-                        icon: const Icon(Icons.select_all),
-                      );
-                    } else if (state is SongsError) {
-                      return const SizedBox();
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-                context.read<IndexGroupCubit>().state != -1
-                    ? IconButton(
+                        icon: const Icon(Icons.search)),
+                    IconButton(
                         onPressed: () {
-                          showModalBottomSheet(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15))),
-                              context: context,
-                              builder: (modalContext) => SafeArea(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            selectedSongsId.length == 1
-                                                ? tr(LocaleKeys
-                                                    .exclude_a_song_title)
-                                                : tr(LocaleKeys
-                                                    .exclude_a_songs_title),
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            selectedSongsId.length == 1
-                                                ? tr(LocaleKeys
-                                                    .exclude_a_song_content)
-                                                : tr(LocaleKeys
-                                                    .exclude_a_songs_content),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          CustomButtonSheet(
-                                            width: context.width,
-                                            height: 40,
-                                            onPressed: () {
-                                              for (Song song in selectedSongs) {
-                                                context.read<SongsBloc>().add(
-                                                    UpdateSong(
-                                                        song.copy(group: 0)));
-                                              }
-                                              setState(() {
-                                                isSecondButton = false;
-                                                // indexAdd = 0;
-                                                selectedSongsId.clear();
-                                                selectedSongs.clear();
-                                              });
-                                              Get.back();
-                                            },
-                                            title: tr(LocaleKeys
-                                                .exclude_a_songs_button),
-                                            fontSize: 14,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          CustomButtonSheet(
-                                            width: context.width,
-                                            height: 40,
-                                            isSecond: true,
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            title: tr(
-                                                LocaleKeys.confirmation_cancel),
-                                            fontSize: 14,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ));
+                          Get.to(const Create_song());
                         },
-                        icon: Icon(
-                          MingCute.exit_line,
-                          color: Colors.red[400],
-                        ))
-                    : IconButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15))),
-                              context: context,
-                              builder: (modalContext) => SafeArea(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            selectedSongsId.length == 1
-                                                ? tr(LocaleKeys
-                                                    .confirmation_delete_song_title)
-                                                : tr(LocaleKeys
-                                                    .confirmation_delete_songs_title),
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            selectedSongsId.length == 1
-                                                ? tr(LocaleKeys
-                                                    .confirmation_delete_song_content)
-                                                : tr(LocaleKeys
-                                                    .confirmation_delete_songs_content),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          CustomButtonSheet(
-                                            width: context.width,
-                                            height: 40,
-                                            onPressed: () {
-                                              for (int id in selectedSongsId) {
-                                                context
-                                                    .read<SongsBloc>()
-                                                    .add(DeleteSong(id));
-                                              }
-                                              setState(() {
-                                                isSecondButton = false;
-                                                // indexAdd = 0;
-                                                selectedSongsId.clear();
-                                                selectedSongs.clear();
-                                              });
-                                              Get.back();
-                                            },
-                                            title: tr(
-                                                LocaleKeys.confirmation_delete),
-                                            fontSize: 14,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          CustomButtonSheet(
-                                            width: context.width,
-                                            height: 40,
-                                            isSecond: true,
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                            title: tr(
-                                                LocaleKeys.confirmation_cancel),
-                                            fontSize: 14,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ));
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: Colors.red[400],
-                        ),
-                      )
-              ]
-            : [
-                IconButton(
-                    onPressed: () {
-                      Get.to(const SearchPage());
-                    },
-                    icon: const Icon(Icons.search)),
-                IconButton(
-                    onPressed: () {
-                      Get.to(const Create_song());
-                    },
-                    icon: const Icon(Icons.add)),
-              ],
+                        icon: const Icon(Icons.add)),
+                  ],
       ),
       body: RefreshIndicator(
         color: colorFiolet,
@@ -720,243 +758,611 @@ class _GuitarPageState extends State<GuitarPage> {
           context.read<SongsBloc>().add(LoadSongs());
           return controller.refreshSongs();
         },
-        child: ScrollConfiguration(
-            behavior: const ScrollBehavior(),
-            child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.down,
-                color: colorFiolet.withValues(alpha: 0.3),
-                child: ListView(controller: controllerScroll, children: [
-                  _buildHeader(context, 0),
-                  // _buildHeader(context, 1),
+        child: BlocBuilder<IndexGroupCubit, int>(
+          builder: (context, indexGroup) {
+            return BlocBuilder<SongsBloc, SongsState>(
+              builder: (context, state) {
+                if (state is SongsLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SongsLoaded) {
+                  // List<Song> filteredSongs = indexGroup == -1
+                  //     ? state.songs
+                  //     : state.songs
+                  //         .where((song) =>
+                  //             song.group == state.groups[indexGroup].id)
+                  //         .toList();
 
-                  BlocBuilder<IndexGroupCubit, int>(
-                    builder: (context, indexGroup) {
-                      return BlocBuilder<SongsBloc, SongsState>(
-                        builder: (context, state) {
-                          if (state is SongsLoading) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (state is SongsLoaded) {
-                            // List<Song> filteredSongs = indexGroup == -1
-                            //     ? state.songs
-                            //     : state.songs
-                            //         .where((song) =>
-                            //             song.group ==
-                            //             state.groups[indexGroup].id)
-                            //         .toList()
-                            //   ..sort((a, b) => a.order!.compareTo(b.order!));
-                            List<Song> filteredSongs = indexGroup == -1
-                                ? (state.songs
-                                  ..sort((a, b) => b.id!.compareTo(
-                                      a.id!))) // Сортировка по id desc
-                                : (state.songs
-                                    .where((song) =>
-                                        song.group ==
-                                        state.groups[indexGroup].id)
-                                    .toList()
-                                  ..sort((a, b) => a.order!.compareTo(
-                                      b.order!))); // Сортировка по order asc
+                  // if (!isReorderMode) {
+                  //   filteredSongs.sort((a, b) => a.order!.compareTo(b.order!));
+                  // }
+                  List<Song> filteredSongs = indexGroup == -1
+                      ? state.songs
+                      : state.songs
+                          .where((song) =>
+                              song.group == state.groups[indexGroup].id)
+                          .toList()
+                    ..sort((a, b) => a.order!.compareTo(b.order!));
+                  if (isReorderMode &&
+                      indexGroup != -1 &&
+                      reorderedSongs.isEmpty) {
+                    reorderedSongs = [...filteredSongs];
+                  }
 
-                            return Column(
+                  return isReorderMode
+                      ? Listener(
+                          onPointerMove: (event) {
+                            final y = event.position.dy;
+                            const edgePadding = 100.0;
+                            const scrollSpeed = 15.0;
+
+                            final maxExtent = reorderScrollController
+                                .position.maxScrollExtent;
+                            final offset = reorderScrollController.offset;
+
+                            if (y < edgePadding) {
+                              reorderScrollController.jumpTo(
+                                  (offset - scrollSpeed).clamp(0.0, maxExtent));
+                            } else if (y >
+                                MediaQuery.of(context).size.height -
+                                    edgePadding) {
+                              reorderScrollController.jumpTo(
+                                  (offset + scrollSpeed).clamp(0.0, maxExtent));
+                            }
+                          },
+                          onPointerDown: (_) {
+                            if (isReorderMode) {
+                              HapticFeedback.vibrate();
+                            }
+                          },
+                          child: ScrollConfiguration(
+                            behavior: const ScrollBehavior(),
+                            child: GlowingOverscrollIndicator(
+                              axisDirection: AxisDirection.down,
+                              color: colorFiolet.withValues(alpha: 0.3),
+                              child: ReorderableListView(
+                                scrollController: reorderScrollController,
+                                // onReorder: (oldIndex, newIndex) {
+                                //   setState(() {
+                                //     if (newIndex > oldIndex) newIndex -= 1;
+                                //     final movedSong =
+                                //         filteredSongs.removeAt(oldIndex);
+                                //     filteredSongs.insert(newIndex, movedSong);
+                                //   });
+
+                                //   final updatedSongs = <Song>[];
+                                //   for (int i = 0;
+                                //       i < filteredSongs.length;
+                                //       i++) {
+                                //     updatedSongs.add(
+                                //         filteredSongs[i].copy(order: i + 1));
+                                //   }
+
+                                //   context
+                                //       .read<SongsBloc>()
+                                //       .add(UpdateSongsOrder(updatedSongs));
+                                // },
+                                onReorder: (oldIndex, newIndex) {
+                                  setState(() {
+                                    if (newIndex > oldIndex) newIndex -= 1;
+                                    final item =
+                                        reorderedSongs.removeAt(oldIndex);
+                                    reorderedSongs.insert(newIndex, item);
+                                  });
+
+                                  final updated = <Song>[];
+                                  for (int i = 0;
+                                      i < reorderedSongs.length;
+                                      i++) {
+                                    updated.add(
+                                        reorderedSongs[i].copy(order: i + 1));
+                                  }
+                                  context
+                                      .read<SongsBloc>()
+                                      .add(UpdateSongsOrder(updated));
+                                },
+                                children: [
+                                  for (int index = 0;
+                                      index < reorderedSongs.length;
+                                      index++)
+                                    ListTile(
+                                      minTileHeight: 60,
+                                      minVerticalPadding: 10,
+                                      key: ValueKey(reorderedSongs[index].id),
+                                      tileColor: context.isDarkMode
+                                          ? backgroundColorDark
+                                          : Colors.white.withValues(alpha: .1),
+                                      leading: SizedBox(
+                                        width: 20,
+                                        child: Center(
+                                          child: Text(
+                                            "${index + 1}.",
+                                            style: TextStyle(
+                                                fontSize: index >= 9
+                                                    ? 14
+                                                    : index >= 99
+                                                        ? 12
+                                                        : 16,
+                                                color: context.isDarkMode
+                                                    ? Colors.white
+                                                        .withValues(alpha: .5)
+                                                    : Colors.black
+                                                        .withValues(alpha: .5)),
+                                          ),
+                                        ),
+                                      ),
+                                      minLeadingWidth: 1,
+                                      title:
+                                          Text(reorderedSongs[index].name_song),
+                                      subtitle: Text(
+                                        reorderedSongs[index].name_singer ?? '',
+                                        style: TextStyle(
+                                          color: context.isDarkMode
+                                              ? Colors.grey[300]
+                                              : Colors.grey[600],
+                                        ),
+                                      ),
+                                      trailing: ReorderableDragStartListener(
+                                        index: index,
+                                        child: const Icon(Icons.drag_handle),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : ScrollConfiguration(
+                          behavior: const ScrollBehavior(),
+                          child: GlowingOverscrollIndicator(
+                            axisDirection: AxisDirection.down,
+                            color: colorFiolet.withValues(alpha: 0.3),
+                            child: ListView(
+                              controller: controllerScroll,
                               children: [
+                                _buildHeader(context, 0),
                                 _buildHorizontalGroupSelector(state.groups),
                                 _buildHeader(context, 2),
-                                filteredSongs.isEmpty &&
-                                        context.read<IndexGroupCubit>().state !=
-                                            -1
-                                    ? SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: Text(tr(
-                                              LocaleKeys.no_data_select_songs)),
-                                        ),
-                                      )
-                                    : Column(
-                                        children: filteredSongs
-                                            .map((song) => ListTile(
-                                                  key: ValueKey(song.id),
-                                                  minLeadingWidth:
-                                                      !isSecondButton
-                                                          ? null
-                                                          : 0,
-                                                  leading: isSecondButton
-                                                      ? _buildSelectionIndicator(
-                                                          song.id!)
-                                                      : null,
-                                                  onLongPress: () {
-                                                    setState(() {
-                                                      isSecondButton = true;
-                                                    });
-                                                    _toggleSongSelection(
-                                                        song.id!, song);
-                                                  },
-                                                  title: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .stretch,
-                                                    children: [
-                                                      Text(song.name_song,
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize:
-                                                                      16)),
-                                                      Text(
-                                                        song.name_singer ?? "",
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: context
-                                                                  .isDarkMode
-                                                              ? Colors.grey[300]
-                                                              : Colors
-                                                                  .grey[600],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  subtitle: indexGroup != -1
-                                                      ? null
-                                                      : song.group == null ||
-                                                              song.group == 0
-                                                          ? null
-                                                          : BlocBuilder<
-                                                              SongsBloc,
-                                                              SongsState>(
-                                                              // Если уже есть группа и по возможности можно поменять
-                                                              builder: (context,
-                                                                  state) {
-                                                                List<GroupModel>
-                                                                    groups = [];
-
-                                                                if (state
-                                                                    is SongsLoaded) {
-                                                                  groups = state
-                                                                      .groups;
-                                                                }
-                                                                return Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      height:
-                                                                          20,
-                                                                      margin: const EdgeInsets
-                                                                          .only(
-                                                                          top:
-                                                                              5,
-                                                                          bottom:
-                                                                              5),
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          horizontal:
-                                                                              5),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: colorFiolet.withValues(
-                                                                            alpha:
-                                                                                .3),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                colorFiolet),
-                                                                      ),
-                                                                      child:
-                                                                          Text(
-                                                                        getNameGroup(
-                                                                          song.group!,
-                                                                          groups,
-                                                                        ),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight:
-                                                                              FontWeight.w600,
-                                                                          color:
-                                                                              colorFiolet,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            ),
-                                                  onTap: isSecondButton
-                                                      ? () =>
-                                                          _toggleSongSelection(
-                                                              song.id!, song)
-                                                      : () {
-                                                          Get.to(GuitarDetal(
-                                                            id: song.id!,
-                                                            speedTextSong: song
-                                                                .speedScroll!,
-                                                          ));
-                                                        },
-                                                ))
-                                            .toList(),
+                                ...filteredSongs.map((song) => ListTile(
+                                      key: ValueKey(song.id),
+                                      minLeadingWidth:
+                                          !isSecondButton ? null : 0,
+                                      leading: isSecondButton
+                                          ? _buildSelectionIndicator(song.id!)
+                                          : null,
+                                      onLongPress: () {
+                                        setState(() {
+                                          isSecondButton = true;
+                                        });
+                                        _toggleSongSelection(song.id!, song);
+                                      },
+                                      title: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          Text(song.name_song,
+                                              style: const TextStyle(
+                                                  fontSize: 16)),
+                                          Text(
+                                            song.name_singer ?? "",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: context.isDarkMode
+                                                  ? Colors.grey[300]
+                                                  : Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      subtitle: indexGroup != -1
+                                          ? null
+                                          : song.group == null ||
+                                                  song.group == 0
+                                              ? null
+                                              : BlocBuilder<SongsBloc,
+                                                  SongsState>(
+                                                  // Если уже есть группа и по возможности можно поменять
+                                                  builder: (context, state) {
+                                                    List<GroupModel> groups =
+                                                        [];
+
+                                                    if (state is SongsLoaded) {
+                                                      groups = state.groups;
+                                                    }
+                                                    return Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 20,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 5,
+                                                                  bottom: 5),
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: colorFiolet
+                                                                .withValues(
+                                                                    alpha: .3),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            border: Border.all(
+                                                                color:
+                                                                    colorFiolet),
+                                                          ),
+                                                          child: Text(
+                                                            getNameGroup(
+                                                              song.group!,
+                                                              groups,
+                                                            ),
+                                                            style: TextStyle(
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  colorFiolet,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                      onTap: isSecondButton
+                                          ? () => _toggleSongSelection(
+                                              song.id!, song)
+                                          : () {
+                                              Get.to(GuitarDetal(
+                                                id: song.id!,
+                                                speedTextSong:
+                                                    song.speedScroll!,
+                                              ));
+                                            },
+                                    ))
                               ],
-                            );
-                          } else if (state is SongsError) {
-                            return const SizedBox();
-                          } else {
-                            return _buildHeader(context, 2);
-                          }
-                        },
-                      );
-                    },
-                  )
-                ]))),
+                            ),
+                          ),
+                        );
+                } else if (state is SongsError) {
+                  return Text(state.message);
+                } else {
+                  return _buildHeader(context, 2);
+                }
+              },
+            );
+          },
+        ),
       ),
+      // body: RefreshIndicator(
+      //   color: colorFiolet,
+      //   backgroundColor: context.isDarkMode
+      //       ? backgroundColorDark.withValues(alpha: .1)
+      //       : Colors.white,
+      //   onRefresh: () {
+      //     context.read<SongsBloc>().add(LoadSongs());
+      //     return controller.refreshSongs();
+      //   },
+      //   child: ScrollConfiguration(
+      //       behavior: const ScrollBehavior(),
+      //       child: GlowingOverscrollIndicator(
+      //           axisDirection: AxisDirection.down,
+      //           color: colorFiolet.withValues(alpha: 0.3),
+      //           child: ListView(controller: controllerScroll, children: [
+      //             _buildHeader(context, 0),
+      //             // _buildHeader(context, 1),
+
+      //             BlocBuilder<IndexGroupCubit, int>(
+      //               builder: (context, indexGroup) {
+      //                 return BlocBuilder<SongsBloc, SongsState>(
+      //                   builder: (context, state) {
+      //                     if (state is SongsLoading) {
+      //                       return const Center(
+      //                           child: CircularProgressIndicator());
+      //                     } else if (state is SongsLoaded) {
+      //                       // List<Song> filteredSongs = indexGroup == -1
+      //                       //     ? state.songs
+      //                       //     : state.songs
+      //                       //         .where((song) =>
+      //                       //             song.group ==
+      //                       //             state.groups[indexGroup].id)
+      //                       //         .toList()
+      //                       //   ..sort((a, b) => a.order!.compareTo(b.order!));
+      //                       List<Song> filteredSongs = indexGroup == -1
+      //                           ? (state.songs
+      //                             ..sort((a, b) => b.id!.compareTo(
+      //                                 a.id!))) // Сортировка по id desc
+      //                           : (state.songs
+      //                               .where((song) =>
+      //                                   song.group ==
+      //                                   state.groups[indexGroup].id)
+      //                               .toList()
+      //                             ..sort((a, b) => a.order!.compareTo(
+      //                                 b.order!))); // Сортировка по order asc
+
+      //                       return Column(
+      //                         children: [
+      //                           _buildHorizontalGroupSelector(state.groups),
+      //                           _buildHeader(context, 2),
+      //                           filteredSongs.isEmpty &&
+      //                                   context.read<IndexGroupCubit>().state !=
+      //                                       -1
+      //                               ? SizedBox(
+      //                                   height: 100,
+      //                                   child: Center(
+      //                                     child: Text(tr(
+      //                                         LocaleKeys.no_data_select_songs)),
+      //                                   ),
+      //                                 )
+      //                               : Column(
+      //                                   children: filteredSongs
+      //                                       .map((song) => ListTile(
+      //                                             key: ValueKey(song.id),
+      //                                             minLeadingWidth:
+      //                                                 !isSecondButton
+      //                                                     ? null
+      //                                                     : 0,
+      //                                             leading: isSecondButton
+      //                                                 ? _buildSelectionIndicator(
+      //                                                     song.id!)
+      //                                                 : null,
+      //                                             onLongPress: () {
+      //                                               setState(() {
+      //                                                 isSecondButton = true;
+      //                                               });
+      //                                               _toggleSongSelection(
+      //                                                   song.id!, song);
+      //                                             },
+      //                                             title: Column(
+      //                                               mainAxisSize:
+      //                                                   MainAxisSize.min,
+      //                                               crossAxisAlignment:
+      //                                                   CrossAxisAlignment
+      //                                                       .stretch,
+      //                                               children: [
+      //                                                 Text(song.name_song,
+      //                                                     style:
+      //                                                         const TextStyle(
+      //                                                             fontSize:
+      //                                                                 16)),
+      //                                                 Text(
+      //                                                   song.name_singer ?? "",
+      //                                                   style: TextStyle(
+      //                                                     fontSize: 14,
+      //                                                     color: context
+      //                                                             .isDarkMode
+      //                                                         ? Colors.grey[300]
+      //                                                         : Colors
+      //                                                             .grey[600],
+      //                                                   ),
+      //                                                 ),
+      //                                               ],
+      //                                             ),
+      //                                             subtitle: indexGroup != -1
+      //                                                 ? null
+      //                                                 : song.group == null ||
+      //                                                         song.group == 0
+      //                                                     ? null
+      //                                                     : BlocBuilder<
+      //                                                         SongsBloc,
+      //                                                         SongsState>(
+      //                                                         // Если уже есть группа и по возможности можно поменять
+      //                                                         builder: (context,
+      //                                                             state) {
+      //                                                           List<GroupModel>
+      //                                                               groups = [];
+
+      //                                                           if (state
+      //                                                               is SongsLoaded) {
+      //                                                             groups = state
+      //                                                                 .groups;
+      //                                                           }
+      //                                                           return Row(
+      //                                                             children: [
+      //                                                               Container(
+      //                                                                 height:
+      //                                                                     20,
+      //                                                                 margin: const EdgeInsets
+      //                                                                     .only(
+      //                                                                     top:
+      //                                                                         5,
+      //                                                                     bottom:
+      //                                                                         5),
+      //                                                                 alignment:
+      //                                                                     Alignment
+      //                                                                         .center,
+      //                                                                 padding: const EdgeInsets
+      //                                                                     .symmetric(
+      //                                                                     horizontal:
+      //                                                                         5),
+      //                                                                 decoration:
+      //                                                                     BoxDecoration(
+      //                                                                   color: colorFiolet.withValues(
+      //                                                                       alpha:
+      //                                                                           .3),
+      //                                                                   borderRadius:
+      //                                                                       BorderRadius.circular(10),
+      //                                                                   border: Border.all(
+      //                                                                       color:
+      //                                                                           colorFiolet),
+      //                                                                 ),
+      //                                                                 child:
+      //                                                                     Text(
+      //                                                                   getNameGroup(
+      //                                                                     song.group!,
+      //                                                                     groups,
+      //                                                                   ),
+      //                                                                   style:
+      //                                                                       TextStyle(
+      //                                                                     fontSize:
+      //                                                                         10,
+      //                                                                     fontWeight:
+      //                                                                         FontWeight.w600,
+      //                                                                     color:
+      //                                                                         colorFiolet,
+      //                                                                   ),
+      //                                                                 ),
+      //                                                               ),
+      //                                                             ],
+      //                                                           );
+      //                                                         },
+      //                                                       ),
+      //                                             onTap: isSecondButton
+      //                                                 ? () =>
+      //                                                     _toggleSongSelection(
+      //                                                         song.id!, song)
+      //                                                 : () {
+      //                                                     Get.to(GuitarDetal(
+      //                                                       id: song.id!,
+      //                                                       speedTextSong: song
+      //                                                           .speedScroll!,
+      //                                                     ));
+      //                                                   },
+      //                                           ))
+      //                                       .toList(),
+      //                                 ),
+      //                         ],
+      //                       );
+      //                     } else if (state is SongsError) {
+      //                       return const SizedBox();
+      //                     } else {
+      //                       return _buildHeader(context, 2);
+      //                     }
+      //                   },
+      //                 );
+      //               },
+      //             )
+      //           ]))),
+      // ),
+      // floatingActionButton: context.read<IndexGroupCubit>().state != -1 &&
+      //         isSecondButton
+      //     ? BlocBuilder<SongsBloc, SongsState>(builder: (context, state) {
+      //         if (state is SongsLoading) {
+      //           return const Center(child: CircularProgressIndicator());
+      //         } else if (state is SongsLoaded) {
+      //           return FloatingActionButton.extended(
+      //               backgroundColor: colorFiolet,
+      //               onPressed: () {
+      //                 List<Song> filteredSongs = state.songs
+      //                     .where((song) =>
+      //                         song.group ==
+      //                         state
+      //                             .groups[context.read<IndexGroupCubit>().state]
+      //                             .id)
+      //                     .toList()
+      //                   ..sort((a, b) => a.order!.compareTo(b.order!));
+
+      //                 List<Song> sortedSongs = [
+      //                   ...selectedSongs,
+      //                   ...filteredSongs
+      //                       .where((song) => !selectedSongs.contains(song)),
+      //                 ];
+
+      //                 for (int i = 0; i < sortedSongs.length; i++) {
+      //                   context
+      //                       .read<SongsBloc>()
+      //                       .add(UpdateSong(sortedSongs[i].copy(order: i + 1)));
+      //                 }
+
+      //                 setState(() {
+      //                   isSecondButton = false;
+      //                   selectedSongsId.clear();
+      //                   selectedSongs.clear();
+      //                 });
+      //               },
+      //               label: Text(
+      //                 tr(LocaleKeys.change_order),
+      //               ));
+      //         } else if (state is SongsError) {
+      //           return const SizedBox();
+      //         } else {
+      //           return const SizedBox();
+      //         }
+      //       })
+      //     : null,
       floatingActionButton: context.read<IndexGroupCubit>().state != -1 &&
               isSecondButton
-          ? BlocBuilder<SongsBloc, SongsState>(builder: (context, state) {
-              if (state is SongsLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is SongsLoaded) {
-                return FloatingActionButton.extended(
-                    backgroundColor: colorFiolet,
-                    onPressed: () {
-                      List<Song> filteredSongs = state.songs
-                          .where((song) =>
-                              song.group ==
-                              state
-                                  .groups[context.read<IndexGroupCubit>().state]
-                                  .id)
-                          .toList()
-                        ..sort((a, b) => a.order!.compareTo(b.order!));
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(
+                height: 50,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    !isReorderMode
+                        ? BlocBuilder<SongsBloc, SongsState>(
+                            builder: (context, state) {
+                            if (state is SongsLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (state is SongsLoaded) {
+                              return FloatingActionButton.extended(
+                                backgroundColor: colorFiolet,
+                                onPressed: () {
+                                  List<Song> filteredSongs = state.songs
+                                      .where((song) =>
+                                          song.group ==
+                                          state
+                                              .groups[context
+                                                  .read<IndexGroupCubit>()
+                                                  .state]
+                                              .id)
+                                      .toList()
+                                    ..sort(
+                                        (a, b) => a.order!.compareTo(b.order!));
 
-                      List<Song> sortedSongs = [
-                        ...selectedSongs,
-                        ...filteredSongs
-                            .where((song) => !selectedSongs.contains(song)),
-                      ];
+                                  List<Song> sortedSongs = [
+                                    ...selectedSongs,
+                                    ...filteredSongs.where((song) =>
+                                        !selectedSongs.contains(song)),
+                                  ];
 
-                      for (int i = 0; i < sortedSongs.length; i++) {
-                        context
-                            .read<SongsBloc>()
-                            .add(UpdateSong(sortedSongs[i].copy(order: i + 1)));
-                      }
+                                  for (int i = 0; i < sortedSongs.length; i++) {
+                                    context.read<SongsBloc>().add(UpdateSong(
+                                        sortedSongs[i].copy(order: i + 1)));
+                                  }
 
-                      setState(() {
-                        isSecondButton = false;
-                        selectedSongsId.clear();
-                        selectedSongs.clear();
-                      });
-                    },
-                    label: Text(
-                      tr(LocaleKeys.change_order),
-                    ));
-              } else if (state is SongsError) {
-                return const SizedBox();
-              } else {
-                return const SizedBox();
-              }
-            })
+                                  setState(() {
+                                    isSecondButton = false;
+                                    selectedSongsId.clear();
+                                    selectedSongs.clear();
+                                  });
+                                },
+                                label: const Text("Изменить порядок"),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          })
+                        : const SizedBox(),
+                    SizedBox(width: !isReorderMode ? 10 : 0),
+                    FloatingActionButton(
+                      heroTag: "drag_mode_toggle",
+                      onPressed: () {
+                        setState(() {
+                          isReorderMode = !isReorderMode;
+                        });
+                      },
+                      backgroundColor:
+                          isReorderMode ? colorFiolet : Colors.grey,
+                      child: const Icon(Icons.drag_handle),
+                    ),
+                  ],
+                ),
+              ),
+            )
           : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 

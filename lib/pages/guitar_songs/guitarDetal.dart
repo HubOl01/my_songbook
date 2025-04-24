@@ -16,6 +16,7 @@ import '../../components/player_widget.dart';
 import '../../core/storage/storage.dart';
 import '../../core/styles/colors.dart';
 import '../../core/utils/currentNumber.dart';
+import '../../core/utils/getLinesString.dart';
 import '../../generated/locale_keys.g.dart';
 import 'edit_song.dart';
 import '../../core/model/songsModel.dart';
@@ -129,13 +130,180 @@ class _GuitarDetalState extends State<GuitarDetal> {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: _buildSongSpeedScroll(songState.song, context),
                     ),
+                    // InkWell(
+                    //   onTap: () async {
+                    //     setState(() {
+                    //       commentController.text =
+                    //           songState.song.comment ?? "";
+                    //     });
+
+                    //     await showModalBottomSheet(
+                    //       useSafeArea: true,
+                    //       isScrollControlled: true,
+                    //       shape: const RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.only(
+                    //           topLeft: Radius.circular(15),
+                    //           topRight: Radius.circular(15),
+                    //         ),
+                    //       ),
+                    //       context: context,
+                    //       builder: (context) => StatefulBuilder(
+                    //           builder: (context, setStateBottom) {
+                    //         return Padding(
+                    //           padding: EdgeInsets.only(
+                    //               bottom: context.isLandscape
+                    //                   ? 0
+                    //                   : MediaQuery.of(context)
+                    //                       .viewInsets
+                    //                       .bottom),
+                    //           child: DraggableScrollableSheet(
+                    //             initialChildSize: 0.5,
+                    //             expand: false,
+                    //             builder: (context, scrollController) {
+                    //               return Column(
+                    //                 children: [
+                    //                   const SizedBox(height: 20),
+                    //                   Padding(
+                    //                     padding: const EdgeInsets.symmetric(
+                    //                         horizontal: 20.0),
+                    //                     child: Align(
+                    //                       alignment:
+                    //                           AlignmentDirectional.topStart,
+                    //                       child: Text(
+                    //                         tr(LocaleKeys
+                    //                             .summary_of_the_song),
+                    //                         style: const TextStyle(
+                    //                           fontSize: 18,
+                    //                           fontWeight: FontWeight.bold,
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //                   const SizedBox(height: 10),
+                    //                   Expanded(
+                    //                     child: ListView(
+                    //                       physics:
+                    //                           const BouncingScrollPhysics(),
+                    //                       controller: scrollController,
+                    //                       // mainAxisSize: MainAxisSize.min,
+                    //                       children: [
+                    //                         Padding(
+                    //                           padding:
+                    //                               const EdgeInsets.symmetric(
+                    //                                   horizontal: 10.0),
+                    //                           child: TextField(
+                    //                             controller: commentController,
+                    //                             maxLines: null,
+                    //                             onChanged: (v) =>
+                    //                                 setStateBottom(() {}),
+                    //                             cursorColor: colorFiolet,
+                    //                             decoration: InputDecoration(
+                    //                                 hintText: tr(LocaleKeys
+                    //                                     .write_something),
+                    //                                 hintStyle: TextStyle(
+                    //                                     color: context
+                    //                                             .isDarkMode
+                    //                                         ? Colors.white
+                    //                                             .withValues(
+                    //                                                 alpha: .7)
+                    //                                         : Colors
+                    //                                             .grey[600]),
+                    //                                 alignLabelWithHint: true,
+                    //                                 disabledBorder:
+                    //                                     const OutlineInputBorder(
+                    //                                         borderSide:
+                    //                                             BorderSide
+                    //                                                 .none),
+                    //                                 enabledBorder:
+                    //                                     const OutlineInputBorder(
+                    //                                   borderSide:
+                    //                                       BorderSide.none,
+                    //                                 ),
+                    //                                 focusedBorder:
+                    //                                     const OutlineInputBorder(
+                    //                                   borderSide:
+                    //                                       BorderSide.none,
+                    //                                 )),
+                    //                           ),
+                    //                         ),
+                    //                       ],
+                    //                     ),
+                    //                   ),
+                    //                   SafeArea(
+                    //                     top: false,
+                    //                     child: Padding(
+                    //                       padding: const EdgeInsets.symmetric(
+                    //                           horizontal: 20.0, vertical: 10),
+                    //                       child: SizedBox(
+                    //                         height: 40,
+                    //                         width: context.width,
+                    //                         child: CustomButton(
+                    //                           onPressed: commentController
+                    //                                       .text ==
+                    //                                   songState.song.comment
+                    //                               ? null
+                    //                               : () {
+                    //                                   context
+                    //                                       .read<SongBloc>()
+                    //                                       .add(UpdateSong(
+                    //                                           songState.song.copy(
+                    //                                               comment:
+                    //                                                   commentController
+                    //                                                       .text)));
+                    //                                   context
+                    //                                       .read<SongsBloc>()
+                    //                                       .add(LoadSongs());
+                    //                                   context
+                    //                                       .read<SongBloc>()
+                    //                                       .add(ReadSong(
+                    //                                           songState
+                    //                                               .song.id!));
+                    //                                   Get.back();
+                    //                                 },
+                    //                           child: Text(tr(
+                    //                               LocaleKeys.add_song_save)),
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                   )
+                    //                 ],
+                    //               );
+                    //             },
+                    //           ),
+                    //         );
+                    //       }),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 12.0, vertical: 8),
+                    //     child: Row(
+                    //       children: [
+                    //         Text(
+                    //           tr(LocaleKeys.summary_of_the_song),
+                    //         ),
+                    //         const Spacer(),
+                    //         Icon(
+                    //           songState.song.comment == ""
+                    //               ? Icons.comments_disabled
+                    //               : Icons.comment,
+                    //           color: songState.song.comment == ""
+                    //               ? null
+                    //               : colorFiolet,
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
                     InkWell(
                       onTap: () async {
                         setState(() {
-                          commentController.text =
-                              songState.song.comment ?? "";
+                          commentController.text = songState.song.comment ?? "";
                         });
-        
+
                         await showModalBottomSheet(
                           useSafeArea: true,
                           isScrollControlled: true,
@@ -169,8 +337,7 @@ class _GuitarDetalState extends State<GuitarDetal> {
                                           alignment:
                                               AlignmentDirectional.topStart,
                                           child: Text(
-                                            tr(LocaleKeys
-                                                .summary_of_the_song),
+                                            tr(LocaleKeys.summary_of_the_song),
                                             style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -205,8 +372,7 @@ class _GuitarDetalState extends State<GuitarDetal> {
                                                             ? Colors.white
                                                                 .withValues(
                                                                     alpha: .7)
-                                                            : Colors
-                                                                .grey[600]),
+                                                            : Colors.grey[600]),
                                                     alignLabelWithHint: true,
                                                     disabledBorder:
                                                         const OutlineInputBorder(
@@ -237,30 +403,30 @@ class _GuitarDetalState extends State<GuitarDetal> {
                                             height: 40,
                                             width: context.width,
                                             child: CustomButton(
-                                              onPressed: commentController
-                                                          .text ==
-                                                      songState.song.comment
-                                                  ? null
-                                                  : () {
-                                                      context
-                                                          .read<SongBloc>()
-                                                          .add(UpdateSong(
-                                                              songState.song.copy(
-                                                                  comment:
-                                                                      commentController
-                                                                          .text)));
-                                                      context
-                                                          .read<SongsBloc>()
-                                                          .add(LoadSongs());
-                                                      context
-                                                          .read<SongBloc>()
-                                                          .add(ReadSong(
-                                                              songState
-                                                                  .song.id!));
-                                                      Get.back();
-                                                    },
-                                              child: Text(tr(
-                                                  LocaleKeys.add_song_save)),
+                                              onPressed:
+                                                  commentController.text ==
+                                                          songState.song.comment
+                                                      ? null
+                                                      : () {
+                                                          context
+                                                              .read<SongBloc>()
+                                                              .add(UpdateSong(
+                                                                  songState.song.copy(
+                                                                      comment:
+                                                                          commentController
+                                                                              .text)));
+                                                          context
+                                                              .read<SongsBloc>()
+                                                              .add(LoadSongs());
+                                                          context
+                                                              .read<SongBloc>()
+                                                              .add(ReadSong(
+                                                                  songState.song
+                                                                      .id!));
+                                                          Get.back();
+                                                        },
+                                              child: Text(
+                                                  tr(LocaleKeys.add_song_save)),
                                             ),
                                           ),
                                         ),
@@ -273,29 +439,90 @@ class _GuitarDetalState extends State<GuitarDetal> {
                           }),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0, vertical: 8),
-                        child: Row(
-                          children: [
-                            Text(
-                              tr(LocaleKeys.summary_of_the_song),
-                            ),
-                            const Spacer(),
-                            Icon(
-                              songState.song.comment == ""
-                                  ? Icons.comments_disabled
-                                  : Icons.comment,
-                              color: songState.song.comment == ""
-                                  ? null
-                                  : colorFiolet,
-                            )
-                          ],
+                      child: Container(
+                        decoration: BoxDecoration(
+                            gradient: getLineCount(songState.song.comment!) > 3
+                                ? LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    stops: context.isDarkMode
+                                        ? null
+                                        : [
+                                            0.5,
+                                            1,
+                                          ],
+                                    colors: context.isDarkMode
+                                        ? [
+                                            Colors.transparent,
+                                            Colors.white.withValues(alpha: .15),
+                                          ]
+                                        : [
+                                            Colors.transparent,
+                                            Colors.black.withValues(alpha: .05),
+                                          ],
+                                  )
+                                : null),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0, vertical: 8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  songState.song.comment == ""
+                                      ? tr(LocaleKeys.summary_of_the_song)
+                                      : songState.song.comment!,
+                                  style: TextStyle(
+                                      color: songState.song.comment == ""
+                                          ? context.isDarkMode
+                                              ? Colors.white
+                                                  .withValues(alpha: .8)
+                                              : Colors.black
+                                                  .withValues(alpha: .6)
+                                          : null),
+                                  // tr(LocaleKeys.summary_of_the_song),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Icon(
+                                songState.song.comment == ""
+                                    ? Icons.comments_disabled
+                                    : Icons.comment,
+                                color: songState.song.comment == ""
+                                    ? null
+                                    : colorFiolet,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    Container(
+                      height: 5,
+                      decoration: BoxDecoration(
+                          gradient: getLineCount(songState.song.comment!) > 3
+                              ? LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  // stops: const [
+                                  //   0.5,
+                                  //   1,
+                                  // ],
+                                  colors: context.isDarkMode
+                                      ? [
+                                          Colors.white.withValues(alpha: .2),
+                                          Colors.transparent,
+                                        ]
+                                      : [
+                                          Colors.black.withValues(alpha: .05),
+                                          Colors.transparent,
+                                        ],
+                                )
+                              : null),
+                    ),
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
