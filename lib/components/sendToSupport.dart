@@ -1,8 +1,28 @@
-import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
-Future sendToSupport() async {
-  AppMetrica.reportEvent('TechSupportPage');
+// Future sendToSupport() async {
+//   AppMetrica.reportEvent('TechSupportPage');
+//   final Email email = Email(
+//     body: "",
+//     subject: "My Songbook (Tech Support)",
+//     recipients: ["ru-developer@mail.ru"],
+//     isHTML: true,
+//   );
+
+//   String platformResponse;
+
+//   try {
+//     await FlutterEmailSender.send(email);
+//     platformResponse = 'success';
+//   } catch (error) {
+//     print(error);
+//     platformResponse = error.toString();
+//   }
+//   print(platformResponse);
+// }
+
+Future sendToSupport(BuildContext context) async {
   final Email email = Email(
     body: "",
     subject: "My Songbook (Tech Support)",
@@ -13,11 +33,18 @@ Future sendToSupport() async {
   String platformResponse;
 
   try {
-    await FlutterEmailSender.send(email);
-    platformResponse = 'success';
-  } catch (error) {
-    print(error);
-    platformResponse = error.toString();
+    if (context.mounted &&
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+      await FlutterEmailSender.send(email);
+      platformResponse = 'success';
+    } else {
+      platformResponse = "Приложение не активно. Отправка почты невозможна.";
+    }
+  } on Exception catch (e) {
+    platformResponse =
+        "Нет приложений для отправки почты. Убедитесь, что на устройстве установлено приложение для работы с электронной почтой.";
+    print("Error: $e");
   }
+
   print(platformResponse);
 }

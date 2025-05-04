@@ -45,7 +45,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         final group = groups[index];
                         return ListTile(
                           tileColor:
-                              context.read<IndexGroupCubit>().state == index
+                              context.read<IndexGroupCubit>().state == group.id
                                   ? colorFiolet.withValues(alpha: .1)
                                   : null,
                           shape: RoundedRectangleBorder(
@@ -55,7 +55,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                               horizontal: 20, vertical: 0),
                           title: Text(group.name),
                           trailing:
-                              context.read<IndexGroupCubit>().state == index
+                              context.read<IndexGroupCubit>().state == group.id
                                   ? Icon(
                                       Icons.check,
                                       color: colorFiolet,
@@ -71,7 +71,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           onTap: () {
                             // _showDeleteConfirmation(context, group);
                             context.read<GroupCubit>().swither(group);
-                            context.read<IndexGroupCubit>().swither(index);
+                            context.read<IndexGroupCubit>().swither(group.id!);
                             Get.back();
                           },
                           onLongPress: () {

@@ -233,9 +233,13 @@ class DBSongs {
     );
   }
 
-  Future<void> insertSong(Map<String, dynamic> songData) async {
+  // Future<void> insertSong(Map<String, dynamic> songData) async {
+  //   final db = await instance.database;
+  //   await db.insert(tableSongs, songData);
+  // }
+  Future<int> insertSong(Map<String, dynamic> songData) async {
     final db = await instance.database;
-    await db.insert(tableSongs, songData);
+    return await db.insert(tableSongs, songData);
   }
 
   Future<int> update(Song song) async {
@@ -341,6 +345,7 @@ class DBSongs {
         where: '${Songs.group} = ?', whereArgs: [id]);
 
     print("!!! Successed delete group id = $id !!!");
+    await db.delete(tableSongToGroups, where: 'group_id = ?', whereArgs: [id]);
     return await db
         .delete(tableGroups, where: '${Groups.id} = ?', whereArgs: [id]);
   }
@@ -398,8 +403,11 @@ class DBSongs {
 // Работа со связкой песни-группы
   Future<void> addSongToGroup(int songId, int groupId, int order) async {
     final db = await instance.database;
-    await db.insert(tableSongToGroups,
-        {'group_id': groupId, 'song_id': songId, 'song_order': order});
+    await db.insert(
+      tableSongToGroups,
+      {'group_id': groupId, 'song_id': songId, 'song_order': order},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<void> updateSongOrder(int songId, int groupId, int newOrder) async {
@@ -421,7 +429,7 @@ class DBSongs {
     WHERE stg.group_id = ?
     ORDER BY stg.song_order ASC
   ''', [groupId]);
-    print("res: ${result.toList()}");
+    // print("res: ${result.toList()}");
     return result.map((json) => Song.fromJson(json)).toList();
   }
 
@@ -465,6 +473,29 @@ class DBSongs {
       where: 'group_id = ?',
       whereArgs: [groupId],
     );
+  }
+
+  Future<void> clearAllGroupsFromSong(int songId) async {
+    final db = await instance.database;
+    await db.delete(
+      tableSongToGroups,
+      where: 'song_id = ?',
+      whereArgs: [songId],
+    );
+  }
+
+  Future<void> clearSongGroups(int songId, int groupId) async {
+    final db = await instance.database;
+    await db.delete(
+      tableSongToGroups,
+      where: 'song_id = ? AND group_id = ?',
+      whereArgs: [songId, groupId],
+    );
+  }
+
+  Future<void> clearAllSongGroups() async {
+    final db = await instance.database;
+    await db.delete(tableSongToGroups);
   }
 
   Future<void> migrateSongsToGroups() async {

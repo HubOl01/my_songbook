@@ -60,7 +60,7 @@ class HelperPage extends StatelessWidget {
                         color: Colors.blue[700], fontWeight: FontWeight.bold),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                       sendToSupport();
+                       sendToSupport(context);
                       },
                   ),
                   // new TextSpan(

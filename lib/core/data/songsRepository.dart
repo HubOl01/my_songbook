@@ -48,6 +48,8 @@ class SongsRepository {
       await _dbSongs.getSongsGroup();
   Future<void> removeSongFromGroup(int songId, int groupId) async =>
       await _dbSongs.removeSongFromGroup(songId, groupId);
+  Future<void> clearAllGroupsFromSong(int songId) async =>
+      await _dbSongs.clearAllGroupsFromSong(songId);
   // Future<List<Song>> readSongsByGroup(int groupId) async =>
   //     await _dbSongs.readSongsByGroup(groupId);
 }

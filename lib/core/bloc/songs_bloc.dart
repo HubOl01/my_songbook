@@ -24,15 +24,6 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
         emit(SongsError(e.toString()));
       }
     });
-    // on<LoadSong>((event, emit) async {
-    //   emit(SongsLoading());
-    //   try {
-    //     final song = await _repository.readSong(event.id);
-    //     emit(SongLoaded(song));
-    //   } catch (e) {
-    //     emit(SongsError(e.toString()));
-    //   }
-    // });
 
     on<AddSong>((event, emit) async {
       try {
@@ -70,35 +61,34 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
       }
     });
 
+    // on<UpdateSongsOrder>((event, emit) async {
+    //   try {
+    //     for (int i = 0; i < event.updatedSongs.length; i++) {
+    //       final updatedSong = event.updatedSongs[i].copy(order: i);
+    //       await _repository.updateSong(updatedSong);
+    //     }
+
+    //     add(LoadSongs());
+    //   } catch (e) {
+    //     emit(SongsError(e.toString()));
+    //   }
+    // });
     on<UpdateSongsOrder>((event, emit) async {
       try {
         for (int i = 0; i < event.updatedSongs.length; i++) {
-          final updatedSong = event.updatedSongs[i].copy(order: i);
-          await _repository.updateSong(updatedSong);
+          final song = event.updatedSongs[i];
+          await _repository.updateSongOrder(song.id!, event.groupId, i + 1);
         }
 
-        add(LoadSongs());
+        final songs = await _repository.getAllSongs();
+        final groups = await _repository.readAllGroups();
+        final songGroups = await _repository.getSongsGroup();
+
+        emit(SongsLoaded(songs, groups, songGroups));
       } catch (e) {
         emit(SongsError(e.toString()));
       }
     });
-    // on<UpdateFontSize>((event, emit) async {
-    //   try {
-    //     await _repository.updateFontSize(event.id, event.fontSize);
-    //     add(LoadSong(event.id));
-    //   } catch (e) {
-    //     emit(SongsError(e.toString()));
-    //   }
-    // });
-
-    // on<UpdateSpeedScroll>((event, emit) async {
-    //   try {
-    //     await _repository.updateSpeedScroll(event.id, event.speed);
-    //     add(LoadSong(event.id));
-    //   } catch (e) {
-    //     emit(SongsError(e.toString()));
-    //   }
-    // });
 
     on<LoadGroups>((event, emit) async {
       emit(GroupsLoading());
@@ -140,7 +130,25 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
         emit(GroupsError(e.toString()));
       }
     });
+    on<UpdateGroupOrder>((event, emit) async {
+      try {
+        // Обновляем порядок групп в репозитории
+        for (int i = 0; i < event.updatedGroups.length; i++) {
+          final group = event.updatedGroups[i];
+          await _repository.updateGroup(group.copy(orderId: i));
+        }
 
+        // Перезагружаем данные из репозитория
+        final songs = await _repository.getAllSongs();
+        final groups = await _repository.readAllGroups();
+        final songGroups = await _repository.getSongsGroup();
+
+        // Обновляем состояние BLoC
+        emit(SongsLoaded(songs, groups, songGroups));
+      } catch (e) {
+        emit(SongsError(e.toString()));
+      }
+    });
     // Song to Group(
     // on<LoadSongToGroup>((event, emit) async {
     //   emit(SongToGroupsLoading());
@@ -163,14 +171,28 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
       }
     });
 
+    // on<AddSongToGroup>((event, emit) async {
+    //   try {
+    //     await _repository.addSongToGroup(
+    //         event.songId, event.groupId, event.order);
+    //     add(LoadSongToGroup(groupId: event.groupId));
+    //     add(LoadSongs());
+    //   } catch (e) {
+    //     emit(SongToGroupsError(e.toString()));
+    //   }
+    // });
     on<AddSongToGroup>((event, emit) async {
       try {
         await _repository.addSongToGroup(
             event.songId, event.groupId, event.order);
-        add(LoadSongToGroup(groupId: event.groupId));
-        add(LoadSongs());
+
+        final songs = await _repository.getAllSongs();
+        final groups = await _repository.readAllGroups();
+        final songGroups = await _repository.getSongsGroup();
+
+        emit(SongsLoaded(songs, groups, songGroups));
       } catch (e) {
-        emit(SongToGroupsError(e.toString()));
+        emit(SongsError(e.toString()));
       }
     });
 
@@ -188,10 +210,27 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
     on<DeleteSongFromGroup>((event, emit) async {
       try {
         await _repository.removeSongFromGroup(event.songId, event.groupId);
-        add(LoadSongToGroup(groupId: event.groupId));
-        add(LoadSongs());
+
+        final songs = await _repository.getAllSongs();
+        final groups = await _repository.readAllGroups();
+        final songGroups = await _repository.getSongsGroup();
+
+        emit(SongsLoaded(songs, groups, songGroups));
       } catch (e) {
-        emit(SongToGroupsError(e.toString()));
+        emit(SongsError(e.toString()));
+      }
+    });
+    on<DeleteAllGroupsFromSong>((event, emit) async {
+      try {
+        await _repository.clearAllGroupsFromSong(event.songId);
+
+        final songs = await _repository.getAllSongs();
+        final groups = await _repository.readAllGroups();
+        final songGroups = await _repository.getSongsGroup();
+
+        emit(SongsLoaded(songs, groups, songGroups));
+      } catch (e) {
+        emit(SongsError(e.toString()));
       }
     });
   }

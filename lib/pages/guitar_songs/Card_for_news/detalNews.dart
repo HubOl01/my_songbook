@@ -55,7 +55,7 @@ class DetalNews extends StatelessWidget {
                       onTapLink: (text, href, title) => href != ''
                           ? href!.contains("@mail.ru") ||
                                   href.contains("@gmail.com")
-                              ? sendToSupport()
+                              ? sendToSupport(context)
                               : launchUrl(Uri.parse(href),
                                   mode: LaunchMode.inAppWebView)
                           : null,
@@ -215,7 +215,7 @@ class DetalNews extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () async {
-                                    sendToSupport();
+                                    sendToSupport(context);
                                   },
                               ),
                             ])),

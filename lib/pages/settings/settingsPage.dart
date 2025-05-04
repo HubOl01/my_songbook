@@ -1,12 +1,15 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/pages/settings/Themes/themePage.dart';
 import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/sendToSupport.dart';
+import '../../core/cubit/settings_exit_cubit.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
 import 'Helper/HelperPage.dart';
@@ -51,6 +54,18 @@ class SettingsPage extends StatelessWidget {
             Get.to(const TranslatePage());
           },
         ),
+        BlocBuilder<SettingsExitCubit, bool>(
+          builder: (context, state) {
+            return SwitchListTile(
+              secondary: const Icon(LineAwesome.window_maximize_solid),
+              title: Text(tr(LocaleKeys.settings_exit)),
+              value: state,
+              onChanged: (bool value) {
+                context.read<SettingsExitCubit>().toggle();
+              },
+            );
+          },
+        ),
         ListTile(
           leading: const Icon(Icons.help_outline),
           title: Text(tr(LocaleKeys.settings_help)),
@@ -63,7 +78,7 @@ class SettingsPage extends StatelessWidget {
           leading: const Icon(Icons.support_agent),
           title: Text(tr(LocaleKeys.settings_call_tech)),
           onTap: () async {
-            sendToSupport();
+            sendToSupport(context);
           },
         ),
         ListTile(

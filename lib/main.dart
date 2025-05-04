@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -21,8 +22,10 @@ import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
+import 'core/cubit/settings_exit_cubit.dart';
 import 'core/cubit/songs1_cubit.dart';
 import 'core/data/songsRepository.dart';
+import 'core/model/groupModel.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'core/data/dbSongs.dart';
@@ -62,6 +65,7 @@ void main() async {
   } catch (ex) {
     print("Firebase ex: $ex");
   }
+  await DBSongs.instance.migrateSongsToGroups();
   // MobileAds.initialize();
   // MobileAds.setUserConsent(true);
   await dotenv.load(fileName: ".env");
@@ -76,8 +80,8 @@ void main() async {
   await Permission.storage.request();
   // testDB();
   try {
-    AppMetrica.activate(
-        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+    // AppMetrica.activate(
+    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
     print("app_metrica: $ex");
   }
@@ -93,6 +97,7 @@ void main() async {
             create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
         BlocProvider(create: (context) => GroupCubit()),
         BlocProvider(create: (context) => IndexGroupCubit()),
+        BlocProvider(create: (context) => SettingsExitCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
@@ -127,8 +132,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    context.read<SettingsExitCubit>().init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,38 +152,85 @@ class MyHomePage extends StatelessWidget {
         init: MyHomePageController(),
         initState: (controller) {},
         builder: (controller) {
-          return Scaffold(
-              body: IndexedStack(
-                index: controller.tabIndex.value,
-                children: pages,
-              ),
-              bottomNavigationBar: Obx(() => BottomNavigationBar(
-                    onTap: controller.changeTabIndex,
-                    unselectedItemColor: Colors.black,
-                    selectedItemColor: Colors.redAccent,
-                    currentIndex: controller.tabIndex.value,
-                    showSelectedLabels: false,
-                    showUnselectedLabels: false,
-                    enableFeedback: true,
-                    landscapeLayout:
-                        BottomNavigationBarLandscapeLayout.centered,
-                    type: BottomNavigationBarType.fixed,
-                    items: [
-                      BottomNavigationBarItem(
-                          icon: const Icon(LineAwesome.file_audio),
-                          label: tr(LocaleKeys.bottom_song),
-                          tooltip: tr(LocaleKeys.tooltip_song)),
-                      BottomNavigationBarItem(
-                          icon: const Icon(LineAwesome.guitar_solid),
-                          label: tr(LocaleKeys.bottom_chords),
-                          tooltip: tr(LocaleKeys.tooltip_chords)),
-                      BottomNavigationBarItem(
-                          icon: const Icon(LineAwesome.cog_solid),
-                          label: tr(LocaleKeys.bottom_settings),
-                          tooltip: tr(LocaleKeys.tooltip_settings)),
-                    ],
-                  )));
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (bool didPop, Object? result) async {
+              if (!didPop) {
+                if (controller.tabIndex == 0 &&
+                    context.read<IndexGroupCubit>().state == -1) {
+                  await _exitApp(context);
+                }
+                if (controller.tabIndex == 0) {
+                  context
+                      .read<GroupCubit>()
+                      .swither(GroupModel(id: -1, name: ''));
+                  context.read<IndexGroupCubit>().swither(-1);
+                }
+                controller.changeTabIndex(0);
+              }
+            },
+            child: Scaffold(
+                body: IndexedStack(
+                  index: controller.tabIndex.value,
+                  children: pages,
+                ),
+                bottomNavigationBar: Obx(() => BottomNavigationBar(
+                      onTap: controller.changeTabIndex,
+                      unselectedItemColor: Colors.black,
+                      selectedItemColor: Colors.redAccent,
+                      currentIndex: controller.tabIndex.value,
+                      showSelectedLabels: false,
+                      showUnselectedLabels: false,
+                      enableFeedback: true,
+                      landscapeLayout:
+                          BottomNavigationBarLandscapeLayout.centered,
+                      type: BottomNavigationBarType.fixed,
+                      items: [
+                        BottomNavigationBarItem(
+                            icon: const Icon(LineAwesome.file_audio),
+                            label: tr(LocaleKeys.bottom_song),
+                            tooltip: tr(LocaleKeys.tooltip_song)),
+                        BottomNavigationBarItem(
+                            icon: const Icon(LineAwesome.guitar_solid),
+                            label: tr(LocaleKeys.bottom_chords),
+                            tooltip: tr(LocaleKeys.tooltip_chords)),
+                        BottomNavigationBarItem(
+                            icon: const Icon(LineAwesome.cog_solid),
+                            label: tr(LocaleKeys.bottom_settings),
+                            tooltip: tr(LocaleKeys.tooltip_settings)),
+                      ],
+                    ))),
+          );
         });
+  }
+
+  Future<void> _exitApp(BuildContext context) async {
+    if (!context.read<SettingsExitCubit>().state) {
+      SystemNavigator.pop();
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(tr(LocaleKeys.exit_title_dialog)),
+          content: Text(tr(LocaleKeys.exit_content_dialog)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(tr(LocaleKeys.exit_dialog_cancel)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                SystemNavigator.pop();
+              },
+              child: Text(tr(LocaleKeys.exit_dialog_exit)),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 

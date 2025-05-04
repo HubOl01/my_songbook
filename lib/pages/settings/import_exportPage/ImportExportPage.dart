@@ -88,7 +88,7 @@ class ImportExportPage extends StatelessWidget {
                       width: 25,
                       colorFilter: ColorFilter.mode(
                           Theme.of(context).iconTheme.color!, BlendMode.srcIn)),
-                  title: Text("${tr(LocaleKeys.data_import)} (.zip)"),
+                  title: Text("${tr(LocaleKeys.data_importSongs)} (.zip)"),
                   onTap: () async {
                     AppMetrica.reportEvent('data_import');
                     await importSongs(context);

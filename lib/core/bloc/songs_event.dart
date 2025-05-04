@@ -49,11 +49,12 @@ class DeleteAllSongs extends SongsEvent {}
 
 class UpdateSongsOrder extends SongsEvent {
   final List<Song> updatedSongs;
+  final int groupId;
 
-  UpdateSongsOrder(this.updatedSongs);
+  UpdateSongsOrder(this.updatedSongs, this.groupId);
 
   @override
-  List<Object?> get props => [updatedSongs];
+  List<Object?> get props => [updatedSongs, groupId];
 }
 
 class LoadGroups extends SongsEvent {}
@@ -73,6 +74,11 @@ class DeleteGroup extends SongsEvent {
   DeleteGroup(this.groupId);
 }
 
+class UpdateGroupOrder extends SongsEvent {
+  final List<GroupModel> updatedGroups;
+
+  UpdateGroupOrder(this.updatedGroups);
+}
 // class LoadSongsByGroup extends SongsEvent {
 //   final int groupId;
 //   LoadSongsByGroup(this.groupId);
@@ -106,4 +112,8 @@ class DeleteSongFromGroup extends SongsEvent {
   final int songId;
   final int groupId;
   DeleteSongFromGroup(this.songId, this.groupId);
+}
+class DeleteAllGroupsFromSong extends SongsEvent {
+  final int songId;
+  DeleteAllGroupsFromSong(this.songId);
 }
