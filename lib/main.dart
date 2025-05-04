@@ -11,7 +11,6 @@ import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/core/cubit/group_id_cubit.dart';
 import 'package:my_songbook/core/cubit/index_group_cubit.dart';
-import 'package:my_songbook/core/cubit/is_second_button_cubit.dart';
 import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
 import 'package:my_songbook/core/styles/Themes.dart';
@@ -22,7 +21,6 @@ import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
-import 'core/cubit/is_reorder_mode_cubit.dart';
 import 'core/cubit/settings_exit_cubit.dart';
 import 'core/cubit/songs1_cubit.dart';
 import 'core/data/songsRepository.dart';
@@ -98,8 +96,6 @@ void main() async {
         BlocProvider(create: (context) => GroupCubit()),
         BlocProvider(create: (context) => IndexGroupCubit()),
         BlocProvider(create: (context) => SettingsExitCubit()),
-        BlocProvider(create: (context) => IsSecondButtonCubit()),
-        BlocProvider(create: (context) => IsReorderModeCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
