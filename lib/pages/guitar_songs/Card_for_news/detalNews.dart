@@ -16,7 +16,7 @@ import '../../../components/updateApp.dart';
 import '../../../core/model/newsModel.dart';
 
 class DetalNews extends StatelessWidget {
-  final News newData;
+  final NewsModel newData;
   DetalNews({super.key, required this.newData});
   double fontSize = 16;
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -62,8 +62,13 @@ class DetalNews extends StatelessWidget {
                       padding: const EdgeInsets.all(2),
                       styleSheet: MarkdownStyleSheet(
                           p: TextStyle(fontSize: fontSize),
-                          blockquotePadding: const EdgeInsets.only(left: 12, top: 8, bottom: 8),
-                          h3: TextStyle(fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize!),
+                          blockquotePadding: const EdgeInsets.only(
+                              left: 12, top: 8, bottom: 8),
+                          h3: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .fontSize!),
                           blockquoteDecoration: const BoxDecoration(
                             border: Border(
                               left: BorderSide(

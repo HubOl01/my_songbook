@@ -50,57 +50,69 @@ Future isSettingsExit(bool isSettingsExit) async {
 // isClosedWarring = box.get("isClosedWarring");
 // isDeleteTest = box.get("isDeleteTest");
 
-Future<bool> shouldShowBanner() async {
-  // Открываем бокс Hive
-  var box = await Hive.openBox('my_songbook');
+class BannerManager {
+  static const String _boxName = 'my_songbook';
+  static const String _bannerIdsKey = 'bannerIds';
+  static const String _bannerVersionKey = 'bannerVersion';
 
-  // Получаем значение isShowBanner (если его нет, считаем true)
-  bool isShowBanner = box.get("isShowBanner", defaultValue: true);
+  /// Проверяет, нужно ли показывать баннер на основе id
+  Future<bool> shouldShowBanner(int idBanner) async {
+    // Открываем бокс Hive
+    var box = await Hive.openBox(_boxName);
 
-  // Если баннер нужно показать, обновляем флаг на false
-  if (isShowBanner) {
-    box.put("isShowBanner", false);
-    await box.compact();
-    await box.close();
-    return true;
-  }
+    try {
+      // Получаем список показанных баннеров (если его нет, создаем пустой список)
+      List<int> shownBannerIds = box.get(_bannerIdsKey, defaultValue: <int>[]);
 
-  // Если баннер уже был показан, возвращаем false
-  await box.close();
-  return false;
-}
+      // Если id баннера уже есть в списке, не показываем его
+      if (shownBannerIds.contains(idBanner)) {
+        return false;
+      }
 
-Future<void> closeBanner(String currentVersion) async {
-  var box = await Hive.openBox('my_songbook');
-  box.put("isBannerClosed", true);
-  box.put("bannerVersion", currentVersion);
-  await box.compact();
-  await box.close();
-}
+      // Добавляем id баннера в список показанных
 
-Future<bool> shouldShowBannerForVersion(String currentVersion) async {
-  var box = await Hive.openBox('my_songbook');
-
-  try {
-    bool? isBannerClosed = box.get("isBannerClosed");
-    if (isBannerClosed == true) {
-      return false;
-    }
-
-    String? savedVersion = box.get("bannerVersion");
-
-    if (savedVersion != currentVersion) {
+      // Показываем баннер
       return true;
+    } finally {
+      // Закрываем бокс после использования
+      await box.close();
     }
+  }
 
-    return false;
-  } finally {
-    await box.close();
+  /// Проверяет, нужно ли показывать баннер на основе версии приложения
+  Future<bool> shouldShowBannerForVersion(String currentVersion) async {
+    var box = await Hive.openBox(_boxName);
+
+    try {
+      String? savedVersion = box.get(_bannerVersionKey);
+
+      if (savedVersion != currentVersion) {
+        return true;
+      }
+
+      return false;
+    } finally {
+      await box.close();
+    }
+  }
+
+  Future<void> closeBanner(bool clearBannerIds,
+      {int? idBanner, String? newVersion}) async {
+    var box = await Hive.openBox(_boxName);
+
+    try {
+      if (clearBannerIds) {
+        List<int> shownBannerIds =
+            box.get(_bannerIdsKey, defaultValue: <int>[]);
+        shownBannerIds.add(idBanner!);
+        await box.put(_bannerIdsKey, shownBannerIds);
+      } else {
+        if (newVersion != null) {
+          await box.put(_bannerVersionKey, newVersion);
+        }
+      }
+    } finally {
+      await box.close();
+    }
   }
 }
-
-  // var box = await Hive.openBox('my_songbook');
-  // speed = box.get("speedText");
-  // sizeText = box.get("sizeText");
-  // isClosedWarring = box.get("isClosedWarring");
-  // isDeleteTest = box.get("isDeleteTest");

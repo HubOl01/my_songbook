@@ -1,236 +1,37 @@
 [
   {
-    "name": "Музыкальная подборка ко Дню влюбленных",
-    "user": "ru-developer",
+    "id": 10,
+    "name": "Обновите приложение",
+    "shortDesc": "Теперь доступна новая версия приложения",
+    "shortImage": "",
+    "user": "",
     "lang": "ru",
-    "description": [
-      "Привет, друзья! В преддверии Дня всех влюбленных мы подготовили для вас специальную подборку музыки, которая поможет создать романтическую атмосферу и подарить вам и вашим близким незабываемые моменты. В этом списке вы найдете как классические композиции о любви, так и современные хиты, которые точно затронут струны вашей души. Откройте для себя новые мелодии или вспомните старые, но такие любимые песни. Наслаждайтесь музыкой и делитесь этой подборкой с теми, кого вы любите!"
-    ],
-    "type": "text",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/valentine.png?alt=media&token=72d531e1-61c0-46d2-8d34-a9dcd3de201f",
-    "audio": [
-      {
-        "name_song": "Autumn Sweater",
-        "name_singer": "Yo La Tengo",
-        "audioURL": "https://www.youtube.com/watch?v=UIkMeaAfIRw",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Когда твоя девушка больна",
-        "name_singer": "КИНО",
-        "audioURL": "https://www.youtube.com/watch?v=Dy3qLNZyDZA",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Song to the Siren",
-        "name_singer": "Tim Buckley",
-        "audioURL": "https://www.youtube.com/watch?v=vMTEtDBHGY4",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Only you",
-        "name_singer": "The Platters",
-        "audioURL": "https://www.youtube.com/watch?v=5p2k55F-uag",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "До скорой встречи",
-        "name_singer": "Звери",
-        "audioURL": "https://www.youtube.com/watch?v=DF6W1XD25Dc",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Still loving you",
-        "name_singer": "Scorpions",
-        "audioURL": "https://www.youtube.com/watch?v=CjRas1yOWvo",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "(Everything I Do) I Do It For You",
-        "name_singer": "Bryan Adams",
-        "audioURL": "https://www.youtube.com/watch?v=Y0pdQU87dc8",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Батарейка",
-        "name_singer": "Жуки",
-        "audioURL": "https://www.youtube.com/watch?v=9IPvUmLCLBM",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Something",
-        "name_singer": "The Beatles",
-        "audioURL": "https://www.youtube.com/watch?v=UelDrZ1aFeY",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "The Supremes",
-        "name_singer": "Baby Love",
-        "audioURL": "https://www.youtube.com/watch?v=Yd43nWkgUzg",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Я хочу быть с тобой",
-        "name_singer": "Наутилус Помпилиус",
-        "audioURL": "https://www.youtube.com/watch?v=Kcmb-K_I5To",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Can’t Help Falling in Love",
-        "name_singer": "Elvis Presley",
-        "audioURL": "https://www.youtube.com/watch?v=vGJTaP6anOU",
-        "name_URLWEB": ""
-      }
-    ],
-    "isDonate": false,
-    "isUpdate": false,
-    "textColorClick": "0xFFFFFFFF",
-    "isClick": true,
-    "isShow": true,
-    "isSupport": true,
-    "websiteUrl": ""
-  },
-  {
-    "name": "Musical selection for Valentine's Day",
-    "user": "ru-developer",
-    "lang": "en",
-    "description": [
-      "Hello friends! On the eve of Valentine's Day, we have prepared for you a special selection of music that will help create a romantic atmosphere and give you and your loved ones unforgettable moments. In this list you will find both classic love songs and modern hits that will definitely touch the strings of your soul. Discover new melodies or remember old, but such favorite songs. Enjoy the music and share this compilation with those you love!"
-    ],
-    "type": "text",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/valentine_en.png?alt=media&token=add107e1-dd7a-470c-b670-8709db346a72",
-    "audio": [
-      {
-        "name_song": "Autumn Sweater",
-        "name_singer": "Yo La Tengo",
-        "audioURL": "https://www.youtube.com/watch?v=UIkMeaAfIRw",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Когда твоя девушка больна",
-        "name_singer": "КИНО",
-        "audioURL": "https://www.youtube.com/watch?v=Dy3qLNZyDZA",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Song to the Siren",
-        "name_singer": "Tim Buckley",
-        "audioURL": "https://www.youtube.com/watch?v=vMTEtDBHGY4",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Only you",
-        "name_singer": "The Platters",
-        "audioURL": "https://www.youtube.com/watch?v=5p2k55F-uag",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "До скорой встречи",
-        "name_singer": "Звери",
-        "audioURL": "https://www.youtube.com/watch?v=DF6W1XD25Dc",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Still loving you",
-        "name_singer": "Scorpions",
-        "audioURL": "https://www.youtube.com/watch?v=CjRas1yOWvo",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "(Everything I Do) I Do It For You",
-        "name_singer": "Bryan Adams",
-        "audioURL": "https://www.youtube.com/watch?v=Y0pdQU87dc8",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Батарейка",
-        "name_singer": "Жуки",
-        "audioURL": "https://www.youtube.com/watch?v=9IPvUmLCLBM",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Something",
-        "name_singer": "The Beatles",
-        "audioURL": "https://www.youtube.com/watch?v=UelDrZ1aFeY",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "The Supremes",
-        "name_singer": "Baby Love",
-        "audioURL": "https://www.youtube.com/watch?v=Yd43nWkgUzg",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Я хочу быть с тобой",
-        "name_singer": "Наутилус Помпилиус",
-        "audioURL": "https://www.youtube.com/watch?v=Kcmb-K_I5To",
-        "name_URLWEB": ""
-      },
-      {
-        "name_song": "Can’t Help Falling in Love",
-        "name_singer": "Elvis Presley",
-        "audioURL": "https://www.youtube.com/watch?v=vGJTaP6anOU",
-        "name_URLWEB": ""
-      }
-    ],
-    "isDonate": false,
-    "isUpdate": false,
-    "textColorClick": "0xFFFFFFFF",
-    "isClick": true,
-    "isShow": true,
-    "isSupport": true,
-    "websiteUrl": ""
-  },
-  {
-    "name": "Оцените приложение",
-    "user": "ru-developer",
-    "lang": "ru",
-    "description": [
-      "**Здравствуйте, уважаемые пользователи My Songbook!**",
-      "",
-      "Мы очень рады, что вы используете наше приложение. Ваше мнение и ваша обратная связь очень важны для нас, так как помогают нам улучшать качество наших услуг и делать приложение еще более комфортным и полезным для вас.",
-      "",
-      "Поэтому мы просим вас оценить наше приложение в магазине приложений. Ваши оценки и комментарии помогут нам понять, какие функции и возможности вы считаете наиболее полезными, а какие требуют улучшения.",
-      "",
-      "Будем благодарны, если вы уделите несколько минут своего времени, чтобы оставить отзыв о приложении My Songbook.",
-      "",
-      "___Спасибо за ваше внимание и ваше мнение!___"
-    ],
-    "type": "text",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/rate%20app.png?alt=media&token=9594e480-3346-4bfc-aec4-a438c2771808",
+    "description": [],
+    "type": "website",
+    "imageUrl": "",
     "audio": [],
     "isDonate": false,
-    "isUpdate": false,
-    "textColorClick": "0xFFFFFFFF",
+    "isUpdate": true,
+    "textColorClick": "",
     "isClick": true,
     "isShow": true,
     "isSupport": false,
-    "websiteUrl": ""
-  },
-  {
-    "name": "Rate the app",
-    "user": "ru-developer",
-    "lang": "en",
-    "description": [
-      "**Hello, dear users of My Songbook!**",
-      "",
-      "We are very glad that you are using our app. Your opinion and your feedback are very important to us, as they help us improve the quality of our services and make the application even more comfortable and useful for you.",
-      "",
-      "Therefore, we ask you to rate our app in the app store. Your ratings and comments will help us understand which features and capabilities you find most useful and which require improvement.",
-      "",
-      "We would be grateful if you would take a few minutes of your time to leave a review about the My Songbook app.",
-      "",
-      "___Thank you for your attention and your opinion!___"
-    ],
-    "type": "text",
-    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/my-songbook-5fb9f.appspot.com/o/rate%20app.png?alt=media&token=9594e480-3346-4bfc-aec4-a438c2771808",
-    "audio": [],
-    "isDonate": false,
-    "isUpdate": false,
-    "textColorClick": "0xFFFFFFFF",
-    "isClick": true,
-    "isShow": true,
-    "isSupport": false,
-    "websiteUrl": ""
+    "websiteUrl": "https://www.rustore.ru/catalog/app/ru.ru_developer.my_songbook_pro",
+    "iconClose": false,
+    "iconArrow": true,
+    "iconStarred": false,
+    "iconPro": false,
+    "isButton": false,
+    "date": {
+      "startAt": "29.01.2025",
+      "closeAt": "5.06.2025"
+    },
+    "button": {
+      "button_name": "Оценить приложение",
+      "button_url": "https://apps.rustore.ru/app/ru.ru_developer.my_university_isuct",
+      "button_color_foreground": "",
+      "button_color_background": ""
+    },
+    "createdAt": "29.01.2025"
   }
 ]

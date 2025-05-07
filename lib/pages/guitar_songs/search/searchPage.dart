@@ -27,10 +27,10 @@ class SearchPage extends GetView<SearchPageController> {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(6),
                 filled: true,
-                fillColor: Colors.white.withOpacity(.3),
+                fillColor: Colors.white.withValues(alpha: .3),
                 hintText: tr(LocaleKeys.search),
                 hintStyle: TextStyle(
-                    color: Colors.white.withOpacity(.8),
+                    color: Colors.white.withValues(alpha: .8),
                     fontSize: 18,
                     decoration: TextDecoration.none),
                 prefixIcon: const Icon(Icons.search),

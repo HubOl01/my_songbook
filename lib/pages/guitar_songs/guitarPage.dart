@@ -63,12 +63,6 @@ class _GuitarPageState extends State<GuitarPage> {
   final ScrollController reorderScrollController = ScrollController();
 
   @override
-  void initState() {
-    context.read<SongsBloc>().add(LoadSongs());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -543,6 +537,27 @@ class _GuitarPageState extends State<GuitarPage> {
                           },
                           icon: const Icon(Icons.add)),
                     ],
+          // bottom: _hasCardContent
+          //     ? PreferredSize(
+          //         preferredSize: Size.fromHeight(_cardHeight),
+          //         child: CardNews(
+          //           onHeightChanged: (height) {
+          //             if (mounted && _cardHeight != height) {
+          //               setState(() {
+          //                 _cardHeight = height;
+          //               });
+          //             }
+          //           },
+          //           onContentChanged: (hasContent) {
+          //             if (mounted && _hasCardContent != hasContent) {
+          //               setState(() {
+          //                 _hasCardContent = hasContent;
+          //               });
+          //             }
+          //           },
+          //         ),
+          //       )
+          //     : null,
         ),
         body: RefreshIndicator(
           color: colorFiolet,
