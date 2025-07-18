@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 String dropdownValue = '14';
 
-class SettingText extends StatefulWidget {
-  const SettingText({super.key});
+class SettingsText extends StatefulWidget {
+  const SettingsText({super.key});
 
   @override
-  State<SettingText> createState() => _SettingTextState();
+  State<SettingsText> createState() => _SettingsTextState();
 }
 
-class _SettingTextState extends State<SettingText> {
+class _SettingsTextState extends State<SettingsText> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,7 +1,11 @@
+import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/components/customButton.dart';
+import 'package:my_songbook/core/styles/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../core/utils/backup.dart';
 
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
@@ -63,6 +67,52 @@ class PremiumPage extends StatelessWidget {
 🔥 Приобретите полную версию уже сегодня и раскройте весь потенциал приложения: создавайте без ограничений, наслаждайтесь эксклюзивными функциями и будьте впереди с ранним доступом к обновлениям.   
           
 🎶 My Songbook Pro — ваш надежный помощник в мире музыки. Превратите идеи в шедевры уже сегодня!'''),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: colorFiolet.withValues(alpha: .15),
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: colorFiolet, width: 1.5)),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Перед переходом на My Songbook Pro",
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text(
+                          "Если вы хотите перенести свои данные в версию PRO, рекомендуем сделать резервную копию."),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                              style: const ButtonStyle(
+                                  minimumSize:
+                                      WidgetStatePropertyAll(Size.zero),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  padding: WidgetStatePropertyAll(
+                                      EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5))),
+                              onPressed: () {
+                                AppMetrica.reportEvent('data_backup');
+                                createBackup(context);
+                              },
+                              child: const Text(
+                                "Сделать копию?",
+                              )))
+                    ],
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
