@@ -1,2 +1,0 @@
-/Users/oleg/Work/MyProjects/my_songbook/android/app/.cxx/Debug/5e1k4r68/armeabi-v7a/CMakeFiles/edit_cache.dir
-/Users/oleg/Work/MyProjects/my_songbook/android/app/.cxx/Debug/5e1k4r68/armeabi-v7a/CMakeFiles/rebuild_cache.dir
