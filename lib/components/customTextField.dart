@@ -6,11 +6,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String title;
   final Function(String value) onChanged;
+  final bool isUpperLetter;
   const CustomTextField({
     super.key,
     required this.controller,
     required this.title,
     required this.onChanged,
+    this.isUpperLetter = false,
   });
 
   @override
@@ -23,6 +25,9 @@ class CustomTextField extends StatelessWidget {
       maxLength: 20,
       textAlign: TextAlign.center,
       cursorColor: colorFiolet,
+      textCapitalization: isUpperLetter
+          ? TextCapitalization.sentences
+          : TextCapitalization.none,
       decoration: InputDecoration(
         // counter: Align(
         //   alignment: Alignment.center,

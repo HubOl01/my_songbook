@@ -506,6 +506,7 @@ class _EditSongState extends State<EditSong> {
                       ),
                       TextField(
                         controller: nameSongController,
+                        textCapitalization: TextCapitalization.sentences,
                         cursorColor: colorFiolet,
                         decoration: InputDecoration(
                             label:
@@ -521,6 +522,7 @@ class _EditSongState extends State<EditSong> {
                       ),
                       TextField(
                         controller: nameSingerController,
+                        textCapitalization: TextCapitalization.sentences,
                         cursorColor: colorFiolet,
                         decoration: InputDecoration(
                             label:

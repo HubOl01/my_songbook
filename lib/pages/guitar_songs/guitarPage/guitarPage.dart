@@ -36,6 +36,7 @@ import '../editGroupPage.dart';
 import '../guitarDetal.dart';
 import '../search/searchPage.dart';
 import '../testPage.dart';
+import 'NoDataSongsGroup.dart';
 
 ScrollController controllerScroll = ScrollController();
 
@@ -813,172 +814,101 @@ class _GuitarPageState extends State<GuitarPage> {
                     }
 
                     return isReorderMode
-                        ? Listener(
-                            onPointerMove: (event) {
-                              final y = event.position.dy;
-                              const edgePadding = 100.0;
-                              const scrollSpeed = 15.0;
+                        ? reorderedSongs.isEmpty
+                            ? const NoDataSongsGroup()
+                            : Listener(
+                                onPointerMove: (event) {
+                                  final y = event.position.dy;
+                                  const edgePadding = 100.0;
+                                  const scrollSpeed = 15.0;
 
-                              final maxExtent = reorderScrollController
-                                  .position.maxScrollExtent;
-                              final offset = reorderScrollController.offset;
+                                  final maxExtent = reorderScrollController
+                                      .position.maxScrollExtent;
+                                  final offset = reorderScrollController.offset;
 
-                              if (y < edgePadding) {
-                                reorderScrollController.jumpTo(
-                                    (offset - scrollSpeed)
-                                        .clamp(0.0, maxExtent));
-                              } else if (y >
-                                  MediaQuery.of(context).size.height -
-                                      edgePadding) {
-                                reorderScrollController.jumpTo(
-                                    (offset + scrollSpeed)
-                                        .clamp(0.0, maxExtent));
-                              }
-                            },
-                            onPointerDown: (_) {
-                              if (isReorderMode) {
-                                HapticFeedback.lightImpact();
-                              }
-                            },
-                            child: ScrollConfiguration(
-                              behavior: const ScrollBehavior(),
-                              child: GlowingOverscrollIndicator(
-                                axisDirection: AxisDirection.down,
-                                color: colorFiolet.withValues(alpha: 0.3),
-                                child: ReorderableListView(
-                                  scrollController: reorderScrollController,
-                                  onReorder: (oldIndex, newIndex) {
-                                    setState(() {
-                                      if (newIndex > oldIndex) newIndex -= 1;
-                                      final item =
-                                          reorderedSongs.removeAt(oldIndex);
-                                      reorderedSongs.insert(newIndex, item);
-                                    });
+                                  if (y < edgePadding) {
+                                    reorderScrollController.jumpTo(
+                                        (offset - scrollSpeed)
+                                            .clamp(0.0, maxExtent));
+                                  } else if (y >
+                                      MediaQuery.of(context).size.height -
+                                          edgePadding) {
+                                    reorderScrollController.jumpTo(
+                                        (offset + scrollSpeed)
+                                            .clamp(0.0, maxExtent));
+                                  }
+                                },
+                                onPointerDown: (_) {
+                                  if (isReorderMode) {
+                                    HapticFeedback.lightImpact();
+                                  }
+                                },
+                                child: ScrollConfiguration(
+                                  behavior: const ScrollBehavior(),
+                                  child: GlowingOverscrollIndicator(
+                                    axisDirection: AxisDirection.down,
+                                    color: colorFiolet.withValues(alpha: 0.3),
+                                    child: ReorderableListView(
+                                      scrollController: reorderScrollController,
+                                      onReorder: (oldIndex, newIndex) {
+                                        setState(() {
+                                          if (newIndex > oldIndex)
+                                            newIndex -= 1;
+                                          final item =
+                                              reorderedSongs.removeAt(oldIndex);
+                                          reorderedSongs.insert(newIndex, item);
+                                        });
 
-                                    final updated = <Song>[];
-                                    for (int i = 0;
-                                        i < reorderedSongs.length;
-                                        i++) {
-                                      updated.add(
-                                          reorderedSongs[i].copy(order: i + 1));
-                                    }
-                                    context
-                                        .read<SongsBloc>()
-                                        .add(UpdateSongsOrder(
-                                            updated,
-                                            // state.groups[
-                                            currentGroupId
-                                            // ].id!
-                                            ));
-                                  },
-                                  children: [
-                                    for (int index = 0;
-                                        index < reorderedSongs.length;
-                                        index++)
-                                      ListTile(
-                                        minTileHeight: 60,
-                                        minVerticalPadding: 10,
-                                        key: ValueKey(reorderedSongs[index].id),
-                                        tileColor: context.isDarkMode
-                                            ? backgroundColorDark
-                                            : Colors.white
-                                                .withValues(alpha: .1),
-                                        horizontalTitleGap: 13.5,
-                                        leading: Text(
-                                          "${index + 1}.",
-                                          style: TextStyle(
-                                              fontSize: (index + 1) > 9 &&
-                                                      (index + 1) <= 99
-                                                  ? 14
-                                                  : (index + 1) > 99
-                                                      ? 13
-                                                      : 16,
-                                              color: context.isDarkMode
-                                                  ? Colors.white
-                                                      .withValues(alpha: .5)
-                                                  : Colors.black
-                                                      .withValues(alpha: .5)),
-                                        ),
-                                        minLeadingWidth: 1,
-                                        title: Text(
-                                            reorderedSongs[index].name_song),
-                                        subtitle: Text(
-                                          reorderedSongs[index].name_singer,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: context.isDarkMode
-                                                ? Colors.grey[300]
-                                                : Colors.grey[600],
-                                          ),
-                                        ),
-                                        trailing: ReorderableDragStartListener(
-                                          index: index,
-                                          child: const Icon(Icons.drag_handle),
-                                        ),
-                                      )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        : ScrollConfiguration(
-                            behavior: const ScrollBehavior(),
-                            child: GlowingOverscrollIndicator(
-                              axisDirection: AxisDirection.down,
-                              color: colorFiolet.withValues(alpha: 0.3),
-                              child: ListView(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                controller: controllerScroll,
-                                children: [
-                                  //     : const CardNews(),
-                                  _buildHorizontalGroupSelector(state.groups),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  !isSecondButton
-                                      ? _buildTestDeleteWidget(context)
-                                      : const SizedBox(),
-                                  ...filteredSongs.map((song) => ListTile(
-                                        key: ValueKey(song.id),
-                                        minTileHeight: 60,
-                                        isThreeLine: true,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                    vertical: 4)
-                                                .copyWith(left: 15, right: 8),
-                                        titleAlignment:
-                                            ListTileTitleAlignment.titleHeight,
-                                        minLeadingWidth:
-                                            !isSecondButton ? null : 0,
-                                        leading: isSecondButton
-                                            ? _buildSelectionIndicator(song.id!)
-                                            : null,
-                                        onTap: isSecondButton
-                                            ? () => _toggleSongSelection(
-                                                song.id!, song)
-                                            : () {
-                                                Get.to(GuitarDetal(
-                                                  id: song.id!,
-                                                  speedTextSong:
-                                                      song.speedScroll!,
+                                        final updated = <Song>[];
+                                        for (int i = 0;
+                                            i < reorderedSongs.length;
+                                            i++) {
+                                          updated.add(reorderedSongs[i]
+                                              .copy(order: i + 1));
+                                        }
+                                        context
+                                            .read<SongsBloc>()
+                                            .add(UpdateSongsOrder(
+                                                updated,
+                                                // state.groups[
+                                                currentGroupId
+                                                // ].id!
                                                 ));
-                                              },
-                                        onLongPress: () {
-                                          setState(() {
-                                            isSecondButton = true;
-                                          });
-                                          _toggleSongSelection(song.id!, song);
-                                        },
-                                        title: Text(song.name_song,
-                                            style:
-                                                const TextStyle(fontSize: 16)),
-                                        subtitle: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              song.name_singer,
+                                      },
+                                      children: [
+                                        for (int index = 0;
+                                            index < reorderedSongs.length;
+                                            index++)
+                                          ListTile(
+                                            minTileHeight: 60,
+                                            minVerticalPadding: 10,
+                                            key: ValueKey(
+                                                reorderedSongs[index].id),
+                                            tileColor: context.isDarkMode
+                                                ? backgroundColorDark
+                                                : Colors.white
+                                                    .withValues(alpha: .1),
+                                            horizontalTitleGap: 13.5,
+                                            leading: Text(
+                                              "${index + 1}.",
+                                              style: TextStyle(
+                                                  fontSize: (index + 1) > 9 &&
+                                                          (index + 1) <= 99
+                                                      ? 14
+                                                      : (index + 1) > 99
+                                                          ? 13
+                                                          : 16,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                          .withValues(alpha: .5)
+                                                      : Colors.black.withValues(
+                                                          alpha: .5)),
+                                            ),
+                                            minLeadingWidth: 1,
+                                            title: Text(reorderedSongs[index]
+                                                .name_song),
+                                            subtitle: Text(
+                                              reorderedSongs[index].name_singer,
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 color: context.isDarkMode
@@ -986,103 +916,194 @@ class _GuitarPageState extends State<GuitarPage> {
                                                     : Colors.grey[600],
                                               ),
                                             ),
-                                            currentGroupId != -1
-                                                ? const SizedBox()
-                                                : BlocBuilder<SongsBloc,
-                                                    SongsState>(
-                                                    builder: (context, state) {
-                                                      if (state
-                                                          is! SongsLoaded) {
-                                                        return const SizedBox();
-                                                      }
+                                            trailing:
+                                                ReorderableDragStartListener(
+                                              index: index,
+                                              child:
+                                                  const Icon(Icons.drag_handle),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                        : filteredSongs.isEmpty
+                            ? const NoDataSongsGroup()
+                            : ScrollConfiguration(
+                                behavior: const ScrollBehavior(),
+                                child: GlowingOverscrollIndicator(
+                                  axisDirection: AxisDirection.down,
+                                  color: colorFiolet.withValues(alpha: 0.3),
+                                  child: ListView(
+                                    padding: const EdgeInsets.only(bottom: 5),
+                                    controller: controllerScroll,
+                                    children: [
+                                      //     : const CardNews(),
+                                      _buildHorizontalGroupSelector(
+                                          state.groups),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      !isSecondButton
+                                          ? _buildTestDeleteWidget(context)
+                                          : const SizedBox(),
+                                      ...filteredSongs.map((song) => ListTile(
+                                            key: ValueKey(song.id),
+                                            minTileHeight: 60,
+                                            isThreeLine: true,
+                                            contentPadding:
+                                                const EdgeInsets.symmetric(
+                                                        vertical: 4)
+                                                    .copyWith(
+                                                        left: 15, right: 8),
+                                            titleAlignment:
+                                                ListTileTitleAlignment
+                                                    .titleHeight,
+                                            minLeadingWidth:
+                                                !isSecondButton ? null : 0,
+                                            leading: isSecondButton
+                                                ? _buildSelectionIndicator(
+                                                    song.id!)
+                                                : null,
+                                            onTap: isSecondButton
+                                                ? () => _toggleSongSelection(
+                                                    song.id!, song)
+                                                : () {
+                                                    Get.to(GuitarDetal(
+                                                      id: song.id!,
+                                                      speedTextSong:
+                                                          song.speedScroll!,
+                                                    ));
+                                                  },
+                                            onLongPress: () {
+                                              setState(() {
+                                                isSecondButton = true;
+                                              });
+                                              _toggleSongSelection(
+                                                  song.id!, song);
+                                            },
+                                            title: Text(song.name_song,
+                                                style: const TextStyle(
+                                                    fontSize: 16)),
+                                            subtitle: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  song.name_singer,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: context.isDarkMode
+                                                        ? Colors.grey[300]
+                                                        : Colors.grey[600],
+                                                  ),
+                                                ),
+                                                currentGroupId != -1
+                                                    ? const SizedBox()
+                                                    : BlocBuilder<SongsBloc,
+                                                        SongsState>(
+                                                        builder:
+                                                            (context, state) {
+                                                          if (state
+                                                              is! SongsLoaded) {
+                                                            return const SizedBox();
+                                                          }
 
-                                                      final songGroups = state
-                                                          .songGroups
-                                                          .where((sg) =>
-                                                              sg.songId ==
-                                                              song.id)
-                                                          .toList();
+                                                          final songGroups = state
+                                                              .songGroups
+                                                              .where((sg) =>
+                                                                  sg.songId ==
+                                                                  song.id)
+                                                              .toList();
 
-                                                      if (songGroups.isEmpty) {
-                                                        return const SizedBox();
-                                                      }
+                                                          if (songGroups
+                                                              .isEmpty) {
+                                                            return const SizedBox();
+                                                          }
 
-                                                      return Wrap(
-                                                        children: songGroups
-                                                            .map((sg) {
-                                                          final group = state
-                                                              .groups
-                                                              .firstWhere(
-                                                            (g) =>
-                                                                g.id ==
-                                                                sg.groupId,
-                                                            orElse: () =>
-                                                                GroupModel(
-                                                                    id: -1,
-                                                                    name: ''),
-                                                          );
+                                                          return Wrap(
+                                                            children: songGroups
+                                                                .map((sg) {
+                                                              final group = state
+                                                                  .groups
+                                                                  .firstWhere(
+                                                                (g) =>
+                                                                    g.id ==
+                                                                    sg.groupId,
+                                                                orElse: () =>
+                                                                    GroupModel(
+                                                                        id: -1,
+                                                                        name:
+                                                                            ''),
+                                                              );
 
-                                                          final backgroundColor =
-                                                              colorFiolet
-                                                                  .withValues(
-                                                                      alpha:
-                                                                          0.3);
+                                                              final backgroundColor =
+                                                                  colorFiolet
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.3);
 
-                                                          final borderColor =
-                                                              colorFiolet;
+                                                              final borderColor =
+                                                                  colorFiolet;
 
-                                                          final textColor =
-                                                              borderColor;
+                                                              final textColor =
+                                                                  borderColor;
 
-                                                          return Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 6,
-                                                                    top: 4,
-                                                                    bottom: 4),
-                                                            padding:
-                                                                const EdgeInsets
+                                                              return Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            6,
+                                                                        top: 4,
+                                                                        bottom:
+                                                                            4),
+                                                                padding: const EdgeInsets
                                                                     .symmetric(
                                                                     horizontal:
                                                                         6,
                                                                     vertical:
                                                                         2),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color:
-                                                                  backgroundColor,
-                                                              border: Border.all(
+                                                                decoration:
+                                                                    BoxDecoration(
                                                                   color:
-                                                                      borderColor),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10),
-                                                            ),
-                                                            child: Text(
-                                                              group.name,
-                                                              style: TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color:
-                                                                    textColor,
-                                                              ),
-                                                            ),
+                                                                      backgroundColor,
+                                                                  border: Border
+                                                                      .all(
+                                                                          color:
+                                                                              borderColor),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                ),
+                                                                child: Text(
+                                                                  group.name,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color:
+                                                                        textColor,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            }).toList(),
                                                           );
-                                                        }).toList(),
-                                                      );
-                                                    },
-                                                  ),
-                                          ],
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ),
-                          );
+                                                        },
+                                                      ),
+                                              ],
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              );
                   } else if (state is SongsError) {
                     return Text(state.message);
                   } else {

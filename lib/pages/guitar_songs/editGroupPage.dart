@@ -45,7 +45,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         final group = groups[index];
                         return ListTile(
                           tileColor:
-                              context.read<CurrentGroupIdCubit>().state == group.id
+                              context.read<CurrentGroupIdCubit>().state ==
+                                      group.id
                                   ? colorFiolet.withValues(alpha: .1)
                                   : null,
                           shape: RoundedRectangleBorder(
@@ -54,13 +55,13 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 0),
                           title: Text(group.name),
-                          trailing:
-                              context.read<CurrentGroupIdCubit>().state == group.id
-                                  ? Icon(
-                                      Icons.check,
-                                      color: colorFiolet,
-                                    )
-                                  : null,
+                          trailing: context.read<CurrentGroupIdCubit>().state ==
+                                  group.id
+                              ? Icon(
+                                  Icons.check,
+                                  color: colorFiolet,
+                                )
+                              : null,
                           // Icon(
                           //   EvaIcons.minus_circle_outline,
                           //   size: 20,
@@ -71,7 +72,9 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           onTap: () {
                             // _showDeleteConfirmation(context, group);
                             context.read<GroupCubit>().switcher(group);
-                            context.read<CurrentGroupIdCubit>().switcher(group.id!);
+                            context
+                                .read<CurrentGroupIdCubit>()
+                                .switcher(group.id!);
                             Get.back();
                           },
                           onLongPress: () {
@@ -165,6 +168,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
               children: [
                 // Поле ввода
                 CustomTextField(
+                  isUpperLetter: true,
                   controller: controller,
                   title: tr(LocaleKeys.title_new_group),
                   onChanged: (value) => setState(() {}),

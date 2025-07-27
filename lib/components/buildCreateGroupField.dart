@@ -29,7 +29,7 @@ Widget buildCreateGroupField(
           return const Center(child: CircularProgressIndicator());
         } else if (state is SongsLoaded) {
           final groups = state.groups;
-          
+
           if (groups.length >= 5) {
             return Padding(
               padding: const EdgeInsets.all(10.0),
@@ -50,6 +50,7 @@ Widget buildCreateGroupField(
             child: Column(
               children: [
                 CustomTextField(
+                  isUpperLetter: true,
                   controller: controller,
                   title: tr(LocaleKeys.title_new_group),
                   onChanged: onChangeTextEditing,

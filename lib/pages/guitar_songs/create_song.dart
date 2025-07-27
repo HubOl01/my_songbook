@@ -113,6 +113,7 @@ class _CreateSongState extends State<CreateSong> {
                 ),
                 TextField(
                   controller: nameSongController,
+                  textCapitalization: TextCapitalization.sentences,
                   // maxLines: 30,
                   cursorColor: colorFiolet,
                   decoration: InputDecoration(
@@ -130,6 +131,7 @@ class _CreateSongState extends State<CreateSong> {
                 ),
                 TextField(
                   controller: nameSingerController,
+                  textCapitalization: TextCapitalization.sentences,
                   cursorColor: colorFiolet,
                   // maxLines: 30,
                   decoration: InputDecoration(
