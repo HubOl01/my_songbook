@@ -8,8 +8,8 @@ import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
+import '../../core/cubit/current_group_id_cubit.dart';
 import '../../core/cubit/group_cubit.dart';
-import '../../core/cubit/index_group_cubit.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
@@ -45,7 +45,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                         final group = groups[index];
                         return ListTile(
                           tileColor:
-                              context.read<IndexGroupCubit>().state == group.id
+                              context.read<CurrentGroupIdCubit>().state == group.id
                                   ? colorFiolet.withValues(alpha: .1)
                                   : null,
                           shape: RoundedRectangleBorder(
@@ -55,7 +55,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                               horizontal: 20, vertical: 0),
                           title: Text(group.name),
                           trailing:
-                              context.read<IndexGroupCubit>().state == group.id
+                              context.read<CurrentGroupIdCubit>().state == group.id
                                   ? Icon(
                                       Icons.check,
                                       color: colorFiolet,
@@ -71,7 +71,7 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           onTap: () {
                             // _showDeleteConfirmation(context, group);
                             context.read<GroupCubit>().switcher(group);
-                            context.read<IndexGroupCubit>().switcher(group.id!);
+                            context.read<CurrentGroupIdCubit>().switcher(group.id!);
                             Get.back();
                           },
                           onLongPress: () {

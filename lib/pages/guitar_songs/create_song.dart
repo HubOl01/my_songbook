@@ -21,7 +21,9 @@ import '../../core/model/songsModel.dart';
 import 'works_file.dart';
 
 class CreateSong extends StatefulWidget {
-  const CreateSong({super.key});
+  final GroupModel? group;
+  final Function()? onSave;
+  const CreateSong({super.key, this.group, this.onSave});
 
   @override
   State<CreateSong> createState() => _CreateSongState();
@@ -66,6 +68,11 @@ class _CreateSongState extends State<CreateSong> {
   @override
   void initState() {
     AppMetrica.reportEvent('Song added');
+    if (widget.group != null) {
+      setState(() {
+        selectedGroups.add(widget.group!);
+      });
+    }
     super.initState();
   }
 
@@ -407,7 +414,7 @@ class _CreateSongState extends State<CreateSong> {
                             }
 
                             context.read<SongsBloc>().add(LoadSongs());
-
+                            widget.onSave?.call();
                             Get.back();
                           } catch (ex) {
                             print("EXCEPTION => $ex");

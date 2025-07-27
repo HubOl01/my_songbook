@@ -22,7 +22,6 @@ import '../../../core/bloc/songs_bloc.dart';
 import '../../../core/cubit/current_group_id_cubit.dart';
 import '../../../core/cubit/current_index_group_cubit.dart';
 import '../../../core/cubit/group_cubit.dart';
-import '../../../core/cubit/index_group_cubit.dart';
 import '../../../core/cubit/settings_exit_cubit.dart';
 import '../../../core/model/groupModel.dart';
 import '../../../core/model/songTogroupModel.dart';
@@ -88,7 +87,7 @@ class _GuitarPageState extends State<GuitarPage> {
             Get.put<MyHomePageController>(MyHomePageController());
         if (!didPop) {
           if (controllerHome.tabIndex == 0) {
-            if (context.read<IndexGroupCubit>().state == -1 &&
+            if (context.read<CurrentGroupIdCubit>().state == -1 &&
                 !isSecondButton &&
                 !isReorderMode) {
               await _exitApp(context);
@@ -100,9 +99,14 @@ class _GuitarPageState extends State<GuitarPage> {
                 selectedSongsId.clear();
                 selectedSongs.clear();
               });
+              List<GroupModel> sortedGroups = List.from(groupsTemp)
+                ..sort((a, b) => (a.orderId ?? 0).compareTo(b.orderId ?? 0));
+              List<GroupModel> list = [GroupModel(name: ""), ...sortedGroups];
+              controlFocus(list[context.read<CurrentIndexGroupCubit>().state]);
             } else {
               context.read<GroupCubit>().switcher(GroupModel(id: -1, name: ''));
-              context.read<IndexGroupCubit>().switcher(-1);
+              context.read<CurrentGroupIdCubit>().switcher(-1);
+              context.read<CurrentIndexGroupCubit>().switcherIndex(0);
             }
           }
           controllerHome.changeTabIndex(0);
@@ -121,8 +125,6 @@ class _GuitarPageState extends State<GuitarPage> {
                       selectedSongs.clear();
                       // print();
                     });
-                    int indexGroup =
-                        context.read<CurrentIndexGroupCubit>().state;
                     List<GroupModel> sortedGroups = List.from(groupsTemp)
                       ..sort(
                           (a, b) => (a.orderId ?? 0).compareTo(b.orderId ?? 0));
@@ -402,7 +404,7 @@ class _GuitarPageState extends State<GuitarPage> {
                           } else if (state is SongsLoaded) {
                             return IconButton(
                               onPressed: () {
-                                if (context.read<IndexGroupCubit>().state ==
+                                if (context.read<CurrentGroupIdCubit>().state ==
                                     -1) {
                                   bool allSelected = state.songs.every((song) =>
                                       selectedSongsId.contains(song.id));
@@ -415,7 +417,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                   final int groupId =
                                       // state
                                       //     .groups[
-                                      context.read<IndexGroupCubit>().state;
+                                      context.read<CurrentGroupIdCubit>().state;
                                   // ].id!;
 
                                   final songGroupLinks = state.songGroups
@@ -450,7 +452,7 @@ class _GuitarPageState extends State<GuitarPage> {
                         },
                       ),
                       // исключение песни из группы
-                      context.read<IndexGroupCubit>().state != -1
+                      context.read<CurrentGroupIdCubit>().state != -1
                           ? IconButton(
                               onPressed: () {
                                 showModalBottomSheet(
@@ -697,46 +699,45 @@ class _GuitarPageState extends State<GuitarPage> {
                           );
                         },
                       ),
-                      IconButton(
-                          onPressed: () {
-                            Get.to(const CreateSong());
-                          },
-                          icon: const Icon(Icons.add)),
                       // IconButton(
-                      //           onPressed: () {
-                      //             GroupModel groupModel =
-                      //                 context.read<GroupCubit>().state;
-                      //             // print(groupModel.id);
-                      //             Get.to(CreateSong(
-                      //               group: groupModel.id == -1 ||
-                      //                       groupModel.id == null
-                      //                   ? null
-                      //                   : groupModel,
-                      //               onSave: () {
-                      //                 List<GroupModel> sortedGroups =
-                      //                     List.from(groupsTemp)
-                      //                       ..sort((a, b) => (a.orderId ?? 0)
-                      //                           .compareTo(b.orderId ?? 0));
-                      //                 List<GroupModel> list = [
-                      //                   GroupModel(name: ""),
-                      //                   ...sortedGroups
-                      //                 ];
-                      //                 _pageController = PageController(
-                      //                     initialPage: context
-                      //                         .read<CurrentIndexGroupCubit>()
-                      //                         .state);
+                      //     onPressed: () {
+                      //       Get.to(const CreateSong());
+                      //     },
+                      //     icon: const Icon(Icons.add)),
+                      IconButton(
+                        onPressed: () {
+                          GroupModel groupModel =
+                              context.read<GroupCubit>().state;
+                          // print(groupModel.id);
+                          Get.to(CreateSong(
+                            group: groupModel.id == -1 || groupModel.id == null
+                                ? null
+                                : groupModel,
+                            onSave: () {
+                              List<GroupModel> sortedGroups = List.from(
+                                  groupsTemp)
+                                ..sort((a, b) =>
+                                    (a.orderId ?? 0).compareTo(b.orderId ?? 0));
+                              List<GroupModel> list = [
+                                GroupModel(name: ""),
+                                ...sortedGroups
+                              ];
+                              // _pageController = PageController(
+                              //     initialPage: context
+                              //         .read<CurrentIndexGroupCubit>()
+                              //         .state);
 
-                      //                 // _pageController.jumpToPage(context
-                      //                 //     .read<CurrentIndexGroupCubit>()
-                      //                 //     .state);
-                      //                 controlFocus(list[context
-                      //                     .read<CurrentIndexGroupCubit>()
-                      //                     .state]);
-                      //               },
-                      //             ));
-                      //           },
-                      //           icon: const Icon(Icons.add),
-                      //         ),
+                              // _pageController.jumpToPage(context
+                              //     .read<CurrentIndexGroupCubit>()
+                              //     .state);
+                              controlFocus(list[context
+                                  .read<CurrentIndexGroupCubit>()
+                                  .state]);
+                            },
+                          ));
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
                     ],
           // bottom: _hasCardContent
           //     ? PreferredSize(
@@ -769,8 +770,8 @@ class _GuitarPageState extends State<GuitarPage> {
             context.read<SongsBloc>().add(LoadSongs());
             return controller.refreshSongs();
           },
-          child: BlocBuilder<IndexGroupCubit, int>(
-            builder: (context, indexGroup) {
+          child: BlocBuilder<CurrentGroupIdCubit, int>(
+            builder: (context, currentGroupId) {
               return BlocBuilder<SongsBloc, SongsState>(
                 builder: (context, state) {
                   if (state is SongsLoading) {
@@ -778,11 +779,11 @@ class _GuitarPageState extends State<GuitarPage> {
                   } else if (state is SongsLoaded) {
                     final List<Song> filteredSongs;
 
-                    if (indexGroup == -1) {
+                    if (currentGroupId == -1) {
                       filteredSongs = [...state.songs]
                         ..sort((a, b) => b.id!.compareTo(a.id!));
                     } else {
-                      final groupId = indexGroup;
+                      final groupId = currentGroupId;
                       // state.groups[
                       //   ].id;
 
@@ -806,7 +807,7 @@ class _GuitarPageState extends State<GuitarPage> {
                     }
 
                     if (isReorderMode &&
-                        indexGroup != -1 &&
+                        currentGroupId != -1 &&
                         reorderedSongs.isEmpty) {
                       reorderedSongs = [...filteredSongs];
                     }
@@ -866,7 +867,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                         .add(UpdateSongsOrder(
                                             updated,
                                             // state.groups[
-                                            indexGroup
+                                            currentGroupId
                                             // ].id!
                                             ));
                                   },
@@ -985,7 +986,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                                     : Colors.grey[600],
                                               ),
                                             ),
-                                            indexGroup != -1
+                                            currentGroupId != -1
                                                 ? const SizedBox()
                                                 : BlocBuilder<SongsBloc,
                                                     SongsState>(
@@ -1308,7 +1309,7 @@ class _GuitarPageState extends State<GuitarPage> {
                     ),
                   ),
                 ),
-                BlocBuilder<IndexGroupCubit, int>(
+                BlocBuilder<CurrentGroupIdCubit, int>(
                   builder: (context, indexGroup) {
                     // Сортируем группы по orderId
                     List<GroupModel> sortedGroups = List.from(groups)
@@ -1325,14 +1326,14 @@ class _GuitarPageState extends State<GuitarPage> {
                                   onTap: () {
                                     if (indexGroup != group.id) {
                                       context
-                                          .read<IndexGroupCubit>()
+                                          .read<CurrentGroupIdCubit>()
                                           .switcher(group.id!);
                                       context
                                           .read<GroupCubit>()
                                           .switcher(group);
                                     } else {
                                       context
-                                          .read<IndexGroupCubit>()
+                                          .read<CurrentGroupIdCubit>()
                                           .switcher(-1);
                                       context
                                           .read<GroupCubit>()
