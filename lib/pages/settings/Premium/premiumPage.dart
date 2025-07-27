@@ -76,7 +76,7 @@ class PremiumPage extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: colorFiolet.withValues(alpha: .15),
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: colorFiolet, width: 1.5)),
+                      border: Border.all(color: colorFiolet.withValues(alpha: .5), width: 1.5)),
                   child: Column(
                     children: [
                       const Text(
