@@ -130,5 +130,9 @@
     "exit_content_dialog": "您确定要退出应用程序吗？",
     "exit_dialog_cancel": "取消",
     "exit_dialog_exit": "出口；出口",
-    "settings_exit": "确认退出"
+    "settings_exit": "确认退出",
+    "no_data": "没有可用的数据",
+    "information": "如果您使用了免费版本的应用程序，则可以从文件中恢复数据。 songs_backup.拉链。\n为此，请在免费版本中创建备份并在此处恢复。",
+    "restore_confirmation": "恢复数据？",
+    "no_data_folder": "此文件夹中没有歌曲"
 }

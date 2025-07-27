@@ -130,5 +130,9 @@
     "exit_content_dialog": "Are you sure you want to exit the app?",
     "exit_dialog_cancel": "Cancel",
     "exit_dialog_exit": "Exit",
-    "settings_exit": "Confirmation of exit"
+    "settings_exit": "Confirmation of exit",
+    "no_data": "No data available",
+    "information": "If you used the free version of the app, you can restore data from the songs_backup.zip. file.\nTo do this, create a backup in the free version and restore it here.",
+    "restore_confirmation": "Restore the data?",
+    "no_data_folder": "There are no songs in this folder"
 }

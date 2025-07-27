@@ -135,5 +135,9 @@ abstract class  LocaleKeys {
   static const exit_dialog_cancel = 'exit_dialog_cancel';
   static const exit_dialog_exit = 'exit_dialog_exit';
   static const settings_exit = 'settings_exit';
+  static const no_data = 'no_data';
+  static const information = 'information';
+  static const restore_confirmation = 'restore_confirmation';
+  static const no_data_folder = 'no_data_folder';
 
 }

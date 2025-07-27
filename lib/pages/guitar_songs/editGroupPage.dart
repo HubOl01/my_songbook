@@ -8,7 +8,7 @@ import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
 import '../../components/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
-import '../../core/cubit/group_id_cubit.dart';
+import '../../core/cubit/group_cubit.dart';
 import '../../core/cubit/index_group_cubit.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/styles/colors.dart';
@@ -70,8 +70,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                           // ),
                           onTap: () {
                             // _showDeleteConfirmation(context, group);
-                            context.read<GroupCubit>().swither(group);
-                            context.read<IndexGroupCubit>().swither(group.id!);
+                            context.read<GroupCubit>().switcher(group);
+                            context.read<IndexGroupCubit>().switcher(group.id!);
                             Get.back();
                           },
                           onLongPress: () {

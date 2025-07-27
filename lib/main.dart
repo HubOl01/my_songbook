@@ -9,7 +9,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:my_songbook/core/cubit/group_id_cubit.dart';
+import 'package:my_songbook/core/cubit/group_cubit.dart';
 import 'package:my_songbook/core/cubit/index_group_cubit.dart';
 import 'package:my_songbook/firebase_options.dart';
 import 'package:my_songbook/generated/locale_keys.g.dart';
@@ -21,6 +21,7 @@ import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
+import 'core/cubit/current_index_group_cubit.dart';
 import 'core/cubit/settings_exit_cubit.dart';
 import 'core/cubit/songs1_cubit.dart';
 import 'core/data/songsRepository.dart';
@@ -28,7 +29,7 @@ import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'core/data/dbSongs.dart';
 import 'core/data/testDataSongs.dart';
-import 'pages/guitar_songs/guitarPage.dart';
+import 'pages/guitar_songs/guitarPage/guitarPage.dart';
 import 'pages/settings/settingsPage.dart';
 
 int? indexMode;
@@ -96,6 +97,7 @@ void main() async {
         BlocProvider(create: (context) => GroupCubit()),
         BlocProvider(create: (context) => IndexGroupCubit()),
         BlocProvider(create: (context) => SettingsExitCubit()),
+         BlocProvider(create: (context) => CurrentIndexGroupCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
