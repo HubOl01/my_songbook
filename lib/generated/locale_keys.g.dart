@@ -139,5 +139,8 @@ abstract class  LocaleKeys {
   static const information = 'information';
   static const restore_confirmation = 'restore_confirmation';
   static const no_data_folder = 'no_data_folder';
+  static const sorting_A_Z = 'sorting_A_Z';
+  static const sorting_Z_A = 'sorting_Z_A';
+  static const sorting_off = 'sorting_off';
 
 }

@@ -24,6 +24,7 @@ import 'core/cubit/current_group_id_cubit.dart';
 import 'core/cubit/current_index_group_cubit.dart';
 import 'core/cubit/settings_exit_cubit.dart';
 import 'core/cubit/songs1_cubit.dart';
+import 'core/cubit/sorting_group_cubit.dart';
 import 'core/data/songsRepository.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
@@ -98,6 +99,7 @@ void main() async {
         BlocProvider(create: (context) => SettingsExitCubit()),
         BlocProvider(create: (context) => CurrentIndexGroupCubit()),
         BlocProvider(create: (context) => CurrentGroupIdCubit()),
+        BlocProvider(create: (context) => SortingGroupCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
@@ -143,6 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     context.read<SettingsExitCubit>().init();
+    context.read<SortingGroupCubit>().init();
     super.initState();
   }
 

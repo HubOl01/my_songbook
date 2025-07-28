@@ -23,6 +23,7 @@ import '../../../core/cubit/current_group_id_cubit.dart';
 import '../../../core/cubit/current_index_group_cubit.dart';
 import '../../../core/cubit/group_cubit.dart';
 import '../../../core/cubit/settings_exit_cubit.dart';
+import '../../../core/cubit/sorting_group_cubit.dart';
 import '../../../core/model/groupModel.dart';
 import '../../../core/model/songTogroupModel.dart';
 import '../../../core/model/songsModel.dart';
@@ -928,8 +929,18 @@ class _GuitarPageState extends State<GuitarPage> {
                                   ),
                                 ),
                               )
-                        : filteredSongs.isEmpty
-                            ? const NoDataSongsGroup()
+                        : context.read<GroupCubit>().state.name != "" &&
+                                filteredSongs.isEmpty
+                            ? Column(
+                                children: [
+                                  _buildHorizontalGroupSelector(state.groups),
+                                  context.read<GroupCubit>().state.name != "" &&
+                                          filteredSongs.isEmpty
+                                      ? const Expanded(
+                                          child: NoDataSongsGroup())
+                                      : const SizedBox(),
+                                ],
+                              )
                             : ScrollConfiguration(
                                 behavior: const ScrollBehavior(),
                                 child: GlowingOverscrollIndicator(
@@ -948,6 +959,7 @@ class _GuitarPageState extends State<GuitarPage> {
                                       !isSecondButton
                                           ? _buildTestDeleteWidget(context)
                                           : const SizedBox(),
+
                                       ...filteredSongs.map((song) => ListTile(
                                             key: ValueKey(song.id),
                                             minTileHeight: 60,
@@ -1330,70 +1342,88 @@ class _GuitarPageState extends State<GuitarPage> {
                     ),
                   ),
                 ),
-                BlocBuilder<CurrentGroupIdCubit, int>(
-                  builder: (context, indexGroup) {
-                    // Сортируем группы по orderId
-                    List<GroupModel> sortedGroups = List.from(groups)
-                      ..sort(
-                          (a, b) => (a.orderId ?? 0).compareTo(b.orderId ?? 0));
+                BlocBuilder<SortingGroupCubit, int>(
+                  builder: (context, sortIndex) {
+                    return BlocBuilder<CurrentGroupIdCubit, int>(
+                      builder: (context, indexGroup) {
+                        // Сортируем группы по orderId
+                        // List<GroupModel> sortedGroups =
+                        List<GroupModel> sortedGroups = List.from(groups)
+                          ..sort((a, b) =>
+                              (a.orderId ?? 0).compareTo(b.orderId ?? 0));
 
-                    return Row(
-                      children: sortedGroups
-                          .asMap()
-                          .map((i, group) => MapEntry(
-                                i,
-                                GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
-                                  onTap: () {
-                                    if (indexGroup != group.id) {
-                                      context
-                                          .read<CurrentGroupIdCubit>()
-                                          .switcher(group.id!);
-                                      context
-                                          .read<GroupCubit>()
-                                          .switcher(group);
-                                    } else {
-                                      context
-                                          .read<CurrentGroupIdCubit>()
-                                          .switcher(-1);
-                                      context
-                                          .read<GroupCubit>()
-                                          .switcher(GroupModel(name: ""));
-                                    }
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.only(
-                                      left: i == 0 ? 10 : 10,
-                                      right:
-                                          i == sortedGroups.length - 1 ? 15 : 0,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    decoration: BoxDecoration(
-                                      color: indexGroup == group.id
-                                          ? colorFiolet.withValues(alpha: .3)
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: colorFiolet),
-                                    ),
-                                    child: Text(
-                                      group.name,
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: indexGroup == group.id
-                                            ? FontWeight.w600
-                                            : FontWeight.normal,
-                                        color: indexGroup == group.id
-                                            ? colorFiolet
-                                            : null,
+                        if (sortIndex == 1) {
+                          sortedGroups.sort((a, b) => a.name
+                              .toLowerCase()
+                              .compareTo(b.name.toLowerCase()));
+                        } else if (sortIndex == -1) {
+                          sortedGroups.sort((a, b) => b.name
+                              .toLowerCase()
+                              .compareTo(a.name.toLowerCase()));
+                        }
+                        return Row(
+                          children: sortedGroups
+                              .asMap()
+                              .map((i, group) => MapEntry(
+                                    i,
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        if (indexGroup != group.id) {
+                                          context
+                                              .read<CurrentGroupIdCubit>()
+                                              .switcher(group.id!);
+                                          context
+                                              .read<GroupCubit>()
+                                              .switcher(group);
+                                        } else {
+                                          context
+                                              .read<CurrentGroupIdCubit>()
+                                              .switcher(-1);
+                                          context
+                                              .read<GroupCubit>()
+                                              .switcher(GroupModel(name: ""));
+                                        }
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.only(
+                                          left: i == 0 ? 10 : 10,
+                                          right: i == sortedGroups.length - 1
+                                              ? 15
+                                              : 0,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        decoration: BoxDecoration(
+                                          color: indexGroup == group.id
+                                              ? colorFiolet.withValues(
+                                                  alpha: .3)
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border:
+                                              Border.all(color: colorFiolet),
+                                        ),
+                                        child: Text(
+                                          group.name,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: indexGroup == group.id
+                                                ? FontWeight.w600
+                                                : FontWeight.normal,
+                                            color: indexGroup == group.id
+                                                ? colorFiolet
+                                                : null,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ))
-                          .values
-                          .toList(),
+                                  ))
+                              .values
+                              .toList(),
+                        );
+                      },
                     );
                   },
                 )

@@ -134,5 +134,8 @@
     "no_data": "No data available",
     "information": "If you used the free version of the app, you can restore data from the songs_backup.zip. file.\nTo do this, create a backup in the free version and restore it here.",
     "restore_confirmation": "Restore the data?",
-    "no_data_folder": "There are no songs in this folder"
+    "no_data_folder": "There are no songs in this folder",
+    "sorting_A_Z": "Sorting: from A to Z",
+    "sorting_Z_A": "Sorting: from Z to A",
+    "sorting_off": "Sorting is disabled"
 }

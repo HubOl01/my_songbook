@@ -44,6 +44,13 @@ Future isSettingsExit(bool isSettingsExit) async {
   await box.close();
 }
 
+Future sortingGroup(int sortingGroupIndex) async {
+  var box = await Hive.openBox('my_songbook');
+  box.put("sortingGroupIndex", sortingGroupIndex);
+  await box.compact();
+  await box.close();
+}
+
 // var box = await Hive.openBox('my_songbook');
 // speed = box.get("speedText");
 // sizeText = box.get("sizeText");

@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
 
 import '../../components/customButtonSheet.dart';
@@ -10,6 +11,7 @@ import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
 import '../../core/cubit/current_group_id_cubit.dart';
 import '../../core/cubit/group_cubit.dart';
+import '../../core/cubit/sorting_group_cubit.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';
@@ -27,71 +29,122 @@ class _EditGroupPageState extends State<EditGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(tr(LocaleKeys.managing_groups_title))),
+        appBar: AppBar(
+          title: Text(tr(LocaleKeys.managing_groups_title)),
+          actions: [
+            BlocBuilder<SortingGroupCubit, int>(
+              builder: (context, state) {
+                return IconButton(
+                    onPressed: () {
+                      switch (state) {
+                        case 0:
+                          context.read<SortingGroupCubit>().switcher(1);
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(tr(LocaleKeys.sorting_A_Z))));
+                          break;
+                        case 1:
+                          context.read<SortingGroupCubit>().switcher(-1);
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(tr(LocaleKeys.sorting_Z_A))));
+                          break;
+                        default:
+                          context.read<SortingGroupCubit>().switcher(0);
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(tr(LocaleKeys.sorting_off))));
+                          break;
+                      }
+                    },
+                    icon: Icon(state == 0
+                        ? AntDesign.sort_ascending_outline
+                        : state == 1
+                            ? AntDesign.sort_descending_outline
+                            : Icons.filter_alt_off_sharp));
+              },
+            )
+          ],
+        ),
         body: Column(
           children: [
             _buildCreateGroupField(context),
             Expanded(
-              child: BlocBuilder<SongsBloc, SongsState>(
-                builder: (context, state) {
-                  if (state is SongsLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is SongsLoaded) {
-                    final groups = state.groups;
-                    return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: groups.length,
-                      itemBuilder: (context, index) {
-                        final group = groups[index];
-                        return ListTile(
-                          tileColor:
-                              context.read<CurrentGroupIdCubit>().state ==
-                                      group.id
-                                  ? colorFiolet.withValues(alpha: .1)
-                                  : null,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 0),
-                          title: Text(group.name),
-                          trailing: context.read<CurrentGroupIdCubit>().state ==
-                                  group.id
-                              ? Icon(
-                                  Icons.check,
-                                  color: colorFiolet,
-                                )
-                              : null,
-                          // Icon(
-                          //   EvaIcons.minus_circle_outline,
-                          //   size: 20,
-                          //   color: context.isDarkMode
-                          //       ? Colors.white.withOpacity(.7)
-                          //       : Colors.grey[600],
-                          // ),
-                          onTap: () {
-                            // _showDeleteConfirmation(context, group);
-                            context.read<GroupCubit>().switcher(group);
-                            context
-                                .read<CurrentGroupIdCubit>()
-                                .switcher(group.id!);
-                            Get.back();
-                          },
-                          onLongPress: () {
-                            _showMenuConfirmation(context, group);
+              child: BlocBuilder<SortingGroupCubit, int>(
+                builder: (context, sortIndex) {
+                  return BlocBuilder<SongsBloc, SongsState>(
+                    builder: (context, state) {
+                      if (state is SongsLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is SongsLoaded) {
+                        List<GroupModel> groups = List.from(state.groups);
+
+                        if (sortIndex == 1) {
+                          groups.sort((a, b) => a.name
+                              .toLowerCase()
+                              .compareTo(b.name.toLowerCase()));
+                        } else if (sortIndex == -1) {
+                          groups.sort((a, b) => b.name
+                              .toLowerCase()
+                              .compareTo(a.name.toLowerCase()));
+                        }
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: groups.length,
+                          itemBuilder: (context, index) {
+                            final group = groups[index];
+                            return ListTile(
+                              tileColor:
+                                  context.read<CurrentGroupIdCubit>().state ==
+                                          group.id
+                                      ? colorFiolet.withValues(alpha: .1)
+                                      : null,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              title: Text(group.name),
+                              trailing:
+                                  context.read<CurrentGroupIdCubit>().state ==
+                                          group.id
+                                      ? Icon(
+                                          Icons.check,
+                                          color: colorFiolet,
+                                        )
+                                      : null,
+                              // Icon(
+                              //   EvaIcons.minus_circle_outline,
+                              //   size: 20,
+                              //   color: context.isDarkMode
+                              //       ? Colors.white.withOpacity(.7)
+                              //       : Colors.grey[600],
+                              // ),
+                              onTap: () {
+                                // _showDeleteConfirmation(context, group);
+                                context.read<GroupCubit>().switcher(group);
+                                context
+                                    .read<CurrentGroupIdCubit>()
+                                    .switcher(group.id!);
+                                Get.back();
+                              },
+                              onLongPress: () {
+                                _showMenuConfirmation(context, group);
+                              },
+                            );
                           },
                         );
-                      },
-                    );
-                  } else if (state is SongsError) {
-                    return Center(
-                      child: Text(
-                        "Error: ${state.message}",
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-                  return const SizedBox();
+                      } else if (state is SongsError) {
+                        return Center(
+                          child: Text(
+                            "Error: ${state.message}",
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  );
                 },
               ),
             ),
@@ -170,7 +223,9 @@ class _EditGroupPageState extends State<EditGroupPage> {
                 CustomTextField(
                   isUpperLetter: true,
                   controller: controller,
-                  title: tr(LocaleKeys.title_new_group),
+                  title: groupModel.id == null
+                      ? tr(LocaleKeys.title_new_group)
+                      : groupModel.name,
                   onChanged: (value) => setState(() {}),
                 ),
                 // Счетчик символов
@@ -184,67 +239,12 @@ class _EditGroupPageState extends State<EditGroupPage> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                // Кнопки подтверждения
-                // if (controller.text.isNotEmpty)
-                //   SizedBox(
-                //     height: 30,
-                //     width: 200,
-                //     child: Row(
-                //       children: [
-                //         // Кнопка "Создать" или "Обновить"
-                //         Expanded(
-                //           child: CustomButtonSheet(
-                //             onPressed: groupModel.id == null
-                //                 ? () {
-                //                     // Добавление группы
-                //                     context.read<SongsBloc>().add(
-                //                           AddGroup(GroupModel(
-                //                               name: controller.text)),
-                //                         );
-                //                     setState(() {
-                //                       groupModel = GroupModel(name: "");
-                //                       controller.clear();
-                //                     });
-                //                   }
-                //                 : () {
-                //                     // Обновление группы
-                //                     context.read<SongsBloc>().add(
-                //                           UpdateGroup(groupModel.copy(
-                //                               name: controller.text)),
-                //                         );
-                //                     setState(() {
-                //                       groupModel = GroupModel(name: "");
-                //                       controller.clear();
-                //                     });
-                //                   },
-                //             title: groupModel.id == null
-                //                 ? tr(LocaleKeys.confirmation_create)
-                //                 : tr(LocaleKeys.confirmation_changing),
-                //           ),
-                //         ),
-                //         const SizedBox(width: 15),
-                //         // Кнопка "Отмена"
-                //         Expanded(
-                //           child: CustomButtonSheet(
-                //             isSecond: true,
-                //             onPressed: () {
-                //               setState(() {
-                //                 controller.clear();
-                //                 groupModel = GroupModel(name: "");
-                //               });
-                //             },
-                //             title: tr(LocaleKeys.confirmation_cancel),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                if (controller.text.isNotEmpty)
-                  SizedBox(
-                    height: 30,
-                    width: 200,
-                    child: Row(
-                      children: [
+                SizedBox(
+                  height: 30,
+                  width: 200,
+                  child: Row(
+                    children: [
+                      if (controller.text.isNotEmpty)
                         Expanded(
                           child: CustomButtonSheet(
                             onPressed: groupModel.id == null
@@ -312,7 +312,8 @@ class _EditGroupPageState extends State<EditGroupPage> {
                                 : tr(LocaleKeys.confirmation_changing),
                           ),
                         ),
-                        const SizedBox(width: 15),
+                      if (controller.text.isNotEmpty) const SizedBox(width: 15),
+                      if (controller.text.isNotEmpty || groupModel.id != null)
                         Expanded(
                           child: CustomButtonSheet(
                             isSecond: true,
@@ -325,9 +326,9 @@ class _EditGroupPageState extends State<EditGroupPage> {
                             title: tr(LocaleKeys.confirmation_cancel),
                           ),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
+                ),
               ],
             ),
           );

@@ -150,7 +150,10 @@ class CodegenLoader extends AssetLoader{
   "no_data": "没有可用的数据",
   "information": "如果您使用了免费版本的应用程序，则可以从文件中恢复数据。 songs_backup.拉链。\n为此，请在免费版本中创建备份并在此处恢复。",
   "restore_confirmation": "恢复数据？",
-  "no_data_folder": "此文件夹中没有歌曲"
+  "no_data_folder": "此文件夹中没有歌曲",
+  "sorting_A_Z": "排序：从A到Z",
+  "sorting_Z_A": "排序：从Z到A",
+  "sorting_off": "排序被禁用"
 };
 static const Map<String,dynamic> _ru = {
   "appbar_list_songs": "Список песен",
@@ -288,7 +291,10 @@ static const Map<String,dynamic> _ru = {
   "no_data": "Нет данных",
   "information": "Если вы пользовались бесплатной версией приложения, то можете восстановить данные из файла songs_backup.zip.\nДля этого создайте резервную копию в бесплатной версии — и восстановите здесь.",
   "restore_confirmation": "Восстановить данные?",
-  "no_data_folder": "Нет песен в данной папке"
+  "no_data_folder": "Нет песен в данной папке",
+  "sorting_A_Z": "Сортировка: от А до Я",
+  "sorting_Z_A": "Сортировка: от Я до А",
+  "sorting_off": "Сортировка отключена"
 };
 static const Map<String,dynamic> _en = {
   "appbar_list_songs": "List of songs",
@@ -426,7 +432,10 @@ static const Map<String,dynamic> _en = {
   "no_data": "No data available",
   "information": "If you used the free version of the app, you can restore data from the songs_backup.zip. file.\nTo do this, create a backup in the free version and restore it here.",
   "restore_confirmation": "Restore the data?",
-  "no_data_folder": "There are no songs in this folder"
+  "no_data_folder": "There are no songs in this folder",
+  "sorting_A_Z": "Sorting: from A to Z",
+  "sorting_Z_A": "Sorting: from Z to A",
+  "sorting_off": "Sorting is disabled"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": _zh, "ru": _ru, "en": _en};
 }
