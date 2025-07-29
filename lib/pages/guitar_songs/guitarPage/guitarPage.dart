@@ -28,9 +28,7 @@ import '../../../core/cubit/sorting_group_cubit.dart';
 import '../../../core/model/groupModel.dart';
 import '../../../core/model/songTogroupModel.dart';
 import '../../../core/model/songsModel.dart';
-import '../../../core/storage/storage.dart';
 import '../../../core/styles/colors.dart';
-import '../../../core/utils/currentNumber.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../../main.dart';
 import '../create_song.dart';
@@ -1352,15 +1350,15 @@ class _GuitarPageState extends State<GuitarPage> {
                         // List<GroupModel> sortedGroups = List.from(groups);
                         List<GroupModel> sortedGroups = List.from(groups);
 
-                        // if (sortIndex == 1) {
-                        //   sortedGroups.sort((a, b) => a.name
-                        //       .toLowerCase()
-                        //       .compareTo(b.name.toLowerCase()));
-                        // } else if (sortIndex == -1) {
-                        //   sortedGroups.sort((a, b) => b.name
-                        //       .toLowerCase()
-                        //       .compareTo(a.name.toLowerCase()));
-                        // }
+                        if (sortIndex == 1) {
+                          sortedGroups.sort((a, b) => a.name
+                              .toLowerCase()
+                              .compareTo(b.name.toLowerCase()));
+                        } else if (sortIndex == -1) {
+                          sortedGroups.sort((a, b) => b.name
+                              .toLowerCase()
+                              .compareTo(a.name.toLowerCase()));
+                        }
                         return Row(
                           children: sortedGroups
                               .asMap()

@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_songbook/core/storage/storage.dart';
-import 'package:my_songbook/core/utils/currentNumber.dart';
 import 'package:provider/provider.dart';
 import '../../components/player_widget.dart';
 import '../../core/cubit/is_demo_song_cubit.dart';
@@ -10,8 +8,7 @@ import '../../generated/locale_keys.g.dart';
 
 class TestEdit_song extends StatefulWidget {
   const TestEdit_song(
-      {
-      required this.name_song,
+      {required this.name_song,
       required this.name_singer,
       required this.song,
       this.audio,
@@ -48,7 +45,8 @@ class _TestEdit_songState extends State<TestEdit_song> {
               floating: true,
               pinned: false,
               backgroundColor: Colors.transparent,
-              foregroundColor: Theme.of(context).primaryTextTheme.titleMedium!.color,
+              foregroundColor:
+                  Theme.of(context).primaryTextTheme.titleMedium!.color,
               elevation: 0,
               actions: [
                 IconButton(
@@ -56,28 +54,33 @@ class _TestEdit_songState extends State<TestEdit_song> {
                       await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                                title: Text(tr(LocaleKeys.confirmation_title)),
-                                content: Text(tr(LocaleKeys.edit_song_confirmation_content_delete)),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: Text(tr(LocaleKeys.confirmation_no))),
-                                  TextButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          // isDeleteTest = true;
-                                          // isDeleteTestPut(isDeleteTest);
-                                          context.read<IsDemoSongCubit>().deleteDemo();
-                                        });
-                                      Get.back();
-                                      Get.back();
-                                      Get.back();
-                                      },
-                                      child: Text(tr(LocaleKeys.confirmation_yes)))
-                                ]));
-                          
+                                  title:
+                                      Text(tr(LocaleKeys.confirmation_title)),
+                                  content: Text(tr(LocaleKeys
+                                      .edit_song_confirmation_content_delete)),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: Text(
+                                            tr(LocaleKeys.confirmation_no))),
+                                    TextButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            // isDeleteTest = true;
+                                            // isDeleteTestPut(isDeleteTest);
+                                            context
+                                                .read<IsDemoSongCubit>()
+                                                .deleteDemo();
+                                          });
+                                          Get.back();
+                                          Get.back();
+                                          Get.back();
+                                        },
+                                        child: Text(
+                                            tr(LocaleKeys.confirmation_yes)))
+                                  ]));
                     },
                     icon: const Icon(
                       Icons.delete,
@@ -125,7 +128,8 @@ class _TestEdit_songState extends State<TestEdit_song> {
                         keyboardType: TextInputType.multiline,
                         maxLines: null,
                         decoration: InputDecoration(
-                            label: Text(tr(LocaleKeys.edit_song_label_text_song)),
+                            label:
+                                Text(tr(LocaleKeys.edit_song_label_text_song)),
                             contentPadding: const EdgeInsets.all(8),
                             border: const OutlineInputBorder()),
                       )
