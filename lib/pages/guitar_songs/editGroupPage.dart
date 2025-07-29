@@ -79,21 +79,22 @@ class _EditGroupPageState extends State<EditGroupPage> {
                       } else if (state is SongsLoaded) {
                         List<GroupModel> groups = List.from(state.groups);
 
-                        if (sortIndex == 1) {
-                          groups.sort((a, b) => a.name
-                              .toLowerCase()
-                              .compareTo(b.name.toLowerCase()));
-                        } else if (sortIndex == -1) {
-                          groups.sort((a, b) => b.name
-                              .toLowerCase()
-                              .compareTo(a.name.toLowerCase()));
-                        }
+                        // if (sortIndex == 1) {
+                        //   groups.sort((a, b) => a.name
+                        //       .toLowerCase()
+                        //       .compareTo(b.name.toLowerCase()));
+                        // } else if (sortIndex == -1) {
+                        //   groups.sort((a, b) => b.name
+                        //       .toLowerCase()
+                        //       .compareTo(a.name.toLowerCase()));
+                        // }
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: groups.length,
                           itemBuilder: (context, index) {
                             final group = groups[index];
                             return ListTile(
+                              leading: Text("${group.id}. "),
                               tileColor:
                                   context.read<CurrentGroupIdCubit>().state ==
                                           group.id

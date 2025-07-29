@@ -526,15 +526,15 @@ class DBSongs {
         );
         print("Migrate");
         // Обнуляем group и order в songs
-        // await db.update(
-        //   tableSongs,
-        //   {
-        //     Songs.group: 0,
-        //     Songs.order: 0,
-        //   },
-        //   where: '${Songs.id} = ?',
-        //   whereArgs: [songId],
-        // );
+        await db.update(
+          tableSongs,
+          {
+            Songs.group: 0,
+            Songs.order: 0,
+          },
+          where: '${Songs.id} = ?',
+          whereArgs: [songId],
+        );
       }
     }
   }

@@ -22,6 +22,7 @@ import '../../../core/bloc/songs_bloc.dart';
 import '../../../core/cubit/current_group_id_cubit.dart';
 import '../../../core/cubit/current_index_group_cubit.dart';
 import '../../../core/cubit/group_cubit.dart';
+import '../../../core/cubit/is_demo_song_cubit.dart';
 import '../../../core/cubit/settings_exit_cubit.dart';
 import '../../../core/cubit/sorting_group_cubit.dart';
 import '../../../core/model/groupModel.dart';
@@ -1348,19 +1349,18 @@ class _GuitarPageState extends State<GuitarPage> {
                       builder: (context, indexGroup) {
                         // Сортируем группы по orderId
                         // List<GroupModel> sortedGroups =
-                        List<GroupModel> sortedGroups = List.from(groups)
-                          ..sort((a, b) =>
-                              (a.orderId ?? 0).compareTo(b.orderId ?? 0));
+                        // List<GroupModel> sortedGroups = List.from(groups);
+                        List<GroupModel> sortedGroups = List.from(groups);
 
-                        if (sortIndex == 1) {
-                          sortedGroups.sort((a, b) => a.name
-                              .toLowerCase()
-                              .compareTo(b.name.toLowerCase()));
-                        } else if (sortIndex == -1) {
-                          sortedGroups.sort((a, b) => b.name
-                              .toLowerCase()
-                              .compareTo(a.name.toLowerCase()));
-                        }
+                        // if (sortIndex == 1) {
+                        //   sortedGroups.sort((a, b) => a.name
+                        //       .toLowerCase()
+                        //       .compareTo(b.name.toLowerCase()));
+                        // } else if (sortIndex == -1) {
+                        //   sortedGroups.sort((a, b) => b.name
+                        //       .toLowerCase()
+                        //       .compareTo(a.name.toLowerCase()));
+                        // }
                         return Row(
                           children: sortedGroups
                               .asMap()
@@ -1432,67 +1432,74 @@ class _GuitarPageState extends State<GuitarPage> {
   }
 
   Widget _buildTestDeleteWidget(BuildContext context) {
-    return !isDeleteTest
-        ? ListTile(
-            onLongPress: () async => await showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                        title: Text(tr(LocaleKeys.confirmation_title)),
-                        content: Text(tr(
-                            LocaleKeys.edit_song_confirmation_content_delete)),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(tr(LocaleKeys.confirmation_no))),
-                          TextButton(
-                              onPressed: () async {
-                                // setState(() {
-                                isDeleteTest = true;
-                                isDeleteTestPut(isDeleteTest);
-                                // });
-                                Get.back();
-                                Get.back();
-                                Get.back();
-                              },
-                              child: Text(tr(LocaleKeys.confirmation_yes)))
-                        ])),
-            title: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
+    return BlocBuilder<IsDemoSongCubit, bool>(
+      builder: (context, isDemoSong) {
+        return isDemoSong
+            ? ListTile(
+                onLongPress: () async => await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                            title: Text(tr(LocaleKeys.confirmation_title)),
+                            content: Text(tr(LocaleKeys
+                                .edit_song_confirmation_content_delete)),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: Text(tr(LocaleKeys.confirmation_no))),
+                              TextButton(
+                                  onPressed: () async {
+                                    // setState(() {
+                                    // isDeleteTest = true;
+                                    // isDeleteTestPut(isDeleteTest);
+                                    context
+                                        .read<IsDemoSongCubit>()
+                                        .deleteDemo();
+                                    // });
+                                    Get.back();
+                                    Get.back();
+                                    Get.back();
+                                  },
+                                  child: Text(tr(LocaleKeys.confirmation_yes)))
+                            ])),
+                title: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(tr(LocaleKeys.ex_name_song),
-                          style: const TextStyle(fontSize: 16)),
-                      const SizedBox(
-                        width: 5,
+                      Row(
+                        children: [
+                          Text(tr(LocaleKeys.ex_name_song),
+                              style: const TextStyle(fontSize: 16)),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              color: colorFiolet,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 3),
+                              child: Text(tr(LocaleKeys.example),
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 10)),
+                            ),
+                          )
+                        ],
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          color: colorFiolet,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 3),
-                          child: Text(tr(LocaleKeys.example),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 10)),
-                        ),
-                      )
-                    ],
-                  ),
-                  Text(
-                    tr(LocaleKeys.ex_name_singer),
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: context.isDarkMode
-                            ? Colors.grey[300]
-                            : Colors.grey[600]),
-                  ),
-                ]),
-            onTap: () => Get.to(const TestPage()))
-        : const SizedBox();
+                      Text(
+                        tr(LocaleKeys.ex_name_singer),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: context.isDarkMode
+                                ? Colors.grey[300]
+                                : Colors.grey[600]),
+                      ),
+                    ]),
+                onTap: () => Get.to(const TestPage()))
+            : const SizedBox();
+      },
+    );
   }
 }
 

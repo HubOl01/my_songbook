@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/core/storage/storage.dart';
 import 'package:my_songbook/core/utils/currentNumber.dart';
+import 'package:provider/provider.dart';
 import '../../components/player_widget.dart';
+import '../../core/cubit/is_demo_song_cubit.dart';
 import '../../generated/locale_keys.g.dart';
 
 class TestEdit_song extends StatefulWidget {
@@ -65,8 +67,9 @@ class _TestEdit_songState extends State<TestEdit_song> {
                                   TextButton(
                                       onPressed: () async {
                                         setState(() {
-                                          isDeleteTest = true;
-                                          isDeleteTestPut(isDeleteTest);
+                                          // isDeleteTest = true;
+                                          // isDeleteTestPut(isDeleteTest);
+                                          context.read<IsDemoSongCubit>().deleteDemo();
                                         });
                                       Get.back();
                                       Get.back();

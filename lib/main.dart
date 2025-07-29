@@ -22,8 +22,8 @@ import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
 import 'core/cubit/current_group_id_cubit.dart';
 import 'core/cubit/current_index_group_cubit.dart';
+import 'core/cubit/is_demo_song_cubit.dart';
 import 'core/cubit/settings_exit_cubit.dart';
-import 'core/cubit/songs1_cubit.dart';
 import 'core/cubit/sorting_group_cubit.dart';
 import 'core/data/songsRepository.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
@@ -76,7 +76,7 @@ void main() async {
   speed = box.get("speedText") ?? 150;
   sizeText = box.get("sizeText") ?? 14.0;
   isClosedWarring = box.get("isClosedWarring") ?? false;
-  isDeleteTest = box.get("isDeleteTest") ?? false;
+  // isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
   // testDB();
   try {
@@ -93,13 +93,12 @@ void main() async {
                 SongsBloc(SongsRepository())..add(LoadSongs())),
         BlocProvider(
             create: (context) => SongBloc(songsRepository: SongsRepository())),
-        BlocProvider(
-            create: (context) => Songs1Cubit(SongsRepository())..loadSongs()),
         BlocProvider(create: (context) => GroupCubit()),
         BlocProvider(create: (context) => SettingsExitCubit()),
         BlocProvider(create: (context) => CurrentIndexGroupCubit()),
         BlocProvider(create: (context) => CurrentGroupIdCubit()),
         BlocProvider(create: (context) => SortingGroupCubit()),
+        BlocProvider(create: (context) => IsDemoSongCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
@@ -146,6 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     context.read<SettingsExitCubit>().init();
     context.read<SortingGroupCubit>().init();
+    context.read<IsDemoSongCubit>().init();
     super.initState();
   }
 

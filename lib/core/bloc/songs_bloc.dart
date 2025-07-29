@@ -83,7 +83,7 @@ class SongsBloc extends Bloc<SongsEvent, SongsState> {
         final songs = await _repository.getAllSongs();
         final groups = await _repository.readAllGroups();
         final songGroups = await _repository.getSongsGroup();
-
+        print("sorted: ${event.groupId}");
         emit(SongsLoaded(songs, groups, songGroups));
       } catch (e) {
         emit(SongsError(e.toString()));
