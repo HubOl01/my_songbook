@@ -8,7 +8,7 @@ import 'package:flutter_chord/flutter_chord.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../components/customButton.dart';
+import '../../components/buttons/customButton.dart';
 import '../../core/bloc/song_bloc.dart';
 import '../../core/bloc/songs_bloc.dart' hide UpdateSong;
 import '../../components/auto_scroll.dart';

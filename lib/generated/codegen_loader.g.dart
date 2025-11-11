@@ -40,6 +40,7 @@ class CodegenLoader extends AssetLoader{
   "confirmation_content_backup": "备份已成功完成并保存在songs_backup的downloads文件夹中。zip存档。\n\n要共享数据吗？",
   "edit_song_confirmation_content_delete": "要删除吗？",
   "edit_song_confirmation_content_update": "你想存钱吗？",
+  "edit_song_confirmation_content_update_exit": "在退出之前保存更改？",
   "confirmation_yes": "是的",
   "confirmation_no": "否",
   "appbar_add_song": "添加歌曲",
@@ -153,7 +154,8 @@ class CodegenLoader extends AssetLoader{
   "no_data_folder": "此文件夹中没有歌曲",
   "sorting_A_Z": "排序：从A到Z",
   "sorting_Z_A": "排序：从Z到A",
-  "sorting_off": "排序被禁用"
+  "sorting_off": "排序被禁用",
+  "auto_save": "自动保存"
 };
 static const Map<String,dynamic> _ru = {
   "appbar_list_songs": "Список песен",
@@ -181,6 +183,7 @@ static const Map<String,dynamic> _ru = {
   "confirmation_content_backup": "Бэкап успешно выполнен и сохранен в папке downloads в архиве songs_backup.zip.\n\nЖелаете ли вы поделиться данными?",
   "edit_song_confirmation_content_delete": "Вы хотите удалить?",
   "edit_song_confirmation_content_update": "Вы хотите сохранить?",
+  "edit_song_confirmation_content_update_exit": "Сохранить изменения перед выходом?",
   "confirmation_yes": "Да",
   "confirmation_no": "Нет",
   "appbar_add_song": "Добавление песни",
@@ -294,7 +297,8 @@ static const Map<String,dynamic> _ru = {
   "no_data_folder": "Нет песен в данной папке",
   "sorting_A_Z": "Сортировка: от А до Я",
   "sorting_Z_A": "Сортировка: от Я до А",
-  "sorting_off": "Сортировка отключена"
+  "sorting_off": "Сортировка отключена",
+  "auto_save": "Автосохранение"
 };
 static const Map<String,dynamic> _en = {
   "appbar_list_songs": "List of songs",
@@ -322,6 +326,7 @@ static const Map<String,dynamic> _en = {
   "confirmation_content_backup": "The backup was successfully completed and saved in the downloads folder in the songs_backup.zip archive.\n\n Do you want to share the data?",
   "edit_song_confirmation_content_delete": "Do you want to delete?",
   "edit_song_confirmation_content_update": "Do you want to save?",
+  "edit_song_confirmation_content_update_exit": "Save the changes before exiting?",
   "confirmation_yes": "Yes",
   "confirmation_no": "No",
   "appbar_add_song": "Adding a song",
@@ -435,7 +440,8 @@ static const Map<String,dynamic> _en = {
   "no_data_folder": "There are no songs in this folder",
   "sorting_A_Z": "Sorting: from A to Z",
   "sorting_Z_A": "Sorting: from Z to A",
-  "sorting_off": "Sorting is disabled"
+  "sorting_off": "Sorting is disabled",
+  "auto_save": "Auto-save"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"zh": _zh, "ru": _ru, "en": _en};
 }

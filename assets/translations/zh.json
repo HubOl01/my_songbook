@@ -24,6 +24,7 @@
     "confirmation_content_backup": "备份已成功完成并保存在songs_backup的downloads文件夹中。zip存档。\n\n要共享数据吗？",
     "edit_song_confirmation_content_delete": "要删除吗？",
     "edit_song_confirmation_content_update": "你想存钱吗？",
+    "edit_song_confirmation_content_update_exit": "在退出之前保存更改？",
     "confirmation_yes": "是的",
     "confirmation_no": "否",
     "appbar_add_song": "添加歌曲",
@@ -137,5 +138,6 @@
     "no_data_folder": "此文件夹中没有歌曲",
     "sorting_A_Z": "排序：从A到Z",
     "sorting_Z_A": "排序：从Z到A",
-    "sorting_off": "排序被禁用"
+    "sorting_off": "排序被禁用",
+    "auto_save": "自动保存"
 }

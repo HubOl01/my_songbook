@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:my_songbook/components/customButtonSheet.dart';
+import 'package:my_songbook/components/buttons/customButtonSheet.dart';
 import '../core/bloc/songs_bloc.dart';
 import '../core/model/groupModel.dart';
 import '../core/model/songsModel.dart';

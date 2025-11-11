@@ -26,7 +26,7 @@ dependencies:
   package_info_plus: any
   intl: any
   hive: any
-  file_picker: 8.1.4
+  file_picker: ^8.1.4
   uuid: ^4.5.1
   path_provider: any
   permission_handler: ^11.3.1
@@ -46,7 +46,6 @@ dependencies:
   firebase_core: ^3.8.0
   firebase_remote_config: ^5.1.5
   smooth_page_indicator: ^1.1.0
-  flutter_markdown: ^0.7.4+3
   # huawei_in_app_update: ^1.2.1
   carousel_slider_plus: ^7.0.2
   flutter_bloc: ^8.1.6
@@ -56,6 +55,7 @@ dependencies:
   flutter_svg: ^2.0.16
   device_info_plus: ^11.2.0
   translit: ^2.0.2
+  flutter_markdown_plus: ^1.0.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -106,4 +106,4 @@ flutter:
     - assets/icon/
     - assets/
     - .env
-    - assets/dataJson/news.json
+    - assets/dataJson/

@@ -9,6 +9,7 @@ import 'package:my_songbook/pages/settings/Translate/translatePage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/sendToSupport.dart';
+import '../../core/cubit/auto_save_switcher_cubit.dart';
 import '../../core/cubit/settings_exit_cubit.dart';
 import '../../generated/locale_keys.g.dart';
 import 'About/aboutPage.dart';
@@ -26,7 +27,7 @@ class SettingsPage extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       children: [
         SizedBox(
-          height: 200,
+          height: 150,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
@@ -52,6 +53,18 @@ class SettingsPage extends StatelessWidget {
           onTap: () {
             AppMetrica.reportEvent('TranslatePage');
             Get.to(const TranslatePage());
+          },
+        ),
+        BlocBuilder<AutoSaveSwitcherCubit, bool>(
+          builder: (context, state) {
+            return SwitchListTile(
+              secondary: const Icon(LineAwesome.save),
+              title: Text(tr(LocaleKeys.auto_save)),
+              value: state,
+              onChanged: (bool value) {
+                context.read<AutoSaveSwitcherCubit>().toggle();
+              },
+            );
           },
         ),
         BlocBuilder<SettingsExitCubit, bool>(

@@ -1,0 +1,35 @@
+{
+    "id": 1,
+    "version_app": 132,
+    "isShow": true,
+    "name": "Обновление",
+    "shortDesc": "Уже доступно обновление!",
+    "isStarred": true,
+    "description": [],
+    "user": "ru-developer",
+    "lang": "en",
+    "type": "website",
+    "iconUrl": "",
+    "iconDarkUrl": "",
+    "imageUrl": "",
+    "audio": [],
+    "isDonate": false,
+    "isUpdate": false,
+    "isButton": false,
+    "button": {
+        "button_name": "Пример",
+        "button_url": "https://pub.dev/packages/flutter_markdown_plus",
+        "button_color_foreground": "",
+        "button_color_background": ""
+    },
+    "textColorClick": "0xFFFFFFFF",
+    "isDate": true,
+    "date": {
+        "startAt": "07.11.2025",
+        "closeAt": "20.11.2025"
+    },
+    "isClick": true,
+    "isSupport": true,
+    "isPremium": false,
+    "websiteUrl": ""
+}

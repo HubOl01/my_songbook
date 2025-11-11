@@ -79,7 +79,7 @@ android {
 
     defaultConfig {
         applicationId = "ru.ru_developer.my_songbook"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode
         versionName = flutterVersionName

@@ -11,26 +11,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:my_songbook/core/api/news.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' hide context;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import '../../../components/bottomSheetEditGroup.dart';
-import '../../../components/customButtonSheet.dart';
+import '../../../components/buttons/customButtonSheet.dart';
 import '../../../core/bloc/songs_bloc.dart';
 import '../../../core/cubit/current_group_id_cubit.dart';
 import '../../../core/cubit/current_index_group_cubit.dart';
 import '../../../core/cubit/group_cubit.dart';
+import '../../../core/cubit/hide_banner_id_cubit.dart';
 import '../../../core/cubit/is_demo_song_cubit.dart';
 import '../../../core/cubit/settings_exit_cubit.dart';
 import '../../../core/cubit/sorting_group_cubit.dart';
 import '../../../core/model/groupModel.dart';
+import '../../../core/model/newsModel.dart';
 import '../../../core/model/songTogroupModel.dart';
 import '../../../core/model/songsModel.dart';
 import '../../../core/styles/colors.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../../main.dart';
+import '../Card_for_news/cardNews.dart';
 import '../create_song.dart';
 import '../editGroupPage.dart';
 import '../guitarDetal.dart';
@@ -60,11 +65,13 @@ class _GuitarPageState extends State<GuitarPage> {
   List<Song> selectedSongs = [];
   bool isSecondButton = false;
   bool isReorderMode = false;
+  bool showBanner = false;
   List<Song> reorderedSongs = [];
   int? activatedSongId;
   List<GroupModel> groupsTemp = [];
   final Map<int, GlobalKey> _groupKeys = {};
   final ScrollController reorderScrollController = ScrollController();
+
   void controlFocus(GroupModel model) {
     Future.delayed(const Duration(milliseconds: 100), () {
       final key = _groupKeys[model.id ?? 0];
@@ -77,6 +84,57 @@ class _GuitarPageState extends State<GuitarPage> {
         );
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkAndShowBanner(context.read<HideBannerIdCubit>().state);
+  }
+
+  void checkAndShowBanner(int currentId) async {
+    NewsModel? newsModel = await NewsService().getNews();
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    int buildCurrent = int.parse(packageInfo.buildNumber);
+    DateFormat format = DateFormat('dd.MM.yyyy');
+    if (newsModel != null) {
+      print("newsModel: ${newsModel.id}, currentId: $currentId");
+      if (newsModel.isShow!) {
+        // currentId >= newsModel.id!
+        if (currentId == newsModel.id!) {
+          setState(() {
+            showBanner = false;
+          });
+        } else {
+          if (newsModel.isDate!) {
+            final now = DateTime.now();
+            final start = format.parse(newsModel.date!.startAt!);
+            final end = format.parse(newsModel.date!.closeAt!);
+
+            final endOfDay = DateTime(end.year, end.month, end.day, 23, 59, 59);
+
+            final isWithinTimeRange =
+                (now.isAfter(start) || now.isAtSameMomentAs(start)) &&
+                    (now.isBefore(endOfDay) || now.isAtSameMomentAs(endOfDay));
+            setState(() {
+              showBanner = isWithinTimeRange;
+            });
+          } else {
+            setState(() {
+              showBanner = true;
+            });
+          }
+        }
+      }
+      if (showBanner) {
+        if (newsModel.isUpdate!) {
+          setState(() {
+            showBanner = newsModel.versionApp != null &&
+                buildCurrent < newsModel.versionApp!;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -955,6 +1013,28 @@ class _GuitarPageState extends State<GuitarPage> {
                                       const SizedBox(
                                         height: 5,
                                       ),
+                                      filteredSongs.isEmpty ||
+                                              context
+                                                      .read<
+                                                          CurrentIndexGroupCubit>()
+                                                      .state !=
+                                                  0 ||
+                                              isSecondButton
+                                          ? const SizedBox()
+                                          : BlocBuilder<HideBannerIdCubit, int>(
+                                              builder: (context, stateId) {
+                                                return CardNews(
+                                                  showBanner: showBanner,
+                                                  onClose: () {
+                                                    setState(() {
+                                                      showBanner = false;
+                                                    });
+                                                    // checkAndShowBanner(
+                                                    //     stateId);
+                                                  },
+                                                );
+                                              },
+                                            ),
                                       !isSecondButton
                                           ? _buildTestDeleteWidget(context)
                                           : const SizedBox(),

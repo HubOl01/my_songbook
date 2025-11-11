@@ -24,6 +24,7 @@
     "confirmation_content_backup": "The backup was successfully completed and saved in the downloads folder in the songs_backup.zip archive.\n\n Do you want to share the data?",
     "edit_song_confirmation_content_delete": "Do you want to delete?",
     "edit_song_confirmation_content_update": "Do you want to save?",
+    "edit_song_confirmation_content_update_exit": "Save the changes before exiting?",
     "confirmation_yes": "Yes",
     "confirmation_no": "No",
     "appbar_add_song": "Adding a song",
@@ -137,5 +138,6 @@
     "no_data_folder": "There are no songs in this folder",
     "sorting_A_Z": "Sorting: from A to Z",
     "sorting_Z_A": "Sorting: from Z to A",
-    "sorting_off": "Sorting is disabled"
+    "sorting_off": "Sorting is disabled",
+    "auto_save": "Auto-save"
 }

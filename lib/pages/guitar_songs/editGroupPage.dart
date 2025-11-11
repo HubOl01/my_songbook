@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
 
-import '../../components/customButtonSheet.dart';
+import '../../components/buttons/customButtonSheet.dart';
 import '../../components/customTextField.dart';
 import '../../core/bloc/songs_bloc.dart';
 import '../../core/cubit/current_group_id_cubit.dart';

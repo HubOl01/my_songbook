@@ -1,10 +1,10 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:my_songbook/components/customButton.dart';
 import 'package:my_songbook/core/styles/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../components/buttons/customButton.dart';
 import '../../../core/utils/backup.dart';
 
 class PremiumPage extends StatelessWidget {

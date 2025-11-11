@@ -24,6 +24,7 @@
     "confirmation_content_backup": "Бэкап успешно выполнен и сохранен в папке downloads в архиве songs_backup.zip.\n\nЖелаете ли вы поделиться данными?",
     "edit_song_confirmation_content_delete": "Вы хотите удалить?",
     "edit_song_confirmation_content_update": "Вы хотите сохранить?",
+    "edit_song_confirmation_content_update_exit": "Сохранить изменения перед выходом?",
     "confirmation_yes": "Да",
     "confirmation_no": "Нет",
     "appbar_add_song": "Добавление песни",
@@ -137,5 +138,6 @@
     "no_data_folder": "Нет песен в данной папке",
     "sorting_A_Z": "Сортировка: от А до Я",
     "sorting_Z_A": "Сортировка: от Я до А",
-    "sorting_off": "Сортировка отключена"
+    "sorting_off": "Сортировка отключена",
+    "auto_save": "Автосохранение"
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
-import 'package:my_songbook/components/customButton.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../components/buttons/customButton.dart';
 import '../../core/data/tonalityAkkords.dart';
 import '../../core/styles/colors.dart';
 import '../../generated/locale_keys.g.dart';

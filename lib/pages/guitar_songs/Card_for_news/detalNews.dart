@@ -5,21 +5,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../components/customButton.dart';
+import '../../../components/buttons/customButton.dart';
 import '../../../components/customListTile.dart';
 import '../../../components/sendToSupport.dart';
-import '../../../components/updateApp.dart';
 import '../../../core/model/newsModel.dart';
 
 class DetalNews extends StatelessWidget {
   final NewsModel newData;
   DetalNews({super.key, required this.newData});
   double fontSize = 16;
-  final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,29 +26,27 @@ class DetalNews extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: newData.imageUrl != ''
-                      ? CachedNetworkImage(
-                          imageUrl: newData.imageUrl!,
-                        )
-                      : Image.asset(context.isDarkMode
-                          ? 'assets/images/dark_isuct.png'
-                          : 'assets/images/isuct.png')),
+          if (newData.imageUrl != '')
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: CachedNetworkImage(
+                      imageUrl: newData.imageUrl!,
+                    )),
+              ),
             ),
-          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               for (var description in newData.description!)
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Markdown(
                       onTapLink: (text, href, title) => href != ''
                           ? href!.contains("@mail.ru") ||
@@ -60,6 +56,34 @@ class DetalNews extends StatelessWidget {
                                   mode: LaunchMode.inAppWebView)
                           : null,
                       padding: const EdgeInsets.all(2),
+
+                      bulletBuilder: (MarkdownBulletParameters parameters) {
+                        // parameters содержит информацию о стиле и индексе
+                        if (parameters.style == BulletStyle.orderedList) {
+                          return Text(
+                            '${parameters.index + 1}.',
+                            style: TextStyle(
+                                color: context.isDarkMode
+                                    ? Colors.grey[400]
+                                    : Colors.black,
+                                fontWeight: FontWeight.bold),
+                          );
+                        } else {
+                          // BulletStyle.unorderedList
+                          return Container(
+                            margin: const EdgeInsets.only(top: 1),
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                              shape: BoxShape.circle,
+                            ),
+                          );
+                        }
+                      },
+                      // bulletBuilder: (parameters) => Text(parameters),
                       styleSheet: MarkdownStyleSheet(
                           p: TextStyle(fontSize: fontSize),
                           blockquotePadding: const EdgeInsets.only(
@@ -69,6 +93,12 @@ class DetalNews extends StatelessWidget {
                                   .textTheme
                                   .headlineSmall!
                                   .fontSize!),
+                          listBullet: const TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 20),
+                          listIndent: 22,
+                          listBulletPadding:
+                              const EdgeInsets.symmetric(vertical: 5),
+                          // orderedListAlign: WrapAlignment.spaceBetween,
                           blockquoteDecoration: const BoxDecoration(
                             border: Border(
                               left: BorderSide(
@@ -116,9 +146,9 @@ class DetalNews extends StatelessWidget {
                           ),
                           trailing: const Icon(Icons.play_circle),
                           paddingBottom:
-                              audio.nameUrlweb!.trim() == '' ? true : false,
+                              audio.nameUrlWeb!.trim() == '' ? true : false,
                         ),
-                        audio.nameUrlweb!.trim() == ''
+                        audio.nameUrlWeb!.trim() == ''
                             ? const SizedBox()
                             : Column(
                                 children: [
@@ -148,7 +178,7 @@ class DetalNews extends StatelessWidget {
                                           width: 2,
                                         ),
                                         Text(
-                                          audio.nameUrlweb ?? '',
+                                          audio.nameUrlWeb ?? '',
                                           style: TextStyle(
                                               fontSize: 10,
                                               color: context.isDarkMode
@@ -170,62 +200,83 @@ class DetalNews extends StatelessWidget {
                   ),
             ],
           ),
-          newData.isUpdate!
+          newData.isButton!
               ? Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 14.0),
                   child: SizedBox(
                     width: context.width,
                     height: 50,
                     child: CustomButton(
                         onPressed: () {
                           AppMetrica.reportEvent(
-                              'Информация о приложении (обновление)');
-                          updateApp(_navigatorKey, context);
+                              'Информация о приложении (Кнопка)');
+                          launchUrl(Uri.parse(newData.button!.buttonUrl!));
                         },
-                        child: const Text("Обновиться до последней версии")),
+                        child: Text(
+                          newData.button!.buttonName!,
+                          style: const TextStyle(fontSize: 16),
+                        )),
                   ),
                 )
-              : const SizedBox(),
+              : newData.isUpdate!
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14.0),
+                      child: SizedBox(
+                        width: context.width,
+                        height: 50,
+                        child: CustomButton(
+                            onPressed: () {
+                              AppMetrica.reportEvent(
+                                  'Информация о приложении (обновление)');
+                              launchUrl(
+                                  Uri.parse(
+                                      'https://www.rustore.ru/catalog/app/ru.ru_developer.my_songbook_pro'),
+                                  mode: LaunchMode.externalApplication);
+                            },
+                            child: const Text(
+                              "Обновиться до последней версии",
+                              style: TextStyle(fontSize: 16),
+                            )),
+                      ),
+                    )
+                  : const SizedBox(),
           newData.isSupport!
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Material(
-                      color: Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .backgroundColor,
-                      elevation: 5,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                            text: TextSpan(
-                                style: TextStyle(
-                                    fontSize: fontSize,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .color),
-                                children: [
-                              TextSpan(
-                                text: context.locale == const Locale('ru')
-                                    ? "Если вы обнаружили проблему или у вас есть пожелания по улучшению нашего сервиса, свяжитесь с разработчиком "
-                                    : "If you find a problem or have any suggestions for improving our service, please contact the developer ",
-                              ),
-                              TextSpan(
-                                text: context.locale == const Locale("ru")
-                                    ? "по электронной почте."
-                                    : "by email.",
-                                style: TextStyle(
-                                    color: Colors.blue[700],
-                                    fontWeight: FontWeight.bold),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    sendToSupport(context);
-                                  },
-                              ),
-                            ])),
-                      )),
-                )
+              ? Material(
+                  color: Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .backgroundColor,
+                  elevation: 2,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                        text: TextSpan(
+                            style: TextStyle(
+                                fontSize: fontSize,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .color),
+                            children: [
+                          TextSpan(
+                            text: context.locale == const Locale('ru')
+                                ? "Если вы обнаружили проблему или у вас есть пожелания по улучшению нашего сервиса, свяжитесь с разработчиком "
+                                : "If you find a problem or have any suggestions for improving our service, please contact the developer ",
+                          ),
+                          TextSpan(
+                            text: context.locale == const Locale("ru")
+                                ? "по электронной почте."
+                                : "by email.",
+                            style: TextStyle(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                sendToSupport(context);
+                              },
+                          ),
+                        ])),
+                  ))
               : const SizedBox(),
         ],
       ),

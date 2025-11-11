@@ -1,36 +1,47 @@
 import 'package:hive/hive.dart';
 import 'package:my_songbook/main.dart';
 
+class Storage {
+  static Box? _box;
+
+  static Future<Box> getBox() async {
+    if (_box?.isOpen ?? false) return _box!;
+    _box = await Hive.openBox(storageName);
+    return _box!;
+  }
+}
+
+const String storageName = "my_songbook";
 Future speedPut(int speed) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("speedText", speed);
   await box.compact();
   await box.close();
 }
 
 Future sizeTextPut(double sizeText) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("sizeText", sizeText);
   await box.compact();
   await box.close();
 }
 
 Future isClosedWarringPut(bool isClosedWarring) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("isClosedWarring", isClosedWarring);
   await box.compact();
   await box.close();
 }
 
 Future isDeleteTestPut(bool isDeleteTest) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("isDeleteTest", isDeleteTest);
   await box.compact();
   await box.close();
 }
 
 Future switCH(int index) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("themeMode", index);
   getMode();
   await box.compact();
@@ -38,88 +49,39 @@ Future switCH(int index) async {
 }
 
 Future isSettingsExit(bool isSettingsExit) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("settingsExit", isSettingsExit);
   await box.compact();
   await box.close();
 }
 
 Future sortingGroup(int sortingGroupIndex) async {
-  var box = await Hive.openBox('my_songbook');
+  var box = await Hive.openBox(storageName);
   box.put("sortingGroupIndex", sortingGroupIndex);
   await box.compact();
   await box.close();
 }
 
-// var box = await Hive.openBox('my_songbook');
-// speed = box.get("speedText");
-// sizeText = box.get("sizeText");
-// isClosedWarring = box.get("isClosedWarring");
-// isDeleteTest = box.get("isDeleteTest");
+bool isAutoSave = false;
+Future autoSave(bool isAuto) async {
+  var box = await Hive.openBox(storageName);
+  box.put("isAutoSave", isAuto);
+  await box.compact();
+  await box.close();
+}
 
-class BannerManager {
-  static const String _boxName = 'my_songbook';
-  static const String _bannerIdsKey = 'bannerIds';
-  static const String _bannerVersionKey = 'bannerVersion';
+int globalIdBanner = 0;
+Future hideBannerId(int id) async {
+  var box = await Hive.openBox(storageName);
+  box.put("hideBannerId", id);
+  await box.compact();
+  await box.close();
+}
 
-  /// Проверяет, нужно ли показывать баннер на основе id
-  Future<bool> shouldShowBanner(int idBanner) async {
-    // Открываем бокс Hive
-    var box = await Hive.openBox(_boxName);
-
-    try {
-      // Получаем список показанных баннеров (если его нет, создаем пустой список)
-      List<int> shownBannerIds = box.get(_bannerIdsKey, defaultValue: <int>[]);
-
-      // Если id баннера уже есть в списке, не показываем его
-      if (shownBannerIds.contains(idBanner)) {
-        return false;
-      }
-
-      // Добавляем id баннера в список показанных
-
-      // Показываем баннер
-      return true;
-    } finally {
-      // Закрываем бокс после использования
-      await box.close();
-    }
-  }
-
-  /// Проверяет, нужно ли показывать баннер на основе версии приложения
-  Future<bool> shouldShowBannerForVersion(String currentVersion) async {
-    var box = await Hive.openBox(_boxName);
-
-    try {
-      String? savedVersion = box.get(_bannerVersionKey);
-
-      if (savedVersion != currentVersion) {
-        return true;
-      }
-
-      return false;
-    } finally {
-      await box.close();
-    }
-  }
-
-  Future<void> closeBanner(bool clearBannerIds,
-      {int? idBanner, String? newVersion}) async {
-    var box = await Hive.openBox(_boxName);
-
-    try {
-      if (clearBannerIds) {
-        List<int> shownBannerIds =
-            box.get(_bannerIdsKey, defaultValue: <int>[]);
-        shownBannerIds.add(idBanner!);
-        await box.put(_bannerIdsKey, shownBannerIds);
-      } else {
-        if (newVersion != null) {
-          await box.put(_bannerVersionKey, newVersion);
-        }
-      }
-    } finally {
-      await box.close();
-    }
-  }
+String stringNewsJsonPublic = "";
+Future stringNewsJson(String str) async {
+  var box = await Hive.openBox(storageName);
+  box.put("stringNewsJsonPublic", str);
+  await box.compact();
+  await box.close();
 }

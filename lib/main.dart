@@ -18,14 +18,18 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
+import 'core/api/news.dart';
 import 'core/bloc/song_bloc.dart';
 import 'core/bloc/songs_bloc.dart';
+import 'core/cubit/auto_save_switcher_cubit.dart';
 import 'core/cubit/current_group_id_cubit.dart';
 import 'core/cubit/current_index_group_cubit.dart';
+import 'core/cubit/hide_banner_id_cubit.dart';
 import 'core/cubit/is_demo_song_cubit.dart';
 import 'core/cubit/settings_exit_cubit.dart';
 import 'core/cubit/sorting_group_cubit.dart';
 import 'core/data/songsRepository.dart';
+import 'core/storage/storage.dart';
 import 'pages/applications_guitar/applicationsPage.dart';
 import 'generated/codegen_loader.g.dart';
 import 'core/data/dbSongs.dart';
@@ -76,12 +80,16 @@ void main() async {
   speed = box.get("speedText") ?? 150;
   sizeText = box.get("sizeText") ?? 14.0;
   isClosedWarring = box.get("isClosedWarring") ?? false;
+  isAutoSave = box.get('isAutoSave') ?? isAutoSave;
+  globalIdBanner = box.get('hideBannerId') ?? globalIdBanner;
+  stringNewsJsonPublic =
+      box.get('stringNewsJsonPublic') ?? stringNewsJsonPublic;
   // isDeleteTest = box.get("isDeleteTest") ?? false;
   await Permission.storage.request();
   // testDB();
   try {
-    AppMetrica.activate(
-        AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
+    // AppMetrica.activate(
+    //     AppMetricaConfig("${dotenv.env['AppMetrica']}", logs: false));
   } catch (ex) {
     print("app_metrica: $ex");
   }
@@ -99,6 +107,9 @@ void main() async {
         BlocProvider(create: (context) => CurrentGroupIdCubit()),
         BlocProvider(create: (context) => SortingGroupCubit()),
         BlocProvider(create: (context) => IsDemoSongCubit()),
+        BlocProvider(create: (context) => HideBannerIdCubit()),
+        BlocProvider(create: (context) => CurrentIndexGroupCubit()),
+        BlocProvider(create: (context) => AutoSaveSwitcherCubit()),
       ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en'), Locale('ru'), Locale('zh')],
@@ -146,7 +157,16 @@ class _MyHomePageState extends State<MyHomePage> {
     context.read<SettingsExitCubit>().init();
     context.read<SortingGroupCubit>().init();
     context.read<IsDemoSongCubit>().init();
+    context.read<HideBannerIdCubit>().init();
+    context.read<AutoSaveSwitcherCubit>().init();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final newsService = NewsService();
+    newsService.loadNewsFromS3(context.locale != const Locale('ru'));
   }
 
   @override

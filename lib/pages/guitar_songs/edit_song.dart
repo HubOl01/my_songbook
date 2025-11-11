@@ -11,6 +11,7 @@ import '../../components/bottomSheetEditGroup.dart';
 import '../../components/player_widget.dart';
 import '../../core/bloc/song_bloc.dart';
 import '../../core/bloc/songs_bloc.dart' hide UpdateSong;
+import '../../core/cubit/auto_save_switcher_cubit.dart';
 import '../../core/data/dbSongs.dart';
 import '../../core/model/groupModel.dart';
 import '../../core/model/songsModel.dart';
@@ -286,442 +287,622 @@ class _EditSongState extends State<EditSong> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              forceElevated: innerBoxIsScrolled,
-              snap: false,
-              floating: true,
-              pinned: false,
-              backgroundColor: Colors.transparent,
-              foregroundColor:
-                  Theme.of(context).primaryTextTheme.titleMedium!.color,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  onPressed: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(tr(LocaleKeys.confirmation_title)),
-                        content: Text(tr(
-                            LocaleKeys.edit_song_confirmation_content_delete)),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Get.back(),
-                            child: Text(tr(LocaleKeys.confirmation_no)),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              try {
-                                await deleteFile(
-                                    widget.songModel.path_music ?? "");
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          if (nameSongController.text != widget.songModel.name_song ||
+              nameSingerController.text != widget.songModel.name_singer ||
+              songController.text != widget.songModel.song) {
+            if (context.read<AutoSaveSwitcherCubit>().state) {
+              try {
+                String updatedPath = audioFile;
 
-                                await DBSongs.instance.clearAllGroupsFromSong(
-                                    widget.songModel.id!);
-                                await DBSongs.instance
-                                    .delete(widget.songModel.id!);
+                if (isAudio && customFile?.path?.isNotEmpty == true) {
+                  final saveFile = await saveFilePermanently(customFile!);
+                  updatedPath = saveFile.path;
+                }
 
-                                context.read<SongsBloc>().add(LoadSongs());
+                final updated = widget.songModel.copy(
+                  name_song: nameSongController.text,
+                  name_singer: nameSingerController.text,
+                  song: songController.text,
+                  path_music: updatedPath,
+                );
 
-                                Get.back();
-                                Get.back();
-                                Get.back();
-                              } catch (ex) {
-                                print("delete ex $ex");
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text(
-                                        tr(LocaleKeys.alertDialog_error_title)),
-                                    content: Text(tr(LocaleKeys
-                                        .alertDialog_error_delete_content)),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(tr(
-                                            LocaleKeys.alertDialog_error_OK)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(tr(LocaleKeys.confirmation_yes)),
-                          ),
-                        ],
+                await DBSongs.instance.update(updated);
+
+                // Получаем текущие связи
+                final currentGroups =
+                    await DBSongs.instance.getGroupsBySong(updated.id!);
+                final currentGroupIds = currentGroups.map((g) => g.id).toSet();
+                final selectedGroupIds =
+                    selectedGroups.map((g) => g.id).toSet();
+
+                // Удаляем те группы, которых больше нет
+                final toRemove = currentGroupIds.difference(selectedGroupIds);
+                for (final groupId in toRemove) {
+                  await DBSongs.instance.clearSongGroups(updated.id!, groupId!);
+                }
+
+                // Добавляем новые группы
+                final toAdd = selectedGroupIds.difference(currentGroupIds);
+                for (final groupId in toAdd) {
+                  final groupSongs =
+                      await DBSongs.instance.getSongsByGroup(groupId!);
+                  final nextOrder = groupSongs.isEmpty
+                      ? 1
+                      : groupSongs
+                              .map((s) => s.order ?? 0)
+                              .reduce((a, b) => a > b ? a : b) +
+                          1;
+
+                  await DBSongs.instance
+                      .addSongToGroup(updated.id!, groupId, nextOrder);
+                }
+
+                context.read<SongsBloc>().add(LoadSongs());
+                context.read<SongBloc>().add(ReadSong(updated.id!));
+
+                Get.back();
+              } catch (ex) {
+                print("update ex $ex");
+                await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(tr(LocaleKeys.alertDialog_error_title)),
+                    content:
+                        Text(tr(LocaleKeys.alertDialog_error_update_content)),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: Text(tr(LocaleKeys.alertDialog_error_OK)),
                       ),
-                    );
-                  },
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(tr(LocaleKeys.confirmation_title)),
-                        content: Text(tr(
-                            LocaleKeys.edit_song_confirmation_content_update)),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Get.back(),
-                            child: Text(tr(LocaleKeys.confirmation_no)),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              try {
-                                String updatedPath = audioFile;
-
-                                if (isAudio &&
-                                    customFile?.path?.isNotEmpty == true) {
-                                  final saveFile =
-                                      await saveFilePermanently(customFile!);
-                                  updatedPath = saveFile.path;
-                                }
-
-                                final updated = widget.songModel.copy(
-                                  name_song: nameSongController.text,
-                                  name_singer: nameSingerController.text,
-                                  song: songController.text,
-                                  path_music: updatedPath,
-                                );
-
-                                await DBSongs.instance.update(updated);
-
-                                // Получаем текущие связи
-                                final currentGroups = await DBSongs.instance
-                                    .getGroupsBySong(updated.id!);
-                                final currentGroupIds =
-                                    currentGroups.map((g) => g.id).toSet();
-                                final selectedGroupIds =
-                                    selectedGroups.map((g) => g.id).toSet();
-
-                                // Удаляем те группы, которых больше нет
-                                final toRemove = currentGroupIds
-                                    .difference(selectedGroupIds);
-                                for (final groupId in toRemove) {
-                                  await DBSongs.instance
-                                      .clearSongGroups(updated.id!, groupId!);
-                                }
-
-                                // Добавляем новые группы
-                                final toAdd = selectedGroupIds
-                                    .difference(currentGroupIds);
-                                for (final groupId in toAdd) {
-                                  final groupSongs = await DBSongs.instance
-                                      .getSongsByGroup(groupId!);
-                                  final nextOrder = groupSongs.isEmpty
-                                      ? 1
-                                      : groupSongs
-                                              .map((s) => s.order ?? 0)
-                                              .reduce((a, b) => a > b ? a : b) +
-                                          1;
-
-                                  await DBSongs.instance.addSongToGroup(
-                                      updated.id!, groupId, nextOrder);
-                                }
-
-                                context.read<SongsBloc>().add(LoadSongs());
-                                context
-                                    .read<SongBloc>()
-                                    .add(ReadSong(updated.id!));
-
-                                Get.back();
-                                Get.back();
-                              } catch (ex) {
-                                print("update ex $ex");
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text(
-                                        tr(LocaleKeys.alertDialog_error_title)),
-                                    content: Text(tr(LocaleKeys
-                                        .alertDialog_error_update_content)),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Get.back(),
-                                        child: Text(tr(
-                                            LocaleKeys.alertDialog_error_OK)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            child: Text(tr(LocaleKeys.confirmation_yes)),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.check),
-                ),
-              ],
-            )
-          ],
-          body: GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      audioFile != ''
-                          ? Stack(
-                              children: [
-                                PlayerWidget(
-                                    name_song: widget.songModel.name_song,
-                                    name_singer: widget.songModel.name_singer,
-                                    audio: audioFile,
-                                    asset: widget.asset),
-                                Positioned(
-                                    top: -10,
-                                    right: 5,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          audioFile = '';
-                                        });
-                                      },
-                                      padding: const EdgeInsets.all(0),
-                                      splashRadius: 20,
-                                      icon: const Icon(
-                                        Icons.close,
-                                        color: Colors.red,
-                                      ),
-                                    ))
-                              ],
-                            )
-                          : const SizedBox(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: nameSongController,
-                        textCapitalization: TextCapitalization.sentences,
-                        cursorColor: colorFiolet,
-                        decoration: InputDecoration(
-                            label:
-                                Text(tr(LocaleKeys.add_song_label_name_song)),
-                            contentPadding: const EdgeInsets.all(8),
-                            floatingLabelStyle: TextStyle(color: colorFiolet),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: colorFiolet)),
-                            border: const OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: nameSingerController,
-                        textCapitalization: TextCapitalization.sentences,
-                        cursorColor: colorFiolet,
-                        decoration: InputDecoration(
-                            label:
-                                Text(tr(LocaleKeys.add_song_label_name_singer)),
-                            contentPadding: const EdgeInsets.all(8),
-                            floatingLabelStyle: TextStyle(color: colorFiolet),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: colorFiolet)),
-                            border: const OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextField(
-                        controller: songController,
-                        cursorColor: colorFiolet,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                            label:
-                                Text(tr(LocaleKeys.edit_song_label_text_song)),
-                            contentPadding: const EdgeInsets.all(8),
-                            floatingLabelStyle: TextStyle(color: colorFiolet),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: colorFiolet)),
-                            border: const OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      widget.songModel.group == null
-                          ? Row(
-                              children: [
-                                Text(
-                                  "${tr(LocaleKeys.confirmation_group_title_select)}:",
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    TextEditingController controller =
-                                        TextEditingController();
-
-                                    getBottom(controller);
-                                  },
-                                  child: const Icon(EvaIcons.folder_add),
-                                ),
-                              ],
-                            )
-                          : BlocBuilder<SongsBloc, SongsState>(
-                              // Если уже есть группа и по возможности можно поменять
-                              builder: (context, state) {
-                                List<GroupModel> groups = [];
-
-                                if (state is SongsLoaded) {
-                                  groups = state.groups;
-                                }
-                                return SingleChildScrollView(
-                                  physics: const BouncingScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                          "${selectedGroups.length <= 1 ? tr(LocaleKeys.title_group) : tr(LocaleKeys.title_groups)}: "),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      GestureDetector(
-                                        child: const Icon(EvaIcons.folder_add),
-                                        onTap: () {
-                                          TextEditingController controller =
-                                              TextEditingController();
-                                          getBottom(controller);
-                                        },
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      selectedGroups.isEmpty
-                                          ? const SizedBox()
-                                          : Wrap(
-                                              spacing: 8,
-                                              runSpacing: 5,
-                                              children: selectedGroups
-                                                  .asMap()
-                                                  .map((i, item) => MapEntry(
-                                                      i,
-                                                      GestureDetector(
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
-                                                          onTap: () {
-                                                            setState(() {
-                                                              selectedGroups
-                                                                  .remove(item);
-                                                            });
-                                                            // setState(() {
-                                                            //   groupID = 0;
-                                                            //   orderID = 0;
-                                                            // });
-                                                          },
-                                                          child: Container(
-                                                              height: 30,
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                          8),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: colorFiolet
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            .3),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                                border: Border.all(
-                                                                    color:
-                                                                        colorFiolet),
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  Text(
-                                                                    getNameGroup(
-                                                                      item.id!,
-                                                                      groups,
-                                                                    ),
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        color:
-                                                                            colorFiolet),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    width: 5,
-                                                                  ),
-                                                                  Icon(
-                                                                    Icons.close,
-                                                                    size: 15,
-                                                                    color:
-                                                                        colorFiolet,
-                                                                  )
-                                                                ],
-                                                              )))))
-                                                  .values
-                                                  .toList()),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                            height: 50,
-                            width: 70,
-                            child: ElevatedButton(
-                                onPressed: () async {
-                                  getFile();
-                                  setState(() {
-                                    isAudio = false;
-                                    customFile = null;
-                                  });
-
-                                  // await FilePicker.platform.clearTemporaryFiles();
-                                },
-                                child: const Icon(
-                                  Icons.audio_file,
-                                  size: 25,
-                                ))),
-                      ),
-                      isAudio && customFile!.path!.isNotEmpty
-                          ? Column(
-                              children: [
-                                PlayerWidget(
-                                    audio: customFile!.path!, asset: false),
-                                Text(customFile!.path!),
-                              ],
-                            )
-                          : const SizedBox(),
                     ],
+                  ),
+                );
+              }
+            } else {
+              await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(tr(LocaleKeys.confirmation_title)),
+                  content: Text(tr(
+                      LocaleKeys.edit_song_confirmation_content_update_exit)),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.back();
+                      },
+                      child: Text(tr(LocaleKeys.confirmation_no)),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          String updatedPath = audioFile;
+
+                          if (isAudio && customFile?.path?.isNotEmpty == true) {
+                            final saveFile =
+                                await saveFilePermanently(customFile!);
+                            updatedPath = saveFile.path;
+                          }
+
+                          final updated = widget.songModel.copy(
+                            name_song: nameSongController.text,
+                            name_singer: nameSingerController.text,
+                            song: songController.text,
+                            path_music: updatedPath,
+                          );
+
+                          await DBSongs.instance.update(updated);
+
+                          // Получаем текущие связи
+                          final currentGroups = await DBSongs.instance
+                              .getGroupsBySong(updated.id!);
+                          final currentGroupIds =
+                              currentGroups.map((g) => g.id).toSet();
+                          final selectedGroupIds =
+                              selectedGroups.map((g) => g.id).toSet();
+
+                          // Удаляем те группы, которых больше нет
+                          final toRemove =
+                              currentGroupIds.difference(selectedGroupIds);
+                          for (final groupId in toRemove) {
+                            await DBSongs.instance
+                                .clearSongGroups(updated.id!, groupId!);
+                          }
+
+                          // Добавляем новые группы
+                          final toAdd =
+                              selectedGroupIds.difference(currentGroupIds);
+                          for (final groupId in toAdd) {
+                            final groupSongs = await DBSongs.instance
+                                .getSongsByGroup(groupId!);
+                            final nextOrder = groupSongs.isEmpty
+                                ? 1
+                                : groupSongs
+                                        .map((s) => s.order ?? 0)
+                                        .reduce((a, b) => a > b ? a : b) +
+                                    1;
+
+                            await DBSongs.instance.addSongToGroup(
+                                updated.id!, groupId, nextOrder);
+                          }
+
+                          context.read<SongsBloc>().add(LoadSongs());
+                          context.read<SongBloc>().add(ReadSong(updated.id!));
+
+                          Get.back();
+                          Get.back();
+                        } catch (ex) {
+                          print("update ex $ex");
+                          await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title:
+                                  Text(tr(LocaleKeys.alertDialog_error_title)),
+                              content: Text(tr(
+                                  LocaleKeys.alertDialog_error_update_content)),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Get.back(),
+                                  child:
+                                      Text(tr(LocaleKeys.alertDialog_error_OK)),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text(tr(LocaleKeys.confirmation_yes)),
+                    ),
+                  ],
+                ),
+              );
+            }
+          } else {
+            Get.back();
+          }
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                forceElevated: innerBoxIsScrolled,
+                snap: false,
+                floating: true,
+                pinned: false,
+                backgroundColor: Colors.transparent,
+                foregroundColor:
+                    Theme.of(context).primaryTextTheme.titleMedium!.color,
+                elevation: 0,
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(tr(LocaleKeys.confirmation_title)),
+                          content: Text(tr(
+                              LocaleKeys.edit_song_confirmation_content_delete)),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: Text(tr(LocaleKeys.confirmation_no)),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                try {
+                                  await deleteFile(
+                                      widget.songModel.path_music ?? "");
+      
+                                  await DBSongs.instance.clearAllGroupsFromSong(
+                                      widget.songModel.id!);
+                                  await DBSongs.instance
+                                      .delete(widget.songModel.id!);
+      
+                                  context.read<SongsBloc>().add(LoadSongs());
+      
+                                  Get.back();
+                                  Get.back();
+                                  Get.back();
+                                } catch (ex) {
+                                  print("delete ex $ex");
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(
+                                          tr(LocaleKeys.alertDialog_error_title)),
+                                      content: Text(tr(LocaleKeys
+                                          .alertDialog_error_delete_content)),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Get.back(),
+                                          child: Text(tr(
+                                              LocaleKeys.alertDialog_error_OK)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text(tr(LocaleKeys.confirmation_yes)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(tr(LocaleKeys.confirmation_title)),
+                          content: Text(tr(
+                              LocaleKeys.edit_song_confirmation_content_update)),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: Text(tr(LocaleKeys.confirmation_no)),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                try {
+                                  String updatedPath = audioFile;
+      
+                                  if (isAudio &&
+                                      customFile?.path?.isNotEmpty == true) {
+                                    final saveFile =
+                                        await saveFilePermanently(customFile!);
+                                    updatedPath = saveFile.path;
+                                  }
+      
+                                  final updated = widget.songModel.copy(
+                                    name_song: nameSongController.text,
+                                    name_singer: nameSingerController.text,
+                                    song: songController.text,
+                                    path_music: updatedPath,
+                                  );
+      
+                                  await DBSongs.instance.update(updated);
+      
+                                  // Получаем текущие связи
+                                  final currentGroups = await DBSongs.instance
+                                      .getGroupsBySong(updated.id!);
+                                  final currentGroupIds =
+                                      currentGroups.map((g) => g.id).toSet();
+                                  final selectedGroupIds =
+                                      selectedGroups.map((g) => g.id).toSet();
+      
+                                  // Удаляем те группы, которых больше нет
+                                  final toRemove = currentGroupIds
+                                      .difference(selectedGroupIds);
+                                  for (final groupId in toRemove) {
+                                    await DBSongs.instance
+                                        .clearSongGroups(updated.id!, groupId!);
+                                  }
+      
+                                  // Добавляем новые группы
+                                  final toAdd = selectedGroupIds
+                                      .difference(currentGroupIds);
+                                  for (final groupId in toAdd) {
+                                    final groupSongs = await DBSongs.instance
+                                        .getSongsByGroup(groupId!);
+                                    final nextOrder = groupSongs.isEmpty
+                                        ? 1
+                                        : groupSongs
+                                                .map((s) => s.order ?? 0)
+                                                .reduce((a, b) => a > b ? a : b) +
+                                            1;
+      
+                                    await DBSongs.instance.addSongToGroup(
+                                        updated.id!, groupId, nextOrder);
+                                  }
+      
+                                  context.read<SongsBloc>().add(LoadSongs());
+                                  context
+                                      .read<SongBloc>()
+                                      .add(ReadSong(updated.id!));
+      
+                                  Get.back();
+                                  Get.back();
+                                } catch (ex) {
+                                  print("update ex $ex");
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text(
+                                          tr(LocaleKeys.alertDialog_error_title)),
+                                      content: Text(tr(LocaleKeys
+                                          .alertDialog_error_update_content)),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Get.back(),
+                                          child: Text(tr(
+                                              LocaleKeys.alertDialog_error_OK)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text(tr(LocaleKeys.confirmation_yes)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.check),
+                  ),
+                ],
+              )
+            ],
+            body: GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        audioFile != ''
+                            ? Stack(
+                                children: [
+                                  PlayerWidget(
+                                      name_song: widget.songModel.name_song,
+                                      name_singer: widget.songModel.name_singer,
+                                      audio: audioFile,
+                                      asset: widget.asset),
+                                  Positioned(
+                                      top: -10,
+                                      right: 5,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            audioFile = '';
+                                          });
+                                        },
+                                        padding: const EdgeInsets.all(0),
+                                        splashRadius: 20,
+                                        icon: const Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                        ),
+                                      ))
+                                ],
+                              )
+                            : const SizedBox(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: nameSongController,
+                          textCapitalization: TextCapitalization.sentences,
+                          cursorColor: colorFiolet,
+                          decoration: InputDecoration(
+                              label:
+                                  Text(tr(LocaleKeys.add_song_label_name_song)),
+                              contentPadding: const EdgeInsets.all(8),
+                              floatingLabelStyle: TextStyle(color: colorFiolet),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: colorFiolet)),
+                              border: const OutlineInputBorder()),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: nameSingerController,
+                          textCapitalization: TextCapitalization.sentences,
+                          cursorColor: colorFiolet,
+                          decoration: InputDecoration(
+                              label:
+                                  Text(tr(LocaleKeys.add_song_label_name_singer)),
+                              contentPadding: const EdgeInsets.all(8),
+                              floatingLabelStyle: TextStyle(color: colorFiolet),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: colorFiolet)),
+                              border: const OutlineInputBorder()),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: songController,
+                          cursorColor: colorFiolet,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              label:
+                                  Text(tr(LocaleKeys.edit_song_label_text_song)),
+                              contentPadding: const EdgeInsets.all(8),
+                              floatingLabelStyle: TextStyle(color: colorFiolet),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: colorFiolet)),
+                              border: const OutlineInputBorder()),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        widget.songModel.group == null
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "${tr(LocaleKeys.confirmation_group_title_select)}:",
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      TextEditingController controller =
+                                          TextEditingController();
+      
+                                      getBottom(controller);
+                                    },
+                                    child: const Icon(EvaIcons.folder_add),
+                                  ),
+                                ],
+                              )
+                            : BlocBuilder<SongsBloc, SongsState>(
+                                // Если уже есть группа и по возможности можно поменять
+                                builder: (context, state) {
+                                  List<GroupModel> groups = [];
+      
+                                  if (state is SongsLoaded) {
+                                    groups = state.groups;
+                                  }
+                                  return SingleChildScrollView(
+                                    physics: const BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                            "${selectedGroups.length <= 1 ? tr(LocaleKeys.title_group) : tr(LocaleKeys.title_groups)}: "),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        GestureDetector(
+                                          child: const Icon(EvaIcons.folder_add),
+                                          onTap: () {
+                                            TextEditingController controller =
+                                                TextEditingController();
+                                            getBottom(controller);
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        selectedGroups.isEmpty
+                                            ? const SizedBox()
+                                            : Wrap(
+                                                spacing: 8,
+                                                runSpacing: 5,
+                                                children: selectedGroups
+                                                    .asMap()
+                                                    .map((i, item) => MapEntry(
+                                                        i,
+                                                        GestureDetector(
+                                                            behavior:
+                                                                HitTestBehavior
+                                                                    .opaque,
+                                                            onTap: () {
+                                                              setState(() {
+                                                                selectedGroups
+                                                                    .remove(item);
+                                                              });
+                                                              // setState(() {
+                                                              //   groupID = 0;
+                                                              //   orderID = 0;
+                                                              // });
+                                                            },
+                                                            child: Container(
+                                                                height: 30,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            8),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: colorFiolet
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              .3),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  border: Border.all(
+                                                                      color:
+                                                                          colorFiolet),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Text(
+                                                                      getNameGroup(
+                                                                        item.id!,
+                                                                        groups,
+                                                                      ),
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w600,
+                                                                          color:
+                                                                              colorFiolet),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    Icon(
+                                                                      Icons.close,
+                                                                      size: 15,
+                                                                      color:
+                                                                          colorFiolet,
+                                                                    )
+                                                                  ],
+                                                                )))))
+                                                    .values
+                                                    .toList()),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                              height: 50,
+                              width: 70,
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    getFile();
+                                    setState(() {
+                                      isAudio = false;
+                                      customFile = null;
+                                    });
+      
+                                    // await FilePicker.platform.clearTemporaryFiles();
+                                  },
+                                  child: const Icon(
+                                    Icons.audio_file,
+                                    size: 25,
+                                  ))),
+                        ),
+                        isAudio && customFile!.path!.isNotEmpty
+                            ? Column(
+                                children: [
+                                  PlayerWidget(
+                                      audio: customFile!.path!, asset: false),
+                                  Text(customFile!.path!),
+                                ],
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
               ),

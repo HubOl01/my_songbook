@@ -28,6 +28,7 @@ abstract class  LocaleKeys {
   static const confirmation_content_backup = 'confirmation_content_backup';
   static const edit_song_confirmation_content_delete = 'edit_song_confirmation_content_delete';
   static const edit_song_confirmation_content_update = 'edit_song_confirmation_content_update';
+  static const edit_song_confirmation_content_update_exit = 'edit_song_confirmation_content_update_exit';
   static const confirmation_yes = 'confirmation_yes';
   static const confirmation_no = 'confirmation_no';
   static const appbar_add_song = 'appbar_add_song';
@@ -142,5 +143,6 @@ abstract class  LocaleKeys {
   static const sorting_A_Z = 'sorting_A_Z';
   static const sorting_Z_A = 'sorting_Z_A';
   static const sorting_off = 'sorting_off';
+  static const auto_save = 'auto_save';
 
 }
