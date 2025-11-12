@@ -70,7 +70,7 @@
 //   return json;
 // }
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -122,7 +122,7 @@ class NewsService {
         return _myJson;
       }
 
-      // _myJson = await getCachedNews();
+      _myJson = await getCachedNews();
 
       if (_myJson != null) {
         print("📰 News from Hive cache: ${_myJson!.toJson()}");
@@ -130,9 +130,9 @@ class NewsService {
         print("⚠️ No cached news available");
       }
       // для теста --------
-      String myJsonString =
-          await rootBundle.loadString('assets/dataJson/event_MS_ru.json');
-      _myJson = newsModelFromJson(myJsonString);
+      // String myJsonString =
+      //     await rootBundle.loadString('assets/dataJson/event_MS_ru.json');
+      // _myJson = newsModelFromJson(myJsonString);
       // ------------------
       return _myJson;
     } catch (e) {

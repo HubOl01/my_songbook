@@ -1,8 +1,11 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/core/model/newsModel.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:my_songbook/pages/settings/Premium/premiumPage.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class ListPro extends StatelessWidget {
   final Function() onClose;
@@ -14,10 +17,11 @@ class ListPro extends StatelessWidget {
     return InkWell(
       onTap: () async {
         AppMetrica.reportEvent('clicked banner_pro');
-        launchUrl(
-            Uri.parse(
-                'https://www.rustore.ru/catalog/app/ru.ru_developer.my_songbook_pro'),
-            mode: LaunchMode.externalApplication);
+        Get.to(const PremiumPage());
+        // launchUrl(
+        //     Uri.parse(
+        //         'https://www.rustore.ru/catalog/app/ru.ru_developer.my_songbook_pro'),
+        //     mode: LaunchMode.externalApplication);
       },
       child: Container(
         color: context.isDarkMode ? Colors.black.withValues(alpha: .15) : null,
@@ -51,7 +55,9 @@ class ListPro extends StatelessWidget {
                   ),
                   Text(
                     model.shortDesc!.isEmpty
-                        ? "Раскройте весь потенциал музыки – больше инструментов, функций и возможностей в одном приложении."
+                        ? context.locale == const Locale('ru')
+                            ? "Раскройте весь потенциал музыки – больше инструментов, функций и возможностей в одном приложении."
+                            : "Unlock the full potential of music with more instruments, features, and capabilities in one app."
                         : model.shortDesc!,
                     style: TextStyle(
                         fontSize: 13,

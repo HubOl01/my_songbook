@@ -5,17 +5,19 @@
     "name": "Обновление",
     "shortDesc": "Уже доступно обновление!",
     "isStarred": true,
-    "description": [],
+    "description": [
+        "Уже доступно обновление! Уже доступно обновление! Уже доступно обновление! Уже доступно обновление! Уже доступно обновление!"
+    ],
     "user": "ru-developer",
     "lang": "ru",
-    "type": "website",
+    "type": "text",
     "iconUrl": "",
     "iconDarkUrl": "",
     "imageUrl": "",
     "audio": [],
     "isDonate": false,
     "isUpdate": false,
-    "isButton": false,
+    "isButton": true,
     "button": {
         "button_name": "Пример",
         "button_url": "https://pub.dev/packages/flutter_markdown_plus",

@@ -1,4 +1,5 @@
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,7 +40,9 @@ class ListStar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Оцените приложение",
+                    context.locale == const Locale('ru')
+                        ? "Оцените приложение"
+                        : "Rate the App",
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -48,7 +51,9 @@ class ListStar extends StatelessWidget {
                             : Colors.black.withValues(alpha: .7)),
                   ),
                   Text(
-                    "Оцените приложение и помогите нам стать лучше!",
+                    context.locale == const Locale('ru')
+                        ? "Оцените приложение и помогите нам стать лучше!"
+                        : "Help us improve by leaving a rating!",
                     style: TextStyle(
                         fontSize: 13,
                         // height: 1.5,
