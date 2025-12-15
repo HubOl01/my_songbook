@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:my_songbook/pages/guitar_songs/search/searchPageController.dart';
 
+import '../../../components/customAdBanner.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../guitarDetal.dart';
 
@@ -49,36 +50,45 @@ class SearchPage extends GetView<SearchPageController> {
         body: FutureBuilder(
             future: controller.refreshSongs(),
             builder: (context, snapshot) {
-              return Obx(() => ListView.builder(
-                    itemCount: controller.searchedSong.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(controller.searchedSong[index].name_song,
-                                style: const TextStyle(fontSize: 16)),
-                            Text(
-                              controller.searchedSong[index].name_singer,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: context.isDarkMode
-                                    ? Colors.grey[300]
-                                    : Colors.grey[600],
+              return Obx(() => Column(
+                    children: [
+                      const CustomAdBanner(
+                        isListTile: true,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.searchedSong.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(controller.searchedSong[index].name_song,
+                                      style: const TextStyle(fontSize: 16)),
+                                  Text(
+                                    controller.searchedSong[index].name_singer,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: context.isDarkMode
+                                          ? Colors.grey[300]
+                                          : Colors.grey[600],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              onTap: () {
+                                Get.to(GuitarDetal(
+                                  id: controller.searchedSong[index].id!,
+                                  speedTextSong: controller
+                                      .searchedSong[index].speedScroll!,
+                                ));
+                              },
+                            );
+                          },
                         ),
-                        onTap: () {
-                          Get.to(GuitarDetal(
-                            id: controller.searchedSong[index].id!,
-                            speedTextSong:
-                                controller.searchedSong[index].speedScroll!,
-                          ));
-                        },
-                      );
-                    },
+                      ),
+                    ],
                   ));
             }));
   }

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:appmetrica_plugin/appmetrica_plugin.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
@@ -10,6 +9,7 @@ import 'package:icons_plus/icons_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../components/bottomSheetEditGroup.dart';
+import '../../components/customAdBanner.dart';
 import '../../components/player_widget.dart';
 import '../../core/bloc/songs_bloc.dart';
 import '../../core/data/dbSongs.dart';
@@ -448,7 +448,10 @@ class _CreateSongState extends State<CreateSong> {
                       ),
                     ),
                   ),
-                )
+                ),
+                const CustomAdBanner(
+                  isView: true,
+                ),
               ],
             ),
           ),

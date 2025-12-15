@@ -17,6 +17,7 @@ import 'package:my_songbook/core/utils/currentNumber.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:yandex_mobileads/mobile_ads.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import 'core/api/news.dart';
 import 'core/bloc/song_bloc.dart';
@@ -159,6 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
     context.read<IsDemoSongCubit>().init();
     context.read<HideBannerIdCubit>().init();
     context.read<AutoSaveSwitcherCubit>().init();
+    MobileAds.initialize();
     super.initState();
   }
 

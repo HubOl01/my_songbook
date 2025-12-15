@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide CarouselController;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../components/customAdBanner.dart';
 import '../../../core/api/news.dart';
 import '../../../core/cubit/hide_banner_id_cubit.dart';
 import '../../../core/model/newsModel.dart';
@@ -57,7 +58,9 @@ class CardNews extends StatelessWidget {
                             },
                           )
                 : const SizedBox(),
-            secondChild: const SizedBox(),
+            secondChild: const CustomAdBanner(
+              isListTile: true,
+            ),
           );
         });
   }

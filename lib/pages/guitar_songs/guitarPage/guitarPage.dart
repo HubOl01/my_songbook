@@ -20,6 +20,7 @@ import 'package:share_plus/share_plus.dart';
 // import 'package:yandex_mobileads/mobile_ads.dart';
 import '../../../components/bottomSheetEditGroup.dart';
 import '../../../components/buttons/customButtonSheet.dart';
+import '../../../components/customAdBanner.dart';
 import '../../../core/bloc/songs_bloc.dart';
 import '../../../core/cubit/current_group_id_cubit.dart';
 import '../../../core/cubit/current_index_group_cubit.dart';
@@ -1190,7 +1191,11 @@ class _GuitarPageState extends State<GuitarPage> {
                                                       ),
                                               ],
                                             ),
-                                          ))
+                                          )),
+                                      const CustomAdBanner(
+                                        isListTile: true,
+                                        isView: true,
+                                      )
                                     ],
                                   ),
                                 ),
@@ -1198,94 +1203,15 @@ class _GuitarPageState extends State<GuitarPage> {
                   } else if (state is SongsError) {
                     return Text(state.message);
                   } else {
-                    return const SizedBox();
+                    return const CustomAdBanner(
+                      isListTile: true,
+                    );
                   }
                 },
               );
             },
           ),
         ),
-        // floatingActionButton: context.read<IndexGroupCubit>().state != -1 &&
-        //         isSecondButton
-        //     ? Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 10),
-        //         child: SizedBox(
-        //           height: 50,
-        //           child: Row(
-        //             mainAxisSize: MainAxisSize.min,
-        //             mainAxisAlignment: MainAxisAlignment.end,
-        //             crossAxisAlignment: CrossAxisAlignment.center,
-        //             children: [
-        //               !isReorderMode
-        //                   ? BlocBuilder<SongsBloc, SongsState>(
-        //                       builder: (context, state) {
-        //                       if (state is SongsLoading) {
-        //                         return const Center(
-        //                             child: CircularProgressIndicator());
-        //                       } else if (state is SongsLoaded) {
-        //                         return FloatingActionButton.extended(
-        //                           backgroundColor: colorFiolet,
-        //                           onPressed: () {
-        //                             List<Song> filteredSongs = state.songs
-        //                                 .where((song) =>
-        //                                         song.group ==
-        //                                         context
-        //                                             .read<IndexGroupCubit>()
-        //                                             .state
-        //                                     // state
-        //                                     //     .groups[
-        //                                     //         ]
-        //                                     //     .id
-        //                                     )
-        //                                 .toList()
-        //                               ..sort((a, b) =>
-        //                                   a.order!.compareTo(b.order!));
-
-        //                             List<Song> sortedSongs = [
-        //                               ...selectedSongs,
-        //                               ...filteredSongs.where((song) =>
-        //                                   !selectedSongs.contains(song)),
-        //                             ];
-
-        //                             for (int i = 0;
-        //                                 i < sortedSongs.length;
-        //                                 i++) {
-        //                               context.read<SongsBloc>().add(UpdateSong(
-        //                                   sortedSongs[i].copy(order: i + 1)));
-        //                             }
-
-        //                             setState(() {
-        //                               isSecondButton = false;
-        //                               selectedSongsId.clear();
-        //                               selectedSongs.clear();
-        //                             });
-        //                           },
-        //                           label: Text(tr(LocaleKeys.change_the_order)),
-        //                         );
-        //                       } else {
-        //                         return const SizedBox();
-        //                       }
-        //                     })
-        //                   : const SizedBox(),
-        //               SizedBox(width: !isReorderMode ? 10 : 0),
-        //               FloatingActionButton(
-        //                 heroTag: "drag_mode_toggle",
-        //                 onPressed: () {
-        //                   setState(() {
-        //                     isReorderMode = !isReorderMode;
-        //                     reorderedSongs.clear();
-        //                   });
-        //                 },
-        //                 backgroundColor:
-        //                     isReorderMode ? colorFiolet : Colors.grey,
-        //                 child: const Icon(Icons.drag_handle),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       )
-        //     : null,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       ),
     );
   }
